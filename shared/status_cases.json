@@ -1,0 +1,50 @@
+[
+  {
+    "name": "fewer than 7 good sessions -> building baseline",
+    "metric": "hr_rest",
+    "history": [[62, true], [64, true], [61, true]],
+    "expect": {"level": "baseline"}
+  },
+  {
+    "name": "low-quality latest -> No data, never Fine",
+    "metric": "hr_rest",
+    "history": [[62, true], [64, true], [61, true], [63, true], [62, true], [65, true], [63, true], [63, false]],
+    "expect": {"level": "nodata"}
+  },
+  {
+    "name": "close to median -> usual",
+    "metric": "hr_rest",
+    "history": [[62, true], [64, true], [61, true], [63, true], [62, true], [65, true], [63, true], [64, true]],
+    "expect": {"level": "usual"}
+  },
+  {
+    "name": "|z| between 2 and 3 -> watch",
+    "metric": "hr_rest",
+    "history": [[60, true], [62, true], [64, true], [62, true], [60, true], [64, true], [62, true], [69, true]],
+    "expect": {"level": "watch"}
+  },
+  {
+    "name": "|z| > 3 -> act",
+    "metric": "hr_rest",
+    "history": [[60, true], [62, true], [64, true], [62, true], [60, true], [64, true], [62, true], [75, true]],
+    "expect": {"level": "act"}
+  },
+  {
+    "name": "watch 3 sessions in a row -> act",
+    "metric": "hr_rest",
+    "history": [[60, true], [62, true], [64, true], [62, true], [60, true], [64, true], [62, true], [69, true], [69, true], [69, true]],
+    "expect": {"level": "act"}
+  },
+  {
+    "name": "low-quality baseline sessions are skipped",
+    "metric": "hr_rest",
+    "history": [[90, false], [60, true], [62, true], [64, true], [62, true], [60, true], [64, true], [62, true], [63, true]],
+    "expect": {"level": "usual"}
+  },
+  {
+    "name": "MAD of zero uses the metric floor (no divide-by-zero, no false alarms)",
+    "metric": "mood",
+    "history": [[7, true], [7, true], [7, true], [7, true], [7, true], [7, true], [7, true], [6, true]],
+    "expect": {"level": "usual"}
+  }
+]

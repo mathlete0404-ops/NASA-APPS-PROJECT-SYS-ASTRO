@@ -1,0 +1,1373 @@
+{
+ "credit": "Dataset metadata from data.nasa.gov",
+ "source": "https://data.nasa.gov/api/3/action/package_search",
+ "datasets": [
+  {
+   "id": "spaceflight-induced-sts-62-vertebral-bone-loss-in-ovariectomized-rats-is-associated-with-i",
+   "title": "Spaceflight-induced (STS-62) vertebral bone loss in ovariectomized rats is associated with increased bone marrow adiposity and no change in bone formation",
+   "description": "There is often a reciprocal relationship between bone marrow adipocytes and osteoblasts, suggesting that marrow adipose tissue (MAT) antagonizes osteoblast differentiation. MAT is increased in rodents during spaceflight but a causal relationship between MAT and bone loss remains unclear. In the present study, we evaluated the effects of a 14-day spaceflight on bone mass, bone resorption, bone form\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/spaceflight-induced-sts-62-vertebral-bone-loss-in-ovariectomized-rats-is-associated-with-i",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "targeting-myostatin-activin-a-protects-against-skeletal-muscle-and-bone-loss-during-spacef-dd481",
+   "title": "Targeting myostatin/activin A protects against skeletal muscle and bone loss during spaceflight [plasma proteomics]",
+   "description": "Among the physiological consequences of extended spaceflight are loss of skeletal muscle and bone mass. One signaling pathway that plays an important role in maintaining muscle and bone homeostasis is that regulated by the secreted signaling proteins, myostatin (MSTN) and activin A. Here, we used both genetic and pharmacological approaches to investigate the effect of targeting MSTN/activin A sign\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/targeting-myostatin-activin-a-protects-against-skeletal-muscle-and-bone-loss-during-spacef-dd481",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone",
+    "muscle"
+   ]
+  },
+  {
+   "id": "specific-host-metabolite-and-gut-microbiome-alterations-are-associated-with-bone-loss-duri",
+   "title": "Specific Host Metabolite and Gut Microbiome Alterations Are Associated with Bone-loss During Spaceflight",
+   "description": "Understanding the axis of the human microbiome and physiological homeostasis is an essential task in managing deep-space travel associated health risks. The NASA led Rodent Research 5 mission enabled an ancillary investigation of the gut microbiome varying exposure to microgravity (flight) relative to ground controls in the context of previously shown bone mineral density (BMD) loss that was obser\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/specific-host-metabolite-and-gut-microbiome-alterations-are-associated-with-bone-loss-duri",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "toward-countering-muscle-and-bone-loss-with-spaceflight-gsk3-as-a-potential-target-tibiali",
+   "title": "Toward countering muscle and bone loss with spaceflight: GSK3 as a potential target (Tibialis Anterior, RR9, Western Blot)",
+   "description": "We examined the effects of ~30 days of spaceflight on glycogen synthase kinase 3 (GSK3) content and inhibitory serine phosphorylation in murine muscle and bone samples from four separate missions (BION-M1, rodent research [RR]1, RR9, and RR18). Spaceflight reduced GSK3b content across all missions, whereas its serine phosphorylation was elevated with RR18 and BION-M1. The reduction in GSK3b was li\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/toward-countering-muscle-and-bone-loss-with-spaceflight-gsk3-as-a-potential-target-tibiali",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone",
+    "muscle",
+    "spine",
+    "fluid"
+   ]
+  },
+  {
+   "id": "spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-88edc",
+   "title": "Spaceflight induces systemic effects on extracellular matrix and immune system in different age-stages - Bone data",
+   "description": "Spaceflights significantly impacts astronaut health, causing muscle atrophy, bone loss, cardiovascular deconditioning and immune system dysregulation, especially during long missions. To explore molecular changes, we generated a single-cell RNA sequencing dataset, of 216 samples from 28 mouse organs and tissues under spaceflight and control conditions. Since spaceflight effects closely resemble as\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-88edc",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-1ac3a",
+   "title": "Spaceflight induces systemic effects on extracellular matrix and immune system in different age-stages - Bone marrow data",
+   "description": "Spaceflights significantly impacts astronaut health, causing muscle atrophy, bone loss, cardiovascular deconditioning and immune system dysregulation, especially during long missions. To explore molecular changes, we generated a single-cell RNA sequencing dataset, of 216 samples from 28 mouse organs and tissues under spaceflight and control conditions. Since spaceflight effects closely resemble as\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-1ac3a",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "gene-metabolite-networks-associated-with-impediment-of-bone-fracture-repair-in-spaceflight",
+   "title": "Gene-metabolite networks associated with impediment of bone fracture repair in spaceflight",
+   "description": "Adverse effects of spaceflight on musculoskeletal health increase the risk of bone injury and impairment of fracture healing. Its yet elusive molecular comprehension warrants immediate attention, since space travel is becoming more frequent. Here we examined the effects of spaceflight on bone fracture healing using a 2 mm femoral segmental bone defect (SBD) model. Forty, 9-week-old, male C57BL/6J \u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/gene-metabolite-networks-associated-with-impediment-of-bone-fracture-repair-in-spaceflight",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "small-changes-in-thermoregulation-influence-cancellous-bone-turnover-balance-in-distal-fem",
+   "title": "Small changes in thermoregulation influence cancellous bone turnover balance in distal femur metaphysis in growing female mice.",
+   "description": "Mice are typically housed at temperatures well below their thermoneutral zone. When individually housed at room temperature (~22 C) mice experience cold stress which results in cancellous bone loss and has the potential to alter the skeletal response to treatment. It is not clear if there is a threshold temperature for cold stress-induced bone loss. It is also not clear if alternative strategies f\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/small-changes-in-thermoregulation-influence-cancellous-bone-turnover-balance-in-distal-fem",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "37-day-microgravity-exposure-in-16-week-female-c57bl-6j-mice-during-the-nasa-rodent-resear",
+   "title": "37-Day microgravity exposure in 16-Week female C57BL/6J mice during the NASA Rodent Research 1 mission is associated with bone loss specific to weight-bearing skeletal sites (femur and vertebrae, micro computed tomography)",
+   "description": "Exposure to weightlessness in microgravity and elevated space radiation are associated with rapid bone loss in mammals, but questions remain about their mechanisms of action and relative importance. In this study, we tested the hypothesis that bone loss during spaceflight in Low Earth Orbit is primarily associated with site-specific microgravity unloading of weight-bearing sites in the skeleton. M\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/37-day-microgravity-exposure-in-16-week-female-c57bl-6j-mice-during-the-nasa-rodent-resear",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone",
+    "spine"
+   ]
+  },
+  {
+   "id": "effects-of-spaceflight-on-cancellous-and-cortical-bone-in-proximal-femur-in-growing-rats",
+   "title": "Effects of spaceflight on cancellous and cortical bone in proximal femur in growing rats.",
+   "description": "Mechanical loading of the skeleton during normal weight bearing plays an important role in bone accrual and turnover balance. We recently evaluated bone microarchitecture in the femoral head in 5.6-week-old male Sprague Dawley rats subjected to a 4-day spaceflight aboard STS-41. Compared to weight bearing ground controls, cancellous bone volume fraction was dramatically lower in animals subjected \u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/effects-of-spaceflight-on-cancellous-and-cortical-bone-in-proximal-femur-in-growing-rats",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "effects-of-spaceflight-on-bone-microarchitecture-in-the-axial-and-appendicular-skeleton-in",
+   "title": "Effects of Spaceflight on Bone Microarchitecture in the Axial and Appendicular Skeleton in Growing Ovariectomized Rats from STS-62",
+   "description": "This study investigated the effects of a 14-day spaceflight on bone mass, density and microarchitecture in weight bearing (femur and humerus) and non-weight bearing (2nd) lumbar vertebra and calvarium) bones in the context of ovarian hormone insufficiency. 12-week-old Fisher 344 rats were ovariectomized 2 weeks before flight and randomized into one of three groups: 1) baseline (n equals 6), 2) gro\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/effects-of-spaceflight-on-bone-microarchitecture-in-the-axial-and-appendicular-skeleton-in",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "microarray-profile-of-gene-expression-during-osteoclast-differentiation-in-modeled-microgr-ce2a2",
+   "title": "Microarray Profile of Gene Expression during Osteoclast Differentiation in Modeled Microgravity",
+   "description": "Microgravity leads to a 10-15% loss of bone mass in astronauts during space flight. Osteoclast is the multinucleated bone resorbing cell. In this study we used NASA developed ground based Rotary Wall Vessel Bioreactor (RWV) Rotary Cell Culture System (RCCS) to simulate microgravity (uXg) conditions and demonstrated a significant increase (2-fold) in osteoclastogenesis compared to ground based cont\u2026",
+   "keywords": [
+    "bioassay_data_transformation",
+    "feature_extraction",
+    "grow",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "p-gse21093-1",
+    "p-gse21093-2",
+    "p-gse21093-3",
+    "p-gse21093-4",
+    "p-gse21093-5"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/microarray-profile-of-gene-expression-during-osteoclast-differentiation-in-modeled-microgr-ce2a2",
+   "modified": "2025-04-23",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "microarray-profile-of-gene-expression-during-osteoclast-differentiation-in-modeled-microgr",
+   "title": "Microarray Profile of Gene Expression during Osteoclast Differentiation in Modeled Microgravity",
+   "description": "Microgravity leads to a 10-15% loss of bone mass in astronauts during space flight. Osteoclast is the multinucleated bone resorbing cell. In this study we used NASA developed ground based Rotary Wall Vessel Bioreactor (RWV) Rotary Cell Culture System (RCCS) to simulate microgravity (uXg) conditions and demonstrated a significant increase (2-fold) in osteoclastogenesis compared to ground based cont\u2026",
+   "keywords": [
+    "bioassay_data_transformation",
+    "feature_extraction",
+    "grow",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "p-gse21093-1",
+    "p-gse21093-2",
+    "p-gse21093-3",
+    "p-gse21093-4",
+    "p-gse21093-5"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/microarray-profile-of-gene-expression-during-osteoclast-differentiation-in-modeled-microgr",
+   "modified": "2025-04-23",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "osteocytes-transcriptome-is-altered-during-spaceflight-622a3",
+   "title": "Osteocytes transcriptome is altered during spaceflight",
+   "description": "Bone loss is one of the major health problems for astronauts during long-term spaceflight and for patients during prolonged bed rest or paralysis. Growing evidence suggests that osteocytes, the most abundant cells in the mineralized bone matrix, play a key role in sensing mechanical forces applied to the skeleton and in transducing them into subcellular biochemical signals to modulate bone homeost\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/osteocytes-transcriptome-is-altered-during-spaceflight-622a3",
+   "modified": "2026-10-20",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "the-role-of-pthrp-in-osteoblast-response-to-microgravity-implications-for-osteoporosis-dev-27e4f",
+   "title": "The Role of PTHrP in Osteoblast Response to Microgravity: Implications for Osteoporosis Development.",
+   "description": "Prolonged skeletal unloading through bedrest results in bone loss similar to that observed in elderly osteoporotic patients but with an accelerated timeframe. This rapid effect on weight-bearing bones is also observed in astronauts who lose up to 2% of their bone mass per month spent in Space. Despite important implications for Spaceflight travellers and bedridden patients on Earth the exact mecha\u2026",
+   "keywords": [
+    "array-scanning-protocol",
+    "genotype",
+    "hybridization-protocol",
+    "labelling-protocol",
+    "normalization-data-transformation-protocol",
+    "nucleic-acid-extraction-protocol",
+    "p-gse78980-1",
+    "p-gse78980-2",
+    "p-gse78980-3",
+    "p-gse78980-4",
+    "p-gse78980-5",
+    "treatment"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/the-role-of-pthrp-in-osteoblast-response-to-microgravity-implications-for-osteoporosis-dev-27e4f",
+   "modified": "2025-04-23",
+   "topics": [
+    "bone"
+   ]
+  },
+  {
+   "id": "muscle-atrophy-osteoporosis-prevention-in-hibernating-mammals",
+   "title": "Muscle atrophy osteoporosis prevention in hibernating mammals",
+   "description": "Physical inactivity decreases the mechanical load on the skeleton which when prolonged leads to losses of muscle strength and bone mass in humans and most mammalian species. Hibernating mammals show no loss in bone mass and less muscle atrophy than would be anticipated over such a prolonged period of physical inactivity. This suggests that diverse hibernating mammals have evolved natural mechanism\u2026",
+   "keywords": [
+    "library-construction",
+    "nucleic-acid-extraction",
+    "nucleic-acid-sequencing",
+    "time",
+    "treatment-protocol"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/muscle-atrophy-osteoporosis-prevention-in-hibernating-mammals",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "expression-profiling-of-soleus-muscle-under-the-effect-of-simulated-spaceflight",
+   "title": "Expression profiling of soleus muscle under the effect of simulated spaceflight",
+   "description": "Spaceflight imposes the risk of skeletal muscle atrophy for astronauts. The understanding of muscle atrophy because of spaceflight is limited but continued efforts are essential for developing countermeasures of this effect. A distinct difference between spaceflight-induced muscle atrophy and other forms of atrophy is the additional effect of cosmic rays in outer space. To study spaceflight-induce\u2026",
+   "keywords": [
+    "clinical-treatment",
+    "data-transformation",
+    "growth-protocol",
+    "hindlimb-unloading",
+    "labeling",
+    "nucleic-acid-hybridization",
+    "rna-extraction"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/expression-profiling-of-soleus-muscle-under-the-effect-of-simulated-spaceflight",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "effects-of-spaceflight-on-murine-skeletal-muscle-gene-expression-ed0ff",
+   "title": "Effects of spaceflight on murine skeletal muscle gene expression",
+   "description": "Spaceflight results in a number of adaptations to skeletal muscle, including atrophy and shifts towards faster muscle fiber types. To identify changes in gene expression that may underlie these adaptations, microarray expression analysis was performed on gastrocnemius from mice flown on the STS-108 shuttle flight (11 days, 19 hours) versus mice maintained on earth for the same period. Additionally\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/effects-of-spaceflight-on-murine-skeletal-muscle-gene-expression-ed0ff",
+   "modified": "2026-10-20",
+   "topics": [
+    "muscle",
+    "fluid"
+   ]
+  },
+  {
+   "id": "rna-seq-transcriptome-profiling-of-soleus-from-adult-and-aged-mice-following-disuse-muscle",
+   "title": "RNA-Seq transcriptome profiling of soleus from adult and aged mice following disuse muscle atrophy and recovery",
+   "description": "Rodent hind limb unloading was used as a model for reduced muscle activity and eventual atrophy. After a 10 day period of unloading mice in this study were xe2 x80 x9creloaded xe2 x80 x9d for 3 days and regained use of their hind limbs. We report the application of Next-generation sequencing (NGS) technology for high-throughput profiling of mRNA in soleus muscle of adult (6 mo) and aged (22-24 mo)\u2026",
+   "keywords": [
+    "age",
+    "animal-husbandry",
+    "hindlimb-unloading",
+    "library-construction",
+    "mouse-habitation",
+    "nucleic-acid-extraction",
+    "nucleic-acid-sequencing",
+    "sample-collection",
+    "sequence-analysis-data-transformation"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rna-seq-transcriptome-profiling-of-soleus-from-adult-and-aged-mice-following-disuse-muscle",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "gene-metabolite-network-linked-to-inhibited-bioenergetics-in-association-with-spaceflight--c9192",
+   "title": "Gene-metabolite network linked to inhibited bioenergetics in association with spaceflight induced loss of quadriceps muscle",
+   "description": "Prolonged residence of mice in spaceflight is a scientifically robust and ethically ratified model of muscle atrophy caused by continued unloading. Under the Rodent Research Program of NASA, we assayed the genomic and metabolomics perturbations in the quadriceps of C57BL/6J male mice that lived on the spaceflight (FLT) or at Ground Control (CTR) for approximately four weeks. Wet weight of quadrice\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/gene-metabolite-network-linked-to-inhibited-bioenergetics-in-association-with-spaceflight--c9192",
+   "modified": "2026-10-20",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-bd8e9",
+   "title": "Spaceflight induces systemic effects on extracellular matrix and immune system in different age-stages - limb muscle data",
+   "description": "Spaceflights significantly impacts astronaut health, causing muscle atrophy, bone loss, cardiovascular deconditioning and immune system dysregulation, especially during long missions. To explore molecular changes, we generated a single-cell RNA sequencing dataset, of 216 samples from 28 mouse organs and tissues under spaceflight and control conditions. Since spaceflight effects closely resemble as\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/spaceflight-induces-systemic-effects-on-extracellular-matrix-and-immune-system-in-differen-bd8e9",
+   "modified": "2026-10-20",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "effect-of-acute-muscle-unloading-on-soleus-and-gastrocnemius-muscle-gene-expression",
+   "title": "Effect of acute muscle unloading on soleus and gastrocnemius muscle gene expression",
+   "description": "Gene expression changes induced by acute skeletal muscle unloading which leads to physiological changes including muscle atrophy fibre-type switching and loss of ability to transition between lipid and glucose as energy source (metabolic inflexibility) was investigated by hind-limb suspension (HLS) treatment of Male ICR mice (28 x9632 g body wt; Harlan Indianapolis IN). Agilent Whole Mouse Genome \u2026",
+   "keywords": [
+    "data-collection",
+    "data-transformation",
+    "growth-protocol",
+    "hindlimb-unloading",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "tissue",
+    "treatment-protocol"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/effect-of-acute-muscle-unloading-on-soleus-and-gastrocnemius-muscle-gene-expression",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "characterizing-serca-function-in-murine-skeletal-muscles-after-35-37-days-of-spaceflight-f",
+   "title": "Characterizing SERCA Function in Murine Skeletal Muscles after 35-37 Days of Spaceflight from RR-1 and RR-9 (calcium uptake and Western blot in soleus and tibialis anterior)",
+   "description": "It is well established that microgravity exposure causes significant muscle weakness and atrophy via muscle unloading. On Earth, muscle unloading leads to a disproportionate loss in muscle force and size with the loss in muscle force occurring at a faster rate. Although the exact mechanisms are unknown, a role for Ca2+ dysregulation has been suggested. The sarco(endo)plasmic reticulum Ca2+ ATPase \u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/characterizing-serca-function-in-murine-skeletal-muscles-after-35-37-days-of-spaceflight-f",
+   "modified": "2026-10-20",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "rodent-research-1-rr1-nasa-validation-flight-mouse-gastrocnemius-muscle-transcriptomic-pro",
+   "title": "Rodent Research-1 (RR1) NASA Validation Flight: Mouse gastrocnemius muscle transcriptomic proteomic and epigenomic data",
+   "description": "NASA s Rodent Research (RR) project is playing a critical role in advancing biomedical research on the physiological effects of space environments. Due to the limited resources for conducting biological experiments aboard the International Space Station (ISS) it is imperative to use crew time efficiently while maximizing high-quality science return. NASA s GeneLab project has as its primary object\u2026",
+   "keywords": [
+    "5mc-total-rna-methylation-analysis",
+    "animal-and-tissue-sampling",
+    "animal-husbandry",
+    "data-transformation",
+    "dna-sequencing-library-construction",
+    "epitranscriptomics",
+    "genelab-rnaseq-data-processing-protocol",
+    "labeling",
+    "library-construction",
+    "mass-spectrometry",
+    "mouse-habitation",
+    "nucleic-acid-extraction"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rodent-research-1-rr1-nasa-validation-flight-mouse-gastrocnemius-muscle-transcriptomic-pro",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "rodent-research-1-rr1-nasa-validation-flight-mouse-quadriceps-muscle-transcriptomic-proteo-13d3a",
+   "title": "Rodent Research-1 (RR1) NASA Validation Flight: Mouse quadriceps muscle transcriptomic proteomic and epigenomic data",
+   "description": "NASA s Rodent Research (RR) project is playing a critical role in advancing biomedical research on the physiological effects of space environments. Due to the limited resources for conducting biological experiments aboard the International Space Station (ISS) it is imperative to use crew time efficiently while maximizing high-quality science return. NASA s GeneLab project has as its primary object\u2026",
+   "keywords": [
+    "5mc-total-rna-methylation-analysis",
+    "animal-and-tissue-sampling",
+    "animal-husbandry",
+    "data-transformation",
+    "dna-library-construction",
+    "epitranscriptomics",
+    "genelab-rnaseq-data-processing-protocol",
+    "labeling",
+    "library-construction",
+    "mass-spectrometry",
+    "mouse-habitation",
+    "nucleic-acid-extraction"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rodent-research-1-rr1-nasa-validation-flight-mouse-quadriceps-muscle-transcriptomic-proteo-13d3a",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "rodent-research-1-rr1-nasa-validation-flight-mouse-tibialis-anterior-muscle-transcriptomic",
+   "title": "Rodent Research-1 (RR1) NASA Validation Flight: Mouse tibialis anterior muscle transcriptomic proteomic and epigenomic data",
+   "description": "NASA s Rodent Research (RR) project is playing a critical role in advancing biomedical research on the physiological effects of space environments. Due to the limited resources for conducting biological experiments aboard the International Space Station (ISS) it is imperative to use crew time efficiently while maximizing high-quality science return. NASA s GeneLab project has as its primary object\u2026",
+   "keywords": [
+    "animal-and-tissue-sampling",
+    "animal-husbandry",
+    "data-transformation",
+    "dna-library-construction",
+    "epitranscriptomics",
+    "genelab-rnaseq-data-processing-protocol",
+    "labeling",
+    "library-construction",
+    "mass-spectrometry",
+    "mouse-habitation",
+    "nucleic-acid-extraction",
+    "nucleic-acid-sequencing"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rodent-research-1-rr1-nasa-validation-flight-mouse-tibialis-anterior-muscle-transcriptomic",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "mouse-muscle-lc-msms-upon-weightlessness-b0f88",
+   "title": "Mouse muscle LC-MSMS upon weightlessness",
+   "description": "Upon weightlessness and microgravity deleterious effects on the neurosensory and neurovestibular systems haematological changes and deconditioning of musculoskeletal cardiovascular and cardiopulmonary functions have been reported. In particular loss of muscle mass and strength are triggered by weightlessness in humans during space flights that is similarly observed as a result of physical inactivi\u2026",
+   "keywords": [
+    "data-transformation",
+    "extraction",
+    "mass-spectrometry",
+    "muscle-skeletal",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mouse-muscle-lc-msms-upon-weightlessness-b0f88",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "mouse-muscle-lc-msms-upon-weightlessness",
+   "title": "Mouse muscle LC-MSMS upon weightlessness",
+   "description": "Upon weightlessness and microgravity deleterious effects on the neurosensory and neurovestibular systems haematological changes and deconditioning of musculoskeletal cardiovascular and cardiopulmonary functions have been reported. In particular loss of muscle mass and strength are triggered by weightlessness in humans during space flights that is similarly observed as a result of physical inactivi\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-transformation",
+    "extraction",
+    "mass-spectrometry",
+    "muscle-skeletal",
+    "radiation-dosimetry",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mouse-muscle-lc-msms-upon-weightlessness",
+   "modified": "2025-04-23",
+   "topics": [
+    "muscle"
+   ]
+  },
+  {
+   "id": "reproducible-changes-in-gut-microbiome-reveal-a-shift-in-microbial-and-host-metabolism-dur-a6cdc",
+   "title": "Reproducible changes in gut microbiome reveal a shift in microbial and host metabolism during spaceflight",
+   "description": "Data were generated as part of a NASA-funded study (Turek F (PI) et al. Effects of Spaceflight on Gastrointestinal Microbiota in Mice: Mechanisms and Impact on Multi-System. NASA NRA: NRA NNH14ZTT002N). As part of the study, we requested and received samples from RR1. We generated 16S rRNA gene amplicon sequence data from DNA extracted from fecal samples, and compared these data to similar data ge\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/reproducible-changes-in-gut-microbiome-reveal-a-shift-in-microbial-and-host-metabolism-dur-a6cdc",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d-cd0e5",
+   "title": "Head-Down Tilt As a Model for Intracranial and Intraocular Pressures, and Retinal Changes during Spaceflight (Optic Nerve, MRI)",
+   "description": "This ground-based program was intended to address the etiology of visual system structural and functional changes observed in astronauts during both inflight and postflight periods. Using the well-documented rat hindlimb suspension (HLS) model, functionally equivalent to human head-down bedrest, we examined the relationship between cephalic fluid shifts resulting from long-duration G-unloading and\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d-cd0e5",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d-6a461",
+   "title": "Head-Down Tilt As a Model for Intracranial and Intraocular Pressures, and Retinal Changes during Spaceflight (Eye, MRI, Optical Coherence Tomography, Tonometry, A-scan)",
+   "description": "This ground-based program was intended to address the etiology of visual system structural and functional changes observed in astronauts during both inflight and postflight periods. Using the well-documented rat hindlimb suspension (HLS) model, functionally equivalent to human head-down bedrest, we examined the relationship between cephalic fluid shifts resulting from long-duration G-unloading and\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d-6a461",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d",
+   "title": "Head-Down Tilt As a Model for Intracranial and Intraocular Pressures, and Retinal Changes during Spaceflight (Subcutaneous Tissue and Subdural Space, Body Temperature and Intracranial Pressure Biotelemetry)",
+   "description": "This ground-based program was intended to address the etiology of visual system structural and functional changes observed in astronauts during both inflight and postflight periods. Using the well-documented rat hindlimb suspension (HLS) model, functionally equivalent to human head-down bedrest, we examined the relationship between cephalic fluid shifts resulting from long-duration G-unloading and\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/head-down-tilt-as-a-model-for-intracranial-and-intraocular-pressures-and-retinal-changes-d",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "candida-albicans-response-to-spaceflight-nasa-sts-115-fa831",
+   "title": "Candida albicans response to spaceflight (NASA STS-115)",
+   "description": "This study presents the first global transcriptional profiling and phenotypic characterization of the major human opportunistic fungal pathogen, Candida albicans, grown in spaceflight conditions. Microarray analysis revealed that C. albicans subjected to short-term spaceflight culture differentially regulated 454 genes compared to synchronous ground controls, which represented 8.4% of the analyzed\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/candida-albicans-response-to-spaceflight-nasa-sts-115-fa831",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "candida-albicans-response-to-spaceflight-nasa-sts-115-gsm1231690-slide-43",
+   "title": "Candida albicans response to spaceflight (NASA STS-115) --- GSM1231690_Slide_43",
+   "description": "https://c3.nasa.gov/genelab/accession/GLDS-20/ This study presents the first global transcriptional profiling and phenotypic characterization of the major human opportunistic fungal pathogen, Candida albicans, grown in spaceflight conditions. Microarray analysis revealed that C. albicans subjected to short-term spaceflight culture differentially regulated 454 genes compared to synchronous ground c\u2026",
+   "keywords": [
+    "albicans",
+    "candida"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/candida-albicans-response-to-spaceflight-nasa-sts-115-gsm1231690-slide-43",
+   "modified": "2025-07-14",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "s-e-geod-50881-study-samples-candida-albicans-response-to-spaceflight-nasa-sts-115",
+   "title": "S E- GEOD-50881 Study Samples --- Candida albicans response to spaceflight (NASA STS-115)",
+   "description": "https://c3.nasa.gov/genelab/accession/GLDS-20/ This study presents the first global transcriptional profiling and phenotypic characterization of the major human opportunistic fungal pathogen, Candida albicans, grown in spaceflight conditions. Microarray analysis revealed that C. albicans subjected to short-term spaceflight culture differentially regulated 454 genes compared to synchronous ground c\u2026",
+   "keywords": [
+    "fungal",
+    "pathogen",
+    "phenotypic"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/s-e-geod-50881-study-samples-candida-albicans-response-to-spaceflight-nasa-sts-115",
+   "modified": "2025-05-29",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "a-e-geod-50881-gene-chip-assay-candida-albicans-response-to-spaceflight-nasa-sts-115",
+   "title": "A E- GEOD-50881 Gene Chip Assay --- Candida albicans response to spaceflight (NASA STS-115)",
+   "description": "https://c3.nasa.gov/genelab/accession/GLDS-20/ This study presents the first global transcriptional profiling and phenotypic characterization of the major human opportunistic fungal pathogen, Candida albicans, grown in spaceflight conditions. Microarray analysis revealed that C. albicans subjected to short-term spaceflight culture differentially regulated 454 genes compared to synchronous ground c\u2026",
+   "keywords": [
+    "candida-albicans",
+    "fungal",
+    "pathogen"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/a-e-geod-50881-gene-chip-assay-candida-albicans-response-to-spaceflight-nasa-sts-115",
+   "modified": "2025-05-29",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "transcriptional-and-proteomic-response-of-pseudomonas-aeruginosa-pao1-to-spaceflight-condi-36d34",
+   "title": "Transcriptional and proteomic response of Pseudomonas aeruginosa PAO1 to spaceflight conditions involves Hfq regulation and reveals a role for oxygen",
+   "description": "This study describes the transcriptional response of P. aeruginosa PAO1 to low-Earth orbit environmental conditions. Our aim was to assess whether the microgravity environment of spaceflight could induce virulence traits in P. aeruginosa. To this end, P. aeruginosa cultures were grown in space, and the expression profile was compared with ground control samples (both in biological triplicate). Cha\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/transcriptional-and-proteomic-response-of-pseudomonas-aeruginosa-pao1-to-spaceflight-condi-36d34",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "integrative-transcriptomics-and-proteomics-profiling-of-arabidopsis-thaliana-elucidates-no",
+   "title": "Integrative Transcriptomics and Proteomics Profiling of Arabidopsis thaliana Elucidates Novel Mechanisms Underlying Spaceflight Adaptation",
+   "description": "Spaceflight presents a unique environment with complex stressors, including microgravity and radiation, that can influence plant physiology at molecular levels. Combining transcriptomics and proteomics approaches, this research gives insights into the coordination of transcriptome and proteome in Arabidopsis\u2019 molecular and physiological responses to Spaceflight environmental stress. Arabidopsis se\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/integrative-transcriptomics-and-proteomics-profiling-of-arabidopsis-thaliana-elucidates-no",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "rapid-electrochemical-detection-and-identification-of-microbiological-and-chemical-contami",
+   "title": "Rapid Electrochemical Detection and Identification of Microbiological and Chemical Contaminants for Manned Spaceflight Project",
+   "description": "&lt;p&gt;A great deal of effort has gone into the development of point-of-use methods to meet the challenge of rapid bacterial identification for both environmental monitoring and clinical applications.&amp;nbsp; Unfortunately, most of the methods developed rely on Preliminary Chain Reaction (PCR) and face inherent limitations because of the requirement for enzymatic components and thermal control\u2026",
+   "keywords": [
+    "active",
+    "johnson-space-center",
+    "project"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rapid-electrochemical-detection-and-identification-of-microbiological-and-chemical-contami",
+   "modified": "2025-03-31",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "spaceflight-analogue-culture-enhances-the-host-pathogen-interaction-between-salmonella-and",
+   "title": "Spaceflight Analogue Culture Enhances the Host-Pathogen Interaction Between Salmonella and a 3-D Biomimetic Intestinal Co-Culture Model",
+   "description": "Physical forces associated with spaceflight and spaceflight analogue culture regulate a wide range of physiological responses by both bacterial and mammalian cells that can impact infection. However, our mechanistic understanding of how these environments regulate host-pathogen interactions in humans is poorly understood. Using a spaceflight analogue low fluid shear culture system, we investigated\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/spaceflight-analogue-culture-enhances-the-host-pathogen-interaction-between-salmonella-and",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "fifteen-days-of-microgravity-causes-growth-in-calvaria-of-mice-sts-131",
+   "title": "Fifteen days of microgravity causes growth in calvaria of mice (STS-131)",
+   "description": "Bone growth may occur in spaceflight as a response to skeletal unloading and head-ward fluid shifts. While unloading causes significant loss of bone mass and density in legs of animals exposed to microgravity, increased blood and interstitial fluid flows accompanying microgravity-induced fluid redistribution may elicit an opposite effect in the head. Seven 23-week-old, adult female wild-type C57BL\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/fifteen-days-of-microgravity-causes-growth-in-calvaria-of-mice-sts-131",
+   "modified": "2026-10-20",
+   "topics": [
+    "fluid"
+   ]
+  },
+  {
+   "id": "mars-science-laboratory-msl-radiation-assessment-detector-rad-level-2-observation-dosimetr-e2695",
+   "title": "Mars Science Laboratory (MSL), Radiation Assessment Detector (RAD), Level 2 Observation Dosimetry, LET, and Neutral-Particle Data",
+   "description": "Mars Science Laboratory Radiation Assessment Detector (RAD) Level 2 observation data for Mars surface operations. The record contains quality-filtered variables, identified by the _f suffix, and corresponding all-quality variables for detector alive time, dose-rate products, linear energy transfer (LET) spectra, and neutral-radiation histograms, together with associated bin and axis support variab\u2026",
+   "keywords": [
+    "energeticparticles"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mars-science-laboratory-msl-radiation-assessment-detector-rad-level-2-observation-dosimetr-e2695",
+   "modified": "2026-11-05",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "mars-science-laboratory-msl-radiation-assessment-detector-rad-level-2-observation-dosimetr",
+   "title": "Mars Science Laboratory (MSL), Radiation Assessment Detector (RAD), Level 2 Observation Dosimetry, LET, and Neutral-Particle Data",
+   "description": "Mars Science Laboratory Radiation Assessment Detector (RAD) Level 2 observation data for Mars surface operations. The record contains quality-filtered variables, identified by the _f suffix, and corresponding all-quality variables for detector alive time, dose-rate products, linear energy transfer (LET) spectra, and neutral-radiation histograms, together with associated bin and axis support variab\u2026",
+   "keywords": [
+    "energeticparticles"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mars-science-laboratory-msl-radiation-assessment-detector-rad-level-2-observation-dosimetr",
+   "modified": "2026-09-28",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "space-radiation-induces-distinct-senescent-phenotypes-implications-for-space-travel-scrna-",
+   "title": "Space radiation induces distinct senescent phenotypes: Implications for space travel [scRNA-Seq]",
+   "description": "As Earth's magnetic field weakens, space radiation begins to pose a significant threat to the health of not only space travelers, but the world's population. Space radiation, comprising high-energy and high-charge ions, creates distinct clusters of DNA damage and dense macromolecular damage that result in the accumulation of senescent cells (SnCs) known to play a critical role in promoting multimo\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/space-radiation-induces-distinct-senescent-phenotypes-implications-for-space-travel-scrna-",
+   "modified": "2026-10-20",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "space-radiation-induces-distinct-senescent-phenotypes-implications-for-space-travel-bulk-r",
+   "title": "Space radiation induces distinct senescent phenotypes: Implications for space travel [bulk RNA-Seq]",
+   "description": "As Earth's magnetic field weakens, space radiation begins to pose a significant threat to the health of not only space travelers, but the world's population. Space radiation, comprising high-energy and high-charge ions, creates distinct clusters of DNA damage and dense macromolecular damage that result in the accumulation of senescent cells (SnCs) known to play a critical role in promoting multimo\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/space-radiation-induces-distinct-senescent-phenotypes-implications-for-space-travel-bulk-r",
+   "modified": "2026-10-20",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-microgravity-and-space-radiation-nimblegen-31c38",
+   "title": "Synergistic effects of microgravity and space radiation (Nimblegen)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured space xef xac x82ight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were perfor\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-microgravity-and-space-radiation-nimblegen-31c38",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-microgravity-and-space-radiation-nimblegen",
+   "title": "Synergistic effects of microgravity and space radiation (Nimblegen)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured spaceflight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were performed. In ou\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-microgravity-and-space-radiation-nimblegen",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "effects-of-low-dose-space-radiation-exposures-on-the-splenic-metabolome",
+   "title": "Effects of low dose space radiation exposures on the splenic metabolome",
+   "description": "Future space missions will include return to the Moon and long duration deep space roundtrip missions to Mars. Leaving the protection that Low Earth Orbit provides will unavoidably expose astronauts to higher cumulative doses of space radiation, in addition to other stressors, e.g. microgravity. Immune regulation is known to be impacted and it remains to be seen whether prolonged effects will be e\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/effects-of-low-dose-space-radiation-exposures-on-the-splenic-metabolome",
+   "modified": "2026-10-20",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "biosentinel-validating-sensitivity-of-yeast-biosensors-to-deep-space-relevant-radiation",
+   "title": "BioSentinel: Validating Sensitivity of Yeast Biosensors to Deep Space Relevant Radiation",
+   "description": "With the imminent human exploration of deep space, it is more important than ever to understand the biological risks of deep space radiation exposure. The BioSentinel mission will be the first biological payload to study the effects of radiation beyond low Earth orbit in 50 years. This study is the last in a collection of articles about the BioSentinel biological CubeSat mission, where budding yea\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/biosentinel-validating-sensitivity-of-yeast-biosensors-to-deep-space-relevant-radiation",
+   "modified": "2026-10-20",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-dys-mutant",
+   "title": "Synergistic effects of space radiation and microgravity (miRNA WT and dys-mutant)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured space xef xac x82ight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were perfor\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-dys-mutant",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-dys-mutant-34bb9",
+   "title": "Synergistic effects of space radiation and microgravity (miRNA WT and dys-mutant)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured spaceflight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were performed. In ou\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-dys-mutant-34bb9",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-ced-1-mutant-d24c1",
+   "title": "Synergistic effects of space radiation and microgravity (miRNA WT and ced-1 mutant)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured space xef xac x82ight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were perfor\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-ced-1-mutant-d24c1",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-ced-1-mutant",
+   "title": "Synergistic effects of space radiation and microgravity (miRNA WT and ced-1 mutant)",
+   "description": "Space radiations and microgravity both could cause DNA damage in cells but the effects of microgravity on DNA damage response to space radiations are still controversial. A mRNA microarray and microRNA microarray in dauer larvae of Caenorhabditis elegans (C. elegans) that endured spaceflight environment and space radiations environment during 16.5-day Shenzhou-8 space mission were performed. In ou\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "data-collection",
+    "labeling",
+    "normalization-data-transformation",
+    "nucleic-acid-hybridization",
+    "rna-extraction",
+    "sample-collection",
+    "weightlessness"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/synergistic-effects-of-space-radiation-and-microgravity-mirna-wt-and-ced-1-mutant",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "mlh1-deficiency-increases-the-risk-of-hematopoietic-malignancy-after-simulated-space-radia",
+   "title": "['Mlh1 deficiency increases the risk of hematopoietic malignancy after simulated space radiation exposure']",
+   "description": "['Cancer-causing genome instability is a major concern during space travel due to exposure of astronauts to potent sources of high-linear energy transfer (LET) ionizing radiation. Hematopoietic stem cells (HSCs) are particularly susceptible to genotoxic stress, and accumulation of damage can lead to HSC dysfunction and oncogenesis. Our group recently demonstrated that aging human HSCs accumulate m\u2026",
+   "keywords": [
+    "genotype-ionizing-radiation",
+    "treatment-protocol-nucleic-acid-extraction-library-construction-nucleic-acid-sequencing"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mlh1-deficiency-increases-the-risk-of-hematopoietic-malignancy-after-simulated-space-radia",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "salmonella-typhimurium-transcription-profiles-in-space-flight",
+   "title": "Salmonella Typhimurium transcription profiles in space flight",
+   "description": "Salmonella transcription profiles were obtained from samples flown on space shuttle mission STS-115 and compared to profiles from Salmonella grown under identical conditions on the ground. Keywords: stress response transcriptional profile Triplicate experimental samples were hybridized to slides that contain three identical Salmonella ORF arrays. Each hybridization was performed with Cy3 labeled t\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "bioassay_data_transformation",
+    "feature_extraction",
+    "gravity",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "p-gse8573-1",
+    "p-gse8573-10",
+    "p-gse8573-11",
+    "p-gse8573-12"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/salmonella-typhimurium-transcription-profiles-in-space-flight",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "salmonella-typhimurium-transcription-profiles-in-space-flight-80083",
+   "title": "Salmonella Typhimurium transcription profiles in space flight",
+   "description": "Salmonella transcription profiles were obtained from samples flown on space shuttle mission STS-115 and compared to profiles from Salmonella grown under identical conditions on the ground. Keywords: stress response transcriptional profile Triplicate experimental samples were hybridized to slides that contain three identical Salmonella ORF arrays. Each hybridization was performed with Cy3 labeled t\u2026",
+   "keywords": [
+    "absorbed-radiation-dose",
+    "bioassay_data_transformation",
+    "feature_extraction",
+    "gravity",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "p-gse8573-1",
+    "p-gse8573-10",
+    "p-gse8573-11",
+    "p-gse8573-12"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/salmonella-typhimurium-transcription-profiles-in-space-flight-80083",
+   "modified": "2025-04-23",
+   "topics": [
+    "radiation"
+   ]
+  },
+  {
+   "id": "woman-skeletal-muscle-transcriptome-with-bed-rest-and-countermeasures",
+   "title": "Woman skeletal muscle transcriptome with bed rest and countermeasures.",
+   "description": "Microgravity has a dramatic impact on human physiology illustrated in particular with skeletal muscle impairment. A thorough understanding of the mechanisms leading to loss of muscle mass and structural disorders is necessary for the definition of efficient clinical and spaceflight countermeasures. We investigated the effects of long-term bed rest on transcriptome of soleus (SOL) and vastus latera\u2026",
+   "keywords": [
+    "bed-rest",
+    "bioassay_data_transformation",
+    "exercise",
+    "feature_extraction",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "nutrition",
+    "p-gse14798-1",
+    "p-gse14798-2",
+    "p-gse14798-3"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/woman-skeletal-muscle-transcriptome-with-bed-rest-and-countermeasures",
+   "modified": "2025-07-14",
+   "topics": [
+    "nutrition"
+   ]
+  },
+  {
+   "id": "woman-skeletal-muscle-transcriptome-with-bed-rest-and-countermeasures-ed64f",
+   "title": "Woman skeletal muscle transcriptome with bed rest and countermeasures.",
+   "description": "Microgravity has a dramatic impact on human physiology illustrated in particular with skeletal muscle impairment. A thorough understanding of the mechanisms leading to loss of muscle mass and structural disorders is necessary for the definition of efficient clinical and spaceflight countermeasures. We investigated the effects of long-term bed rest on transcriptome of soleus (SOL) and vastus latera\u2026",
+   "keywords": [
+    "bed-rest",
+    "bioassay_data_transformation",
+    "exercise",
+    "feature_extraction",
+    "hybridization",
+    "image_aquisition",
+    "labeling",
+    "nucleic_acid_extraction",
+    "nutrition",
+    "p-gse14798-1",
+    "p-gse14798-2",
+    "p-gse14798-3"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/woman-skeletal-muscle-transcriptome-with-bed-rest-and-countermeasures-ed64f",
+   "modified": "2025-07-14",
+   "topics": [
+    "nutrition"
+   ]
+  },
+  {
+   "id": "pick-and-eat-space-crop-production-flight-testing-on-the-international-space-station-plate",
+   "title": "Pick-and-eat space crop production flight testing on the International Space Station (Plate Count Assay using Plant and Hardware Surface Microbes)",
+   "description": "Fresh, nutritious, palatable produce for crew consumption on long-duration spaceflight missions may provide health-promoting, bioavailable nutrients and enhance the dietary experience. VEG-04A and VEG-04B explored growing leafy greens on the International Space Station using the Veggie Vegetable Production System. Two flight tests with ground controls were conducted in 2019 growing mizuna mustard,\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/pick-and-eat-space-crop-production-flight-testing-on-the-international-space-station-plate",
+   "modified": "2026-10-20",
+   "topics": [
+    "nutrition"
+   ]
+  },
+  {
+   "id": "pick-and-eat-space-crop-production-flight-testing-on-the-international-space-station-eleme",
+   "title": "Pick-and-eat space crop production flight testing on the International Space Station (Elemental Analysis, ORAC, Phenolic Content)",
+   "description": "Fresh, nutritious, palatable produce for crew consumption on long-duration spaceflight missions may provide health-promoting, bioavailable nutrients and enhance the dietary experience. VEG-04A and VEG-04B explored growing leafy greens on the International Space Station using the Veggie Vegetable Production System. Two flight tests with ground controls were conducted in 2019 growing mizuna mustard,\u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/pick-and-eat-space-crop-production-flight-testing-on-the-international-space-station-eleme",
+   "modified": "2026-10-20",
+   "topics": [
+    "nutrition"
+   ]
+  },
+  {
+   "id": "simulated-galactic-cosmic-ray-exposure-activates-dose-dependent-dna-repair-response-and-do",
+   "title": "Simulated Galactic Cosmic Ray Exposure Activates Dose-Dependent DNA Repair Response and Downregulates Glucosinolate Pathway in Arabidopsis Seedlings",
+   "description": "This study's objective was to develop an understanding of the biological effects of space radiation on plants with the goal of producing fresh food during long duration space missions to support astronauts' nutritional and psychological needs.10-day-old Arabidopsis seedlings were exposed to simulated Galactic Cosmic Rays (GCR) and assessed for transcriptomic changes. The simulated GCR irradiation \u2026",
+   "keywords": [
+    "biological-and-physical-sciences",
+    "genelab",
+    "nasa"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/simulated-galactic-cosmic-ray-exposure-activates-dose-dependent-dna-repair-response-and-do",
+   "modified": "2026-10-20",
+   "topics": [
+    "nutrition"
+   ]
+  },
+  {
+   "id": "nasa-life-sciences-portal-nlsp",
+   "title": "NASA Life Sciences Portal (NLSP)",
+   "description": "The NASA Life Sciences Portal (NLSP) is the data platform for accessing NASA's Life Sciences Data Archive (LSDA). The LSDA is an active archive that provides information and data from 1961 (Mercury Project) through current flight and flight analog studies (International Space Station, Shuttle, bed rest studies, etc.) involving human, plant and animal subjects. Alternative contact: Jessica Keune (j\u2026",
+   "keywords": [
+    "accessibility",
+    "actiwatch",
+    "biospecimens",
+    "blind",
+    "bone",
+    "calcium",
+    "chronobiology",
+    "earth-images",
+    "endocrinology",
+    "gastrointestinal",
+    "health",
+    "hematology"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/nasa-life-sciences-portal-nlsp",
+   "modified": "2025-03-31",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "space-life-and-physical-sciences-research-and-applications-program",
+   "title": "Space Life and Physical Sciences Research and Applications Program",
+   "description": "Space Life and Physical Sciences Research and Applications Program",
+   "keywords": [
+    "active",
+    "program"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/space-life-and-physical-sciences-research-and-applications-program",
+   "modified": "2025-03-31",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "nasa-ipac-infrared-science-archive",
+   "title": "NASA/IPAC Infrared Science Archive",
+   "description": "IRSA is chartered to curate the calibrated science products from NASAs infrared and sub-millimeter missions, including five major large-area/all-sky surveys. IRSA data sets are cited in about 10% of astronomical refereed papers.<br /> IRSA offers access to digital archives through powerful query engines, including VO-compliant interfaces, and offers unique tools such as the IRAS scan processing to\u2026",
+   "keywords": [
+    "akari",
+    "blast",
+    "bolocam",
+    "cosmic-microwaves",
+    "cosmos",
+    "denis",
+    "dust",
+    "ephemeris",
+    "imagery",
+    "instrument",
+    "iras",
+    "irts"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/nasa-ipac-infrared-science-archive",
+   "modified": "2025-07-14",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "high-energy-astrophysics-science-archive-research-center",
+   "title": "High Energy Astrophysics Science Archive Research Center",
+   "description": "The High Energy Astrophysics Science Archive Research Center (HEASARC) is the primary archive for NASA missions dealing with extremely energetic phenomena, from black holes to the Big Bang.",
+   "keywords": [
+    "act",
+    "ariel-v",
+    "asca",
+    "astronomy",
+    "astrophysics",
+    "bbxrt",
+    "beppo-sax",
+    "cgro",
+    "chandra",
+    "controlled-vocabulary",
+    "cosmology",
+    "denis"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/high-energy-astrophysics-science-archive-research-center",
+   "modified": "2025-04-23",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "cluster-samba-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-fb982",
+   "title": "Cluster-Samba Electron Drift Instrument (EDI) Data at the ESA Cluster Science Archive",
+   "description": "The Electron Drift Instrument (EDI) data products from the Cluster spacecraft in three main categories: (1) Electron enegergies measured between 0.5 and 1.0 keV for the Windshield Wiper mode: time series of the three components of the electron drift velocity and of the three components of the electric field in Cartesian GSE coordinate system (corrected for spacecraft motion) with different qualiti\u2026",
+   "keywords": [
+    "electricfield"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/cluster-samba-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-fb982",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "cluster-rumba-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-77561",
+   "title": "Cluster-Rumba Electron Drift Instrument (EDI) Data at the ESA Cluster Science Archive",
+   "description": "The Electron Drift Instrument (EDI) data products from the Cluster spacecraft in three main categories: (1) Electron enegergies measured between 0.5 and 1.0 keV for the Windshield Wiper mode: time series of the three components of the electron drift velocity and of the three components of the electric field in Cartesian GSE coordinate system (corrected for spacecraft motion) with different qualiti\u2026",
+   "keywords": [
+    "electricfield"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/cluster-rumba-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-77561",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "cluster-tango-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-60e2d",
+   "title": "Cluster-Tango Electron Drift Instrument (EDI) Data at the ESA Cluster Science Archive",
+   "description": "The Electron Drift Instrument (EDI) data products from the Cluster spacecraft in three main categories: (1) Electron enegergies measured between 0.5 and 1.0 keV for the Windshield Wiper mode: time series of the three components of the electron drift velocity and of the three components of the electric field in Cartesian GSE coordinate system (corrected for spacecraft motion) with different qualiti\u2026",
+   "keywords": [
+    "electricfield"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/cluster-tango-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-60e2d",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "cluster-salsa-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-78942",
+   "title": "Cluster-Salsa Electron Drift Instrument (EDI) Data at the ESA Cluster Science Archive",
+   "description": "The Electron Drift Instrument (EDI) data products from the Cluster spacecraft in three main categories: (1) Electron enegergies measured between 0.5 and 1.0 keV for the Windshield Wiper mode: time series of the three components of the electron drift velocity and of the three components of the electric field in Cartesian GSE coordinate system (corrected for spacecraft motion) with different qualiti\u2026",
+   "keywords": [
+    "electricfield"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/cluster-salsa-electron-drift-instrument-edi-data-at-the-esa-cluster-science-archive-78942",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "rosat-archival-data",
+   "title": "ROSAT Archival Data",
+   "description": "This database table contains the list of all R&ouml;ntgen Satellite (ROSAT) X-Ray Telescope (XRT) pointing-mode observations for which data sets are available, i.e., it excludes the ROSAT All-Sky Survey observations. Users should consult the RASSMASTER database table for those XRT observations which were made in scanning mode during the ROSAT All-Sky Survey (RASS) phase (30 July 1990 to 25 January\u2026",
+   "keywords": [
+    "__"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rosat-archival-data",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "rosat-archival-wfc-euv-data",
+   "title": "ROSAT Archival WFC EUV Data",
+   "description": "The WFCPOINT database table contains the list of ROSAT-Wide Field Camera calibration (CAL), performance verification (PV), and AO phase observations. For each observation listed in WFCPOINT, the target name, celestial co-ordinates, sequence number, PI name, and proposal title are given. The date of the observation, date that the data were distributed, and the date that the data will be released to\u2026",
+   "keywords": [
+    "__"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rosat-archival-wfc-euv-data",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "xte-archived-public-slew-data",
+   "title": "XTE Archived Public Slew Data",
+   "description": "This database table is a catalog of all the RXTE slew observations and is based on information culled from the RXTE Data Archive&#39;s latest top-level FMI (FITS Master Index) file that is created when data products are made publicly available each week. ObsIDs listed in this table are available for download from &lt;a href=\"https://heasarc.gsfc.nasa.gov/FTP/xte/data/archive/\"&gt;https://heasarc.g\u2026",
+   "keywords": [
+    "__"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/xte-archived-public-slew-data",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "rosat-all-sky-survey-archival-data",
+   "title": "ROSAT All-Sky Survey Archival Data",
+   "description": "This database table contains the list German ROSAT All-Sky Survey observations which were obtained during the ROSAT All-Sky Survey phase (1990 July 30 to 1991 Jan 25) and which have become available to the public. These data were obtained in scanning mode and therefore an individual dataset covers a much larger area of the sky than do pointed moded observations. In addition all these data were obt\u2026",
+   "keywords": [
+    "__"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/rosat-all-sky-survey-archival-data",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "polar-pixie-level-1-data-archive-d8272",
+   "title": "Polar PIXIE Level 1 Data Archive",
+   "description": "Polar PIXIE Level 1 Auroral X-ray Data Archive in CDF Format",
+   "keywords": [
+    "imageintensity"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/polar-pixie-level-1-data-archive-d8272",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "comet-halley-archive-near-nucleus-image-data-099e2",
+   "title": "COMET HALLEY ARCHIVE - NEAR NUCLEUS IMAGE DATA",
+   "description": "The NEAR NUCLEUS STUDIES Network contains 2204 observations of Comet Halley spanning dates from 11982 Oct 16 through 1989 Apr 12.",
+   "keywords": [
+    "__"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/comet-halley-archive-near-nucleus-image-data-099e2",
+   "modified": "2026-11-05",
+   "topics": [
+    "life-sciences"
+   ]
+  },
+  {
+   "id": "mariner-10-imaging-archive-experiment-data-record",
+   "title": "MARINER 10 IMAGING ARCHIVE EXPERIMENT DATA RECORD",
+   "description": "This series of fifteen CDs was produced by JPL's Science Digital Data Preservation Task (SDDPT) by migrating the original Mariner Ten image EDRs from old, deteriorating",
+   "keywords": [
+    "pds"
+   ],
+   "organization": "NASA",
+   "landing": "https://data.nasa.gov/dataset/mariner-10-imaging-archive-experiment-data-record",
+   "modified": "2025-07-17",
+   "topics": [
+    "life-sciences"
+   ]
+  }
+ ]
+}
