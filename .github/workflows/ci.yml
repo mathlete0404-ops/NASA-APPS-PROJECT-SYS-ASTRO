@@ -1,0 +1,67 @@
+name: CI and Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install
+        working-directory: web
+        run: npm ci
+      - name: Tests (shared rule cases)
+        working-directory: web
+        run: npm test
+      - name: Typecheck and build
+        working-directory: web
+        env:
+          BASE: /${{ github.event.repository.name }}/
+        run: |
+          npm run models
+          npm run build
+      - name: Keep a single-page fallback for deep links
+        run: cp web/dist/index.html web/dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: server/requirements.txt
+      - run: pip install -r server/requirements.txt
+      - name: Tests (same shared rule cases as the web app)
+        working-directory: server
+        run: python -m pytest -q
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [web, server]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

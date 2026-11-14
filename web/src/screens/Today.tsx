@@ -6,6 +6,7 @@ import { boneLossEstimate } from '../engine/triage'
 import { PATTERN_LABEL } from '../engine/triage'
 import { REGION_LABEL } from '../content/cards'
 import { EvidenceChips, fmtNum, Spark, StatusChip } from '../components/ui'
+import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
 
 const GROUPS: { id: string; label: string }[] = [
   { id: 'face', label: 'Face scan' },
@@ -105,6 +106,8 @@ export function Today({ go }: { go: (tab: string) => void }) {
           </div>
         )
       })}
+
+      <SpaceWeatherCard phase={p.phase} />
 
       <div className="grid g2">
         <div className="card">

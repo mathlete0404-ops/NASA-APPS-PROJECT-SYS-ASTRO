@@ -1,6 +1,6 @@
 // Crew Mirror service worker: cache-first for the app shell, wasm and models so the
 // app keeps working with no network (the spacecraft case). API calls are never cached.
-const CACHE = 'crew-mirror-v1'
+const CACHE = 'crew-mirror-v2'
 self.addEventListener('install', (e) => { self.skipWaiting(); e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['./', './index.html']))) })
 self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()))
 self.addEventListener('fetch', (e) => {
@@ -13,6 +13,6 @@ self.addEventListener('fetch', (e) => {
         caches.open(CACHE).then((c) => c.put(e.request, copy))
       }
       return res
-    }).catch(() => caches.match('./index.html')))
+    }).catch(() => (e.request.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
   )
 })

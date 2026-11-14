@@ -7,6 +7,7 @@ export const EVIDENCE: Record<string, Evidence> = {
   osd569: { id: 'osd569', kind: 'nasa-data', label: 'OSDR OSD-569 · Inspiration4 blood count', url: 'https://osdr.nasa.gov/bio/repo/data/studies/OSD-569' },
   osd575: { id: 'osd575', kind: 'nasa-data', label: 'OSDR OSD-575 · Inspiration4 metabolic panel', url: 'https://osdr.nasa.gov/bio/repo/data/studies/OSD-575' },
   radlab: { id: 'radlab', kind: 'nasa-data', label: 'RadLab Portal · space radiation', url: 'https://visualization.osdr.nasa.gov/radlab/gui/overview/' },
+  swpc: { id: 'swpc', kind: 'paper', label: 'NOAA SWPC · space weather scales and GOES proton flux', url: 'https://www.swpc.noaa.gov/noaa-scales-explanation' },
   eda: { id: 'eda', kind: 'nasa-data', label: 'OSDR Environmental Data App · cabin CO₂', url: 'https://visualization.osdr.nasa.gov/eda/' },
   nlsp: { id: 'nlsp', kind: 'nasa-data', label: 'NASA Life Sciences Portal (data.nasa.gov)', url: 'https://data.nasa.gov/dataset/nasa-life-sciences-portal-nlsp' },
   spine: { id: 'spine', kind: 'nasa', label: 'NASA · Astronauts’ spines under scrutiny', url: 'https://www.nasa.gov/feature/astronauts-spines-under-scrutiny' },

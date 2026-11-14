@@ -5,7 +5,7 @@ Challenge: *Create Health Monitoring Software for Astronauts on Space Missions*.
 
 > **Prototype, not a medical device.** Results are patterns, never diagnoses. Camera video never leaves the browser.
 
-**Live demo:** _TBD (static build of `web/`, e.g. GitHub Pages)_ · **Demo video / slides:** _TBD_
+**Live demo:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
 
 A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
@@ -37,6 +37,8 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | **Settings** (profile, mission, nutrition targets, scan length, theme, account, data export) | ✅ | `web/src/screens/Settings.tsx` |
 | NASA evidence: Inspiration4 CBC + CMP analysis (OSD-569, OSD-575), offline data.nasa.gov catalog with live search through the server | ✅ | `ingest/`, `web/src/screens/Evidence.tsx` |
 | Radiation context + cumulative dose estimate | ✅ (published rates) | `web/src/content/mission.ts` |
+| **Solar radiation storm card**: live NOAA SWPC ≥10 MeV proton flux → NOAA S-scale (S1–S5), phase-aware rule-based actions (shelter / suspend EVA / tell the CMO), 24 h chart, last reading kept for offline use ("Last known", never "Quiet" when there is no data) | ✅ | `web/src/engine/spaceweather.ts`, `web/src/components/SpaceWeatherCard.tsx` |
+| CI + static deploy: tests (web and server), typecheck, production build, GitHub Pages | ✅ workflow · needs Pages enabled | `.github/workflows/ci.yml` |
 | CMO view: all crew, worst first, reasons; delayed downlink to Earth (light-time) | ✅ | `web/src/screens/Medical.tsx` |
 | Habitat server (FastAPI + SQLite): same rules in Python, sync, crew overview, downlink, NASA search | ✅ | `server/` |
 | Offline PWA (service worker, bundled models) | ✅ (production build) | `web/public/sw.js` |
@@ -123,6 +125,7 @@ The UI uses a "layered surfaces" style shared with the team's NullBase project: 
 - **Ghost coach** (replaying a recorded correct rep) and the finger-tap test are not built.
 - **Food values** are approximate demo numbers, and the targets are defaults for a crew nutritionist to set.
 - **RadLab** and the Environmental Data App are linked as evidence. Their data are not ingested; dose rates are published averages with citations.
+- **Solar storm card** reads Earth-orbit GOES data from NOAA (not NASA). Far from Earth the real flux differs, so it is context only and defers to vehicle dosimetry and mission storm rules. Without a network it shows the last saved reading, labelled "Last known".
 - The data.nasa.gov API sometimes timed out during ingest, so the offline catalog is a partial snapshot (76 datasets).
 - Demo crew history is **synthetic** and labelled as such in the app.
 
@@ -138,6 +141,7 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | NASA OSDR OSD-575 (Inspiration4 CMP) — https://osdr.nasa.gov/bio/repo/data/studies/OSD-575 | Same | NASA open data |
 | data.nasa.gov catalog (CKAN API) — https://data.nasa.gov | Offline NASA Evidence Library, live search | NASA open data |
 | RadLab Portal — https://visualization.osdr.nasa.gov/radlab/gui/overview/ | Radiation evidence link | NASA open data |
+| NOAA Space Weather Prediction Center: GOES integral proton flux (`services.swpc.noaa.gov/json/goes/primary/integral-protons-1-day.json`) and the NOAA Space Weather Scales — https://www.swpc.noaa.gov/noaa-scales-explanation | Solar radiation storm card (live level, S-scale thresholds) | US government data, public domain; not NASA |
 | OSDR Environmental Data App — https://visualization.osdr.nasa.gov/eda/ | Headache / CO₂ card evidence link | NASA open data |
 | NASA Life Sciences Portal — https://data.nasa.gov/dataset/nasa-life-sciences-portal-nlsp | Card evidence links | NASA open data |
 | MediaPipe Tasks Vision 1.2.3 + Face, Pose (lite) and Hand Landmarker models — https://ai.google.dev/edge/mediapipe | Face scan, balance, exercise coach, point-to-pain (on-device) | Apache-2.0 |
