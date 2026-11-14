@@ -1,0 +1,359 @@
+[
+  {
+    "name": "any danger sign -> act now, no exercises",
+    "input": {
+      "danger": {
+        "chest_pain": true
+      },
+      "region": "lower_back",
+      "kind": "pain",
+      "intensity": 3,
+      "onset": "gradual",
+      "tests": {},
+      "microgravity_days": 10
+    },
+    "expect": {
+      "level": "act_now",
+      "pattern": "danger_sign",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "fall or impact is a danger sign",
+    "input": {
+      "danger": {
+        "fall_impact": true
+      },
+      "region": "ankle_foot",
+      "kind": "pain",
+      "intensity": 2,
+      "onset": "sudden",
+      "tests": {
+        "muscle_tender": true
+      },
+      "microgravity_days": 0
+    },
+    "expect": {
+      "level": "act_now",
+      "pattern": "danger_sign",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "spreading tingling -> nerve pattern -> CMO",
+    "input": {
+      "danger": {},
+      "region": "neck",
+      "kind": "pain",
+      "intensity": 4,
+      "onset": "gradual",
+      "tests": {
+        "spreading_tingling": true,
+        "muscle_tender": true
+      },
+      "microgravity_days": 30
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "nerve",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "numbness kind -> nerve pattern",
+    "input": {
+      "danger": {},
+      "region": "shoulder",
+      "kind": "numbness",
+      "intensity": 2,
+      "onset": "gradual",
+      "tests": {},
+      "microgravity_days": 30
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "nerve",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "gradual weakness -> CMO",
+    "input": {
+      "danger": {},
+      "region": "knee",
+      "kind": "weakness",
+      "intensity": 2,
+      "onset": "gradual",
+      "tests": {},
+      "microgravity_days": 30
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "weakness",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "single bony spot -> possible fracture -> CMO",
+    "input": {
+      "danger": {},
+      "region": "ankle_foot",
+      "kind": "pain",
+      "intensity": 3,
+      "onset": "gradual",
+      "tests": {
+        "bony_tender": true
+      },
+      "microgravity_days": 0
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "possible_fracture",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "cannot bear weight -> possible fracture",
+    "input": {
+      "danger": {},
+      "region": "knee",
+      "kind": "pain",
+      "intensity": 4,
+      "onset": "gradual",
+      "tests": {
+        "cannot_bear_weight": true,
+        "muscle_tender": true
+      },
+      "microgravity_days": 5
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "possible_fracture",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "pain 6/10 at hip early in mission -> self care (muscle)",
+    "input": {
+      "danger": {},
+      "region": "hip",
+      "kind": "pain",
+      "intensity": 6,
+      "onset": "gradual",
+      "tests": {
+        "muscle_tender": true
+      },
+      "microgravity_days": 20
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "muscle_strain",
+      "exercises_allowed": true
+    }
+  },
+  {
+    "name": "same pain 6/10 at hip on day 180 -> CMO because of bone loss weighting",
+    "input": {
+      "danger": {},
+      "region": "hip",
+      "kind": "pain",
+      "intensity": 6,
+      "onset": "gradual",
+      "tests": {
+        "muscle_tender": true
+      },
+      "microgravity_days": 180
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "severe_pain",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "bone weighting does not apply to non-weight-bearing shoulder",
+    "input": {
+      "danger": {},
+      "region": "shoulder",
+      "kind": "pain",
+      "intensity": 6,
+      "onset": "gradual",
+      "tests": {
+        "resisted_pain": true
+      },
+      "microgravity_days": 180
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "tendon_irritation",
+      "exercises_allowed": true
+    }
+  },
+  {
+    "name": "pain 8/10 anywhere -> CMO",
+    "input": {
+      "danger": {},
+      "region": "neck",
+      "kind": "pain",
+      "intensity": 8,
+      "onset": "gradual",
+      "tests": {
+        "stretch_pain": true
+      },
+      "microgravity_days": 3
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "severe_pain",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "lower back tightness on stretch -> self care",
+    "input": {
+      "danger": {},
+      "region": "lower_back",
+      "kind": "stiffness",
+      "intensity": 4,
+      "onset": "gradual",
+      "tests": {
+        "stretch_pain": true
+      },
+      "microgravity_days": 12
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "tightness",
+      "exercises_allowed": true
+    }
+  },
+  {
+    "name": "painful range-of-motion angle only -> joint irritation",
+    "input": {
+      "danger": {},
+      "region": "shoulder",
+      "kind": "pain",
+      "intensity": 3,
+      "onset": "gradual",
+      "tests": {
+        "rom_pain_angle": 110
+      },
+      "microgravity_days": 40
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "joint_irritation",
+      "exercises_allowed": true
+    }
+  },
+  {
+    "name": "nothing reproduces it -> nonspecific, self care",
+    "input": {
+      "danger": {},
+      "region": "upper_back",
+      "kind": "pain",
+      "intensity": 2,
+      "onset": "gradual",
+      "tests": {},
+      "microgravity_days": 40
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "nonspecific",
+      "exercises_allowed": true
+    }
+  },
+  {
+    "name": "non-sudden headache -> fluid shift / CO2 pattern, no exercises",
+    "input": {
+      "danger": {},
+      "region": "head",
+      "kind": "pain",
+      "intensity": 4,
+      "onset": "gradual",
+      "tests": {},
+      "microgravity_days": 4
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "headache_fluid_shift",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "chest/abdomen region always goes to CMO",
+    "input": {
+      "danger": {},
+      "region": "trunk_front",
+      "kind": "pain",
+      "intensity": 2,
+      "onset": "gradual",
+      "tests": {
+        "muscle_tender": true
+      },
+      "microgravity_days": 5
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "trunk_front",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "danger sign still wins over chest region",
+    "input": {
+      "danger": {
+        "chest_pain": true
+      },
+      "region": "trunk_front",
+      "kind": "pain",
+      "intensity": 2,
+      "onset": "sudden",
+      "tests": {},
+      "microgravity_days": 5
+    },
+    "expect": {
+      "level": "act_now",
+      "pattern": "danger_sign",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "shin is weight-bearing: 6/10 at day 180 -> CMO",
+    "input": {
+      "danger": {},
+      "region": "lower_leg",
+      "kind": "pain",
+      "intensity": 6,
+      "onset": "gradual",
+      "tests": {
+        "muscle_tender": true
+      },
+      "microgravity_days": 180
+    },
+    "expect": {
+      "level": "cmo",
+      "pattern": "severe_pain",
+      "exercises_allowed": false
+    }
+  },
+  {
+    "name": "forearm muscle pain on resistance -> self care",
+    "input": {
+      "danger": {},
+      "region": "arm",
+      "kind": "pain",
+      "intensity": 4,
+      "onset": "gradual",
+      "tests": {
+        "resisted_pain": true
+      },
+      "microgravity_days": 180
+    },
+    "expect": {
+      "level": "self_care",
+      "pattern": "tendon_irritation",
+      "exercises_allowed": true
+    }
+  }
+]

@@ -1,0 +1,15 @@
+3D anatomy models in this folder (skeleton.glb, muscles.glb, skin.glb, nerves.glb, joints.glb)
+
+Derived from:
+  "Z-Anatomy - The libre 3D atlas of anatomy - CC-BY-SA 4.0"
+  https://github.com/Z-Anatomy/Models-of-human-anatomy
+which is derived from:
+  "BodyParts3D - The Database Center for Life Science - CC-BY-SA 2.1 Japan"
+  https://dbarchive.biosciencedbc.jp/en/bodyparts3d/download.html
+
+Changes made by Team SYS-ASTRO (Crew Mirror): selected structures exported with
+ingest/blender/export_body.py — helper objects, labels and sex-specific anatomy removed,
+meshes decimated and Draco-compressed, body-region tags added.
+
+These derivative files are licensed CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+The .task files (if present) are Google MediaPipe models, Apache-2.0.

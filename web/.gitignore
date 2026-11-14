@@ -1,0 +1,4 @@
+public/mediapipe/
+public/draco/
+public/models/*.task
+.env.local

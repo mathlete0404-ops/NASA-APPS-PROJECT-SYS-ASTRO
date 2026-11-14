@@ -1,0 +1,3935 @@
+{
+ "credit": "Data are courtesy of the NASA Open Science Data Repository (https://osdr.nasa.gov/bio/repo)",
+ "studies": [
+  {
+   "id": "OSD-569",
+   "title": "Inspiration4 Complete Blood Count (CBC)",
+   "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-569"
+  },
+  {
+   "id": "OSD-575",
+   "title": "Inspiration4 Comprehensive Metabolic Panel (CMP)",
+   "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-575"
+  }
+ ],
+ "method": "Personal range = min..max of the 3 pre-flight draws (L-92, L-44, L-3). Compared with the R+1 (day after landing) draw and the lab's population reference range.",
+ "headline": {
+  "crew": 4,
+  "pairs": 137,
+  "outside_personal_range": 60,
+  "outside_personal_inside_population": 55,
+  "outside_population_range": 5
+ },
+ "analytes": [
+  {
+   "analyte": "MCV",
+   "unit": "fL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      92.8,
+      93.0,
+      94.9
+     ],
+     "pre_median": 93.0,
+     "series": {
+      "L-92": 92.8,
+      "L-44": 93.0,
+      "L-3": 94.9,
+      "R+1": 90.1,
+      "R+45": 93.5,
+      "R+82": 91.8,
+      "R+194": 89.7
+     },
+     "r1": 90.1,
+     "r1_change_pct": -3.1,
+     "pop_range": [
+      80.0,
+      100.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      93.6,
+      96.2,
+      96.5
+     ],
+     "pre_median": 96.2,
+     "series": {
+      "L-92": 93.6,
+      "L-44": 96.2,
+      "L-3": 96.5,
+      "R+1": 90.5,
+      "R+45": 92.3,
+      "R+82": 90.4
+     },
+     "r1": 90.5,
+     "r1_change_pct": -5.9,
+     "pop_range": [
+      80.0,
+      100.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      91.3,
+      92.2,
+      92.4
+     ],
+     "pre_median": 92.2,
+     "series": {
+      "L-92": 91.3,
+      "L-44": 92.2,
+      "L-3": 92.4,
+      "R+1": 88.7,
+      "R+45": 87.0,
+      "R+82": 91.2,
+      "R+194": 87.1
+     },
+     "r1": 88.7,
+     "r1_change_pct": -3.8,
+     "pop_range": [
+      80.0,
+      100.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      89.6,
+      89.8,
+      90.7
+     ],
+     "pre_median": 89.8,
+     "series": {
+      "L-92": 89.6,
+      "L-44": 89.8,
+      "L-3": 90.7,
+      "R+1": 87.0,
+      "R+45": 88.4,
+      "R+82": 87.2,
+      "R+194": 86.0
+     },
+     "r1": 87.0,
+     "r1_change_pct": -3.1,
+     "pop_range": [
+      80.0,
+      100.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -4.0,
+   "n_outside_personal_inside_pop": 4
+  },
+  {
+   "analyte": "ALT",
+   "unit": "U/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      15.0,
+      16.0,
+      13.0
+     ],
+     "pre_median": 15.0,
+     "series": {
+      "L-92": 15.0,
+      "L-44": 16.0,
+      "L-3": 13.0,
+      "R+1": 9.0,
+      "R+45": 11.0,
+      "R+82": 15.0,
+      "R+194": 15.0
+     },
+     "r1": 9.0,
+     "r1_change_pct": -40.0,
+     "pop_range": [
+      9.0,
+      46.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      16.0,
+      24.0,
+      19.0
+     ],
+     "pre_median": 19.0,
+     "series": {
+      "L-92": 16.0,
+      "L-44": 24.0,
+      "L-3": 19.0,
+      "R+1": 16.0,
+      "R+45": 14.0,
+      "R+82": 17.0,
+      "R+194": 17.0
+     },
+     "r1": 16.0,
+     "r1_change_pct": -15.8,
+     "pop_range": [
+      6.0,
+      29.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      12.0,
+      13.0,
+      13.0
+     ],
+     "pre_median": 13.0,
+     "series": {
+      "L-92": 12.0,
+      "L-44": 13.0,
+      "L-3": 13.0,
+      "R+1": 19.0,
+      "R+45": 17.0,
+      "R+82": 12.0,
+      "R+194": 10.0
+     },
+     "r1": 19.0,
+     "r1_change_pct": 46.2,
+     "pop_range": [
+      6.0,
+      29.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      37.0,
+      35.0,
+      37.0
+     ],
+     "pre_median": 37.0,
+     "series": {
+      "L-92": 37.0,
+      "L-44": 35.0,
+      "L-3": 37.0,
+      "R+1": 40.0,
+      "R+45": 32.0,
+      "R+82": 23.0,
+      "R+194": 43.0
+     },
+     "r1": 40.0,
+     "r1_change_pct": 8.1,
+     "pop_range": [
+      9.0,
+      46.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -0.4,
+   "n_outside_personal_inside_pop": 3
+  },
+  {
+   "analyte": "MONOCYTES",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      8.9,
+      7.1,
+      7.9
+     ],
+     "pre_median": 7.9,
+     "series": {
+      "L-92": 8.9,
+      "L-44": 7.1,
+      "L-3": 7.9,
+      "R+1": 9.1,
+      "R+45": 7.5,
+      "R+82": 9.9,
+      "R+194": 8.0
+     },
+     "r1": 9.1,
+     "r1_change_pct": 15.2,
+     "pop_range": [
+      0.0,
+      13.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      5.6,
+      5.6,
+      6.2
+     ],
+     "pre_median": 5.6,
+     "series": {
+      "L-92": 5.6,
+      "L-44": 5.6,
+      "L-3": 6.2,
+      "R+1": 7.9,
+      "R+45": 7.8,
+      "R+82": 6.5,
+      "R+194": 8.1
+     },
+     "r1": 7.9,
+     "r1_change_pct": 41.1,
+     "pop_range": [
+      0.0,
+      13.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      6.4,
+      6.8,
+      7.3
+     ],
+     "pre_median": 6.8,
+     "series": {
+      "L-92": 6.4,
+      "L-44": 6.8,
+      "L-3": 7.3,
+      "R+1": 9.4,
+      "R+45": 8.0,
+      "R+82": 8.3,
+      "R+194": 10.3
+     },
+     "r1": 9.4,
+     "r1_change_pct": 38.2,
+     "pop_range": [
+      0.0,
+      13.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      11.3,
+      13.0,
+      9.1
+     ],
+     "pre_median": 11.3,
+     "series": {
+      "L-92": 11.3,
+      "L-44": 13.0,
+      "L-3": 9.1,
+      "R+1": 12.7,
+      "R+45": 13.2,
+      "R+82": 11.6,
+      "R+194": 11.9
+     },
+     "r1": 12.7,
+     "r1_change_pct": 12.4,
+     "pop_range": [
+      0.0,
+      13.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 26.7,
+   "n_outside_personal_inside_pop": 3
+  },
+  {
+   "analyte": "NEUTROPHILS",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      43.5,
+      54.5,
+      51.0
+     ],
+     "pre_median": 51.0,
+     "series": {
+      "L-92": 43.5,
+      "L-44": 54.5,
+      "L-3": 51.0,
+      "R+1": 53.7,
+      "R+45": 44.9,
+      "R+82": 40.7,
+      "R+194": 48.8
+     },
+     "r1": 53.7,
+     "r1_change_pct": 5.3,
+     "pop_range": [
+      38.0,
+      80.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      57.0,
+      53.2,
+      51.4
+     ],
+     "pre_median": 53.2,
+     "series": {
+      "L-92": 57.0,
+      "L-44": 53.2,
+      "L-3": 51.4,
+      "R+1": 60.5,
+      "R+45": 43.2,
+      "R+82": 59.1,
+      "R+194": 48.8
+     },
+     "r1": 60.5,
+     "r1_change_pct": 13.7,
+     "pop_range": [
+      38.0,
+      80.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      71.1,
+      68.9,
+      59.1
+     ],
+     "pre_median": 68.9,
+     "series": {
+      "L-92": 71.1,
+      "L-44": 68.9,
+      "L-3": 59.1,
+      "R+1": 58.4,
+      "R+45": 59.2,
+      "R+82": 52.0,
+      "R+194": 56.1
+     },
+     "r1": 58.4,
+     "r1_change_pct": -15.2,
+     "pop_range": [
+      38.0,
+      80.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      61.9,
+      57.8,
+      59.6
+     ],
+     "pre_median": 59.6,
+     "series": {
+      "L-92": 61.9,
+      "L-44": 57.8,
+      "L-3": 59.6,
+      "R+1": 55.9,
+      "R+45": 53.2,
+      "R+82": 55.2,
+      "R+194": 50.6
+     },
+     "r1": 55.9,
+     "r1_change_pct": -6.2,
+     "pop_range": [
+      38.0,
+      80.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -0.6,
+   "n_outside_personal_inside_pop": 3
+  },
+  {
+   "analyte": "SODIUM",
+   "unit": "mmol/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      141.0,
+      139.0,
+      142.0
+     ],
+     "pre_median": 141.0,
+     "series": {
+      "L-92": 141.0,
+      "L-44": 139.0,
+      "L-3": 142.0,
+      "R+1": 138.0,
+      "R+45": 138.0,
+      "R+82": 140.0,
+      "R+194": 137.0
+     },
+     "r1": 138.0,
+     "r1_change_pct": -2.1,
+     "pop_range": [
+      135.0,
+      146.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      142.0,
+      141.0,
+      143.0
+     ],
+     "pre_median": 142.0,
+     "series": {
+      "L-92": 142.0,
+      "L-44": 141.0,
+      "L-3": 143.0,
+      "R+1": 137.0,
+      "R+45": 140.0,
+      "R+82": 141.0,
+      "R+194": 138.0
+     },
+     "r1": 137.0,
+     "r1_change_pct": -3.5,
+     "pop_range": [
+      135.0,
+      146.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      139.0,
+      139.0,
+      138.0
+     ],
+     "pre_median": 139.0,
+     "series": {
+      "L-92": 139.0,
+      "L-44": 139.0,
+      "L-3": 138.0,
+      "R+1": 137.0,
+      "R+45": 136.0,
+      "R+82": 138.0,
+      "R+194": 137.0
+     },
+     "r1": 137.0,
+     "r1_change_pct": -1.4,
+     "pop_range": [
+      135.0,
+      146.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      138.0,
+      140.0,
+      141.0
+     ],
+     "pre_median": 140.0,
+     "series": {
+      "L-92": 138.0,
+      "L-44": 140.0,
+      "L-3": 141.0,
+      "R+1": 140.0,
+      "R+45": 139.0,
+      "R+82": 140.0,
+      "R+194": 141.0
+     },
+     "r1": 140.0,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      135.0,
+      146.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -1.8,
+   "n_outside_personal_inside_pop": 3
+  },
+  {
+   "analyte": "ABSOLUTE BASOPHILS",
+   "unit": "cells/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      70.0,
+      50.0,
+      49.0
+     ],
+     "pre_median": 50.0,
+     "series": {
+      "L-92": 70.0,
+      "L-44": 50.0,
+      "L-3": 49.0,
+      "R+1": 50.0,
+      "R+45": 59.0,
+      "R+82": 69.0,
+      "R+194": 49.0
+     },
+     "r1": 50.0,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      0.0,
+      200.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      33.0,
+      32.0,
+      29.0
+     ],
+     "pre_median": 32.0,
+     "series": {
+      "L-92": 33.0,
+      "L-44": 32.0,
+      "L-3": 29.0,
+      "R+1": 39.0,
+      "R+45": 51.0,
+      "R+82": 32.0,
+      "R+194": 19.0
+     },
+     "r1": 39.0,
+     "r1_change_pct": 21.9,
+     "pop_range": [
+      0.0,
+      200.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      125.0,
+      47.0,
+      49.0
+     ],
+     "pre_median": 49.0,
+     "series": {
+      "L-92": 125.0,
+      "L-44": 47.0,
+      "L-3": 49.0,
+      "R+1": 28.0,
+      "R+45": 62.0,
+      "R+82": 70.0,
+      "R+194": 59.0
+     },
+     "r1": 28.0,
+     "r1_change_pct": -42.9,
+     "pop_range": [
+      0.0,
+      200.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      77.0,
+      83.0,
+      95.0
+     ],
+     "pre_median": 83.0,
+     "series": {
+      "L-92": 77.0,
+      "L-44": 83.0,
+      "L-3": 95.0,
+      "R+1": 89.0,
+      "R+45": 88.0,
+      "R+82": 47.0,
+      "R+194": 100.0
+     },
+     "r1": 89.0,
+     "r1_change_pct": 7.2,
+     "pop_range": [
+      0.0,
+      200.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -3.5,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "ABSOLUTE LYMPHOCYTES",
+   "unit": "cells/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      2241.0,
+      1859.0,
+      2667.0
+     ],
+     "pre_median": 2241.0,
+     "series": {
+      "L-92": 2241.0,
+      "L-44": 1859.0,
+      "L-3": 2667.0,
+      "R+1": 1640.0,
+      "R+45": 2146.0,
+      "R+82": 2171.0,
+      "R+194": 1847.0
+     },
+     "r1": 1640.0,
+     "r1_change_pct": -26.8,
+     "pop_range": [
+      850.0,
+      3900.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      2119.0,
+      1982.0,
+      2873.0
+     ],
+     "pre_median": 2119.0,
+     "series": {
+      "L-92": 2119.0,
+      "L-44": 1982.0,
+      "L-3": 2873.0,
+      "R+1": 1540.0,
+      "R+45": 2874.0,
+      "R+82": 1701.0,
+      "R+194": 2573.0
+     },
+     "r1": 1540.0,
+     "r1_change_pct": -27.3,
+     "pop_range": [
+      850.0,
+      3900.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      6826.0,
+      2083.0,
+      3156.0
+     ],
+     "pre_median": 3156.0,
+     "series": {
+      "L-92": 6826.0,
+      "L-44": 2083.0,
+      "L-3": 3156.0,
+      "R+1": 2086.0,
+      "R+45": 2379.0,
+      "R+82": 3247.0,
+      "R+194": 2220.0
+     },
+     "r1": 2086.0,
+     "r1_change_pct": -33.9,
+     "pop_range": [
+      850.0,
+      3900.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      1786.0,
+      1613.0,
+      2947.0
+     ],
+     "pre_median": 1786.0,
+     "series": {
+      "L-92": 1786.0,
+      "L-44": 1613.0,
+      "L-3": 2947.0,
+      "R+1": 2155.0,
+      "R+45": 1938.0,
+      "R+82": 2307.0,
+      "R+194": 2639.0
+     },
+     "r1": 2155.0,
+     "r1_change_pct": 20.7,
+     "pop_range": [
+      850.0,
+      3900.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -16.8,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "ALKALINE PHOSPHATASE",
+   "unit": "U/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      51.0,
+      46.0,
+      45.0
+     ],
+     "pre_median": 46.0,
+     "series": {
+      "L-92": 51.0,
+      "L-44": 46.0,
+      "L-3": 45.0,
+      "R+1": 52.0,
+      "R+45": 46.0,
+      "R+82": 49.0,
+      "R+194": 50.0
+     },
+     "r1": 52.0,
+     "r1_change_pct": 13.0,
+     "pop_range": [
+      36.0,
+      130.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      73.0,
+      78.0,
+      68.0
+     ],
+     "pre_median": 73.0,
+     "series": {
+      "L-92": 73.0,
+      "L-44": 78.0,
+      "L-3": 68.0,
+      "R+1": 71.0,
+      "R+45": 65.0,
+      "R+82": 65.0,
+      "R+194": 66.0
+     },
+     "r1": 71.0,
+     "r1_change_pct": -2.7,
+     "pop_range": [
+      37.0,
+      153.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      33.0,
+      41.0,
+      31.0
+     ],
+     "pre_median": 33.0,
+     "series": {
+      "L-92": 33.0,
+      "L-44": 41.0,
+      "L-3": 31.0,
+      "R+1": 41.0,
+      "R+45": 51.0,
+      "R+82": 50.0,
+      "R+194": 43.0
+     },
+     "r1": 41.0,
+     "r1_change_pct": 24.2,
+     "pop_range": [
+      31.0,
+      125.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      58.0,
+      56.0,
+      55.0
+     ],
+     "pre_median": 56.0,
+     "series": {
+      "L-92": 58.0,
+      "L-44": 56.0,
+      "L-3": 55.0,
+      "R+1": 62.0,
+      "R+45": 60.0,
+      "R+82": 54.0,
+      "R+194": 57.0
+     },
+     "r1": 62.0,
+     "r1_change_pct": 10.7,
+     "pop_range": [
+      36.0,
+      130.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 11.3,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "BILIRUBIN; TOTAL",
+   "unit": "mg/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      0.7,
+      0.9,
+      1.0
+     ],
+     "pre_median": 0.9,
+     "series": {
+      "L-92": 0.7,
+      "L-44": 0.9,
+      "L-3": 1.0,
+      "R+1": 1.2,
+      "R+82": 1.2,
+      "R+194": 0.8
+     },
+     "r1": 1.2,
+     "r1_change_pct": 33.3,
+     "pop_range": [
+      0.2,
+      1.2
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      0.5,
+      0.4,
+      0.3
+     ],
+     "pre_median": 0.4,
+     "series": {
+      "L-92": 0.5,
+      "L-44": 0.4,
+      "L-3": 0.3,
+      "R+1": 0.4,
+      "R+45": 0.5,
+      "R+82": 0.5,
+      "R+194": 0.3
+     },
+     "r1": 0.4,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      0.2,
+      1.2
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      0.3,
+      0.4,
+      0.2
+     ],
+     "pre_median": 0.3,
+     "series": {
+      "L-92": 0.3,
+      "L-44": 0.4,
+      "L-3": 0.2,
+      "R+1": 0.3,
+      "R+45": 0.7,
+      "R+82": 0.5,
+      "R+194": 0.3
+     },
+     "r1": 0.3,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      0.2,
+      1.2
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      0.7,
+      0.7,
+      0.5
+     ],
+     "pre_median": 0.7,
+     "series": {
+      "L-92": 0.7,
+      "L-44": 0.7,
+      "L-3": 0.5,
+      "R+1": 0.4,
+      "R+45": 0.7,
+      "R+82": 1.0,
+      "R+194": 0.5
+     },
+     "r1": 0.4,
+     "r1_change_pct": -42.9,
+     "pop_range": [
+      0.2,
+      1.2
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -2.4,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "CALCIUM",
+   "unit": "mg/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      9.7,
+      10.0,
+      9.6
+     ],
+     "pre_median": 9.7,
+     "series": {
+      "L-92": 9.7,
+      "L-44": 10.0,
+      "L-3": 9.6,
+      "R+1": 9.7,
+      "R+45": 9.6,
+      "R+82": 10.1,
+      "R+194": 9.4
+     },
+     "r1": 9.7,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      8.6,
+      10.3
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      10.2,
+      9.7,
+      9.3
+     ],
+     "pre_median": 9.7,
+     "series": {
+      "L-92": 10.2,
+      "L-44": 9.7,
+      "L-3": 9.3,
+      "R+1": 9.2,
+      "R+45": 9.3,
+      "R+82": 9.7,
+      "R+194": 9.5
+     },
+     "r1": 9.2,
+     "r1_change_pct": -5.2,
+     "pop_range": [
+      8.6,
+      10.4
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      9.3,
+      10.3,
+      9.5
+     ],
+     "pre_median": 9.5,
+     "series": {
+      "L-92": 9.3,
+      "L-44": 10.3,
+      "L-3": 9.5,
+      "R+1": 9.4,
+      "R+45": 9.6,
+      "R+82": 10.0,
+      "R+194": 9.6
+     },
+     "r1": 9.4,
+     "r1_change_pct": -1.1,
+     "pop_range": [
+      8.6,
+      10.2
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      10.0,
+      10.1,
+      10.2
+     ],
+     "pre_median": 10.1,
+     "series": {
+      "L-92": 10.0,
+      "L-44": 10.1,
+      "L-3": 10.2,
+      "R+1": 9.8,
+      "R+45": 9.8,
+      "R+82": 10.0,
+      "R+194": 9.8
+     },
+     "r1": 9.8,
+     "r1_change_pct": -3.0,
+     "pop_range": [
+      8.6,
+      10.3
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -2.3,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "CHLORIDE",
+   "unit": "mmol/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      104.0,
+      101.0,
+      102.0
+     ],
+     "pre_median": 102.0,
+     "series": {
+      "L-92": 104.0,
+      "L-44": 101.0,
+      "L-3": 102.0,
+      "R+1": 102.0,
+      "R+45": 100.0,
+      "R+82": 101.0,
+      "R+194": 102.0
+     },
+     "r1": 102.0,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      98.0,
+      110.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      103.0,
+      103.0,
+      106.0
+     ],
+     "pre_median": 103.0,
+     "series": {
+      "L-92": 103.0,
+      "L-44": 103.0,
+      "L-3": 106.0,
+      "R+1": 103.0,
+      "R+45": 104.0,
+      "R+82": 105.0,
+      "R+194": 104.0
+     },
+     "r1": 103.0,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      98.0,
+      110.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      102.0,
+      99.0,
+      101.0
+     ],
+     "pre_median": 101.0,
+     "series": {
+      "L-92": 102.0,
+      "L-44": 99.0,
+      "L-3": 101.0,
+      "R+1": 103.0,
+      "R+45": 97.0,
+      "R+82": 102.0,
+      "R+194": 101.0
+     },
+     "r1": 103.0,
+     "r1_change_pct": 2.0,
+     "pop_range": [
+      98.0,
+      110.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      102.0,
+      103.0,
+      103.0
+     ],
+     "pre_median": 103.0,
+     "series": {
+      "L-92": 102.0,
+      "L-44": 103.0,
+      "L-3": 103.0,
+      "R+1": 105.0,
+      "R+45": 102.0,
+      "R+82": 103.0,
+      "R+194": 105.0
+     },
+     "r1": 105.0,
+     "r1_change_pct": 1.9,
+     "pop_range": [
+      98.0,
+      110.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 1.0,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "CREATININE",
+   "unit": "mg/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      1.24,
+      1.1,
+      1.37
+     ],
+     "pre_median": 1.24,
+     "series": {
+      "L-92": 1.24,
+      "L-44": 1.1,
+      "L-3": 1.37,
+      "R+1": 1.12,
+      "R+45": 1.11,
+      "R+82": 1.25,
+      "R+194": 1.29
+     },
+     "r1": 1.12,
+     "r1_change_pct": -9.7,
+     "pop_range": [
+      0.6,
+      1.35
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      0.83,
+      0.88,
+      0.96
+     ],
+     "pre_median": 0.88,
+     "series": {
+      "L-92": 0.83,
+      "L-44": 0.88,
+      "L-3": 0.96,
+      "R+1": 0.95,
+      "R+45": 1.02,
+      "R+82": 0.82,
+      "R+194": 1.02
+     },
+     "r1": 0.95,
+     "r1_change_pct": 8.0,
+     "pop_range": [
+      0.5,
+      1.05
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      1.0,
+      1.03,
+      1.08
+     ],
+     "pre_median": 1.03,
+     "series": {
+      "L-92": 1.0,
+      "L-44": 1.03,
+      "L-3": 1.08,
+      "R+1": 0.89,
+      "R+45": 0.94,
+      "R+82": 0.89,
+      "R+194": 1.1
+     },
+     "r1": 0.89,
+     "r1_change_pct": -13.6,
+     "pop_range": [
+      0.5,
+      1.1
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      1.14,
+      1.08,
+      1.13
+     ],
+     "pre_median": 1.13,
+     "series": {
+      "L-92": 1.14,
+      "L-44": 1.08,
+      "L-3": 1.13,
+      "R+1": 1.15,
+      "R+45": 1.08,
+      "R+82": 1.11,
+      "R+194": 1.31
+     },
+     "r1": 1.15,
+     "r1_change_pct": 1.8,
+     "pop_range": [
+      0.6,
+      1.35
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -3.4,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "EOSINOPHILS",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      4.8,
+      3.7,
+      2.3
+     ],
+     "pre_median": 3.7,
+     "series": {
+      "L-92": 4.8,
+      "L-44": 3.7,
+      "L-3": 2.3,
+      "R+1": 3.4,
+      "R+45": 2.6,
+      "R+82": 3.7,
+      "R+194": 4.5
+     },
+     "r1": 3.4,
+     "r1_change_pct": -8.1,
+     "pop_range": [
+      0.0,
+      8.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      4.3,
+      3.9,
+      2.1
+     ],
+     "pre_median": 3.9,
+     "series": {
+      "L-92": 4.3,
+      "L-44": 3.9,
+      "L-3": 2.1,
+      "R+1": 2.9,
+      "R+45": 3.3,
+      "R+82": 1.7,
+      "R+194": 2.6
+     },
+     "r1": 2.9,
+     "r1_change_pct": -25.6,
+     "pop_range": [
+      0.0,
+      8.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      1.3,
+      1.4,
+      0.9
+     ],
+     "pre_median": 1.3,
+     "series": {
+      "L-92": 1.3,
+      "L-44": 1.4,
+      "L-3": 0.9,
+      "R+1": 2.0,
+      "R+45": 1.5,
+      "R+82": 2.0,
+      "R+194": 2.8
+     },
+     "r1": 2.0,
+     "r1_change_pct": 53.8,
+     "pop_range": [
+      0.0,
+      8.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      2.6,
+      2.7,
+      2.6
+     ],
+     "pre_median": 2.6,
+     "series": {
+      "L-92": 2.6,
+      "L-44": 2.7,
+      "L-3": 2.6,
+      "R+1": 3.7,
+      "R+45": 3.8,
+      "R+82": 3.4,
+      "R+194": 4.5
+     },
+     "r1": 3.7,
+     "r1_change_pct": 42.3,
+     "pop_range": [
+      0.0,
+      8.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 15.6,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "GLUCOSE",
+   "unit": "mg/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      83.0,
+      80.0,
+      69.0
+     ],
+     "pre_median": 80.0,
+     "series": {
+      "L-92": 83.0,
+      "L-44": 80.0,
+      "L-3": 69.0,
+      "R+1": 90.0,
+      "R+45": 84.0,
+      "R+82": 91.0,
+      "R+194": 87.0
+     },
+     "r1": 90.0,
+     "r1_change_pct": 12.5,
+     "pop_range": [
+      65.0,
+      99.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      69.0,
+      72.0,
+      78.0
+     ],
+     "pre_median": 72.0,
+     "series": {
+      "L-92": 69.0,
+      "L-44": 72.0,
+      "L-3": 78.0,
+      "R+1": 83.0,
+      "R+45": 44.0,
+      "R+82": 77.0,
+      "R+194": 84.0
+     },
+     "r1": 83.0,
+     "r1_change_pct": 15.3,
+     "pop_range": [
+      65.0,
+      99.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      77.0,
+      62.0,
+      75.0
+     ],
+     "pre_median": 75.0,
+     "series": {
+      "L-92": 77.0,
+      "L-44": 62.0,
+      "L-3": 75.0,
+      "R+1": 103.0,
+      "R+45": 36.0,
+      "R+82": 80.0,
+      "R+194": 73.0
+     },
+     "r1": 103.0,
+     "r1_change_pct": 37.3,
+     "pop_range": [
+      65.0,
+      99.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": false
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      100.0,
+      83.0,
+      56.0
+     ],
+     "pre_median": 83.0,
+     "series": {
+      "L-92": 100.0,
+      "L-44": 83.0,
+      "L-3": 56.0,
+      "R+1": 97.0,
+      "R+45": 43.0,
+      "R+82": 80.0,
+      "R+194": 84.0
+     },
+     "r1": 97.0,
+     "r1_change_pct": 16.9,
+     "pop_range": [
+      65.0,
+      99.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 20.5,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "LYMPHOCYTES",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      41.5,
+      33.8,
+      38.1
+     ],
+     "pre_median": 38.1,
+     "series": {
+      "L-92": 41.5,
+      "L-44": 33.8,
+      "L-3": 38.1,
+      "R+1": 32.8,
+      "R+45": 43.8,
+      "R+82": 44.3,
+      "R+194": 37.7
+     },
+     "r1": 32.8,
+     "r1_change_pct": -13.9,
+     "pop_range": [
+      15.0,
+      49.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      32.6,
+      36.7,
+      39.9
+     ],
+     "pre_median": 36.7,
+     "series": {
+      "L-92": 32.6,
+      "L-44": 36.7,
+      "L-3": 39.9,
+      "R+1": 28.0,
+      "R+45": 44.9,
+      "R+82": 32.1,
+      "R+194": 40.2
+     },
+     "r1": 28.0,
+     "r1_change_pct": -23.7,
+     "pop_range": [
+      15.0,
+      49.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      20.8,
+      22.4,
+      32.2
+     ],
+     "pre_median": 22.4,
+     "series": {
+      "L-92": 20.8,
+      "L-44": 22.4,
+      "L-3": 32.2,
+      "R+1": 29.8,
+      "R+45": 30.5,
+      "R+82": 36.9,
+      "R+194": 30.0
+     },
+     "r1": 29.8,
+     "r1_change_pct": 33.0,
+     "pop_range": [
+      15.0,
+      49.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      23.2,
+      25.2,
+      27.8
+     ],
+     "pre_median": 25.2,
+     "series": {
+      "L-92": 23.2,
+      "L-44": 25.2,
+      "L-3": 27.8,
+      "R+1": 26.6,
+      "R+45": 28.5,
+      "R+82": 29.2,
+      "R+194": 31.8
+     },
+     "r1": 26.6,
+     "r1_change_pct": 5.6,
+     "pop_range": [
+      15.0,
+      49.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 0.2,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "MCH",
+   "unit": "pg",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      30.8,
+      30.7,
+      31.3
+     ],
+     "pre_median": 30.8,
+     "series": {
+      "L-92": 30.8,
+      "L-44": 30.7,
+      "L-3": 31.3,
+      "R+1": 30.4,
+      "R+45": 30.9,
+      "R+82": 31.3,
+      "R+194": 30.3
+     },
+     "r1": 30.4,
+     "r1_change_pct": -1.3,
+     "pop_range": [
+      27.0,
+      33.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      30.3,
+      32.6,
+      30.9
+     ],
+     "pre_median": 30.9,
+     "series": {
+      "L-92": 30.3,
+      "L-44": 32.6,
+      "L-3": 30.9,
+      "R+1": 30.1,
+      "R+45": 30.3,
+      "R+82": 29.9,
+      "R+194": 30.9
+     },
+     "r1": 30.1,
+     "r1_change_pct": -2.6,
+     "pop_range": [
+      27.0,
+      33.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -2.0,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "PLATELET COUNT",
+   "unit": "Thousand/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      241.0,
+      237.0,
+      258.0
+     ],
+     "pre_median": 241.0,
+     "series": {
+      "L-92": 241.0,
+      "L-44": 237.0,
+      "L-3": 258.0,
+      "R+1": 227.0,
+      "R+45": 228.0,
+      "R+82": 257.0,
+      "R+194": 214.0
+     },
+     "r1": 227.0,
+     "r1_change_pct": -5.8,
+     "pop_range": [
+      140.0,
+      400.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      241.0,
+      229.0,
+      241.0
+     ],
+     "pre_median": 241.0,
+     "series": {
+      "L-92": 241.0,
+      "L-44": 229.0,
+      "L-3": 241.0,
+      "R+1": 252.0,
+      "R+45": 252.0,
+      "R+82": 245.0,
+      "R+194": 243.0
+     },
+     "r1": 252.0,
+     "r1_change_pct": 4.6,
+     "pop_range": [
+      140.0,
+      400.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      12.9,
+      345.0,
+      367.0
+     ],
+     "pre_median": 345.0,
+     "series": {
+      "L-92": 12.9,
+      "L-44": 345.0,
+      "L-3": 367.0,
+      "R+1": 359.0,
+      "R+45": 396.0,
+      "R+82": 345.0,
+      "R+194": 185.0
+     },
+     "r1": 359.0,
+     "r1_change_pct": 4.1,
+     "pop_range": [
+      140.0,
+      400.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      239.0,
+      227.0,
+      295.0
+     ],
+     "pre_median": 239.0,
+     "series": {
+      "L-92": 239.0,
+      "L-44": 227.0,
+      "L-3": 295.0,
+      "R+1": 240.0,
+      "R+45": 281.0,
+      "R+82": 198.0,
+      "R+194": 256.0
+     },
+     "r1": 240.0,
+     "r1_change_pct": 0.4,
+     "pop_range": [
+      140.0,
+      400.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 0.8,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "RDW",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      13.0,
+      12.6,
+      12.6
+     ],
+     "pre_median": 12.6,
+     "series": {
+      "L-92": 13.0,
+      "L-44": 12.6,
+      "L-3": 12.6,
+      "R+1": 12.5,
+      "R+45": 12.8,
+      "R+82": 12.3,
+      "R+194": 12.8
+     },
+     "r1": 12.5,
+     "r1_change_pct": -0.8,
+     "pop_range": [
+      11.0,
+      15.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      12.7,
+      12.6,
+      12.1
+     ],
+     "pre_median": 12.6,
+     "series": {
+      "L-92": 12.7,
+      "L-44": 12.6,
+      "L-3": 12.1,
+      "R+1": 11.8,
+      "R+45": 12.0,
+      "R+82": 11.9,
+      "R+194": 12.1
+     },
+     "r1": 11.8,
+     "r1_change_pct": -6.3,
+     "pop_range": [
+      11.0,
+      15.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      32.4,
+      13.2,
+      12.5
+     ],
+     "pre_median": 13.2,
+     "series": {
+      "L-92": 32.4,
+      "L-44": 13.2,
+      "L-3": 12.5,
+      "R+1": 12.7,
+      "R+45": 12.5,
+      "R+82": 12.9,
+      "R+194": 13.1
+     },
+     "r1": 12.7,
+     "r1_change_pct": -3.8,
+     "pop_range": [
+      11.0,
+      15.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      12.5,
+      12.7,
+      13.3
+     ],
+     "pre_median": 12.7,
+     "series": {
+      "L-92": 12.5,
+      "L-44": 12.7,
+      "L-3": 13.3,
+      "R+1": 13.2,
+      "R+45": 12.6,
+      "R+82": 12.9,
+      "R+194": 13.1
+     },
+     "r1": 13.2,
+     "r1_change_pct": 3.9,
+     "pop_range": [
+      11.0,
+      15.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -1.8,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "UREA NITROGEN (BUN)",
+   "unit": "mg/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      25.0,
+      19.0,
+      20.0
+     ],
+     "pre_median": 20.0,
+     "series": {
+      "L-92": 25.0,
+      "L-44": 19.0,
+      "L-3": 20.0,
+      "R+1": 18.0,
+      "R+45": 15.0,
+      "R+82": 22.0,
+      "R+194": 28.0
+     },
+     "r1": 18.0,
+     "r1_change_pct": -10.0,
+     "pop_range": [
+      7.0,
+      25.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      14.0,
+      16.0,
+      17.0
+     ],
+     "pre_median": 16.0,
+     "series": {
+      "L-92": 14.0,
+      "L-44": 16.0,
+      "L-3": 17.0,
+      "R+1": 20.0,
+      "R+45": 19.0,
+      "R+82": 16.0,
+      "R+194": 18.0
+     },
+     "r1": 20.0,
+     "r1_change_pct": 25.0,
+     "pop_range": [
+      7.0,
+      25.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      17.0,
+      19.0,
+      26.0
+     ],
+     "pre_median": 19.0,
+     "series": {
+      "L-92": 17.0,
+      "L-44": 19.0,
+      "L-3": 26.0,
+      "R+1": 21.0,
+      "R+45": 19.0,
+      "R+82": 23.0,
+      "R+194": 28.0
+     },
+     "r1": 21.0,
+     "r1_change_pct": 10.5,
+     "pop_range": [
+      7.0,
+      25.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      22.0,
+      19.0,
+      19.0
+     ],
+     "pre_median": 19.0,
+     "series": {
+      "L-92": 22.0,
+      "L-44": 19.0,
+      "L-3": 19.0,
+      "R+1": 26.0,
+      "R+45": 21.0,
+      "R+82": 16.0,
+      "R+194": 27.0
+     },
+     "r1": 26.0,
+     "r1_change_pct": 36.8,
+     "pop_range": [
+      7.0,
+      25.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": false
+    }
+   ],
+   "mean_r1_change_pct": 15.6,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "WHITE BLOOD CELL COUNT",
+   "unit": "Thousand/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      5.4,
+      5.5,
+      7.0
+     ],
+     "pre_median": 5.5,
+     "series": {
+      "L-92": 5.4,
+      "L-44": 5.5,
+      "L-3": 7.0,
+      "R+1": 5.0,
+      "R+45": 4.9,
+      "R+82": 4.9,
+      "R+194": 4.9
+     },
+     "r1": 5.0,
+     "r1_change_pct": -9.1,
+     "pop_range": [
+      3.8,
+      10.8
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      6.5,
+      5.4,
+      7.2
+     ],
+     "pre_median": 6.5,
+     "series": {
+      "L-92": 6.5,
+      "L-44": 5.4,
+      "L-3": 7.2,
+      "R+1": 5.5,
+      "R+45": 6.4,
+      "R+82": 5.3,
+      "R+194": 6.4
+     },
+     "r1": 5.5,
+     "r1_change_pct": -15.4,
+     "pop_range": [
+      3.8,
+      10.8
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      9.6,
+      9.3,
+      9.8
+     ],
+     "pre_median": 9.6,
+     "series": {
+      "L-92": 9.6,
+      "L-44": 9.3,
+      "L-3": 9.8,
+      "R+1": 7.0,
+      "R+45": 7.8,
+      "R+82": 8.8,
+      "R+194": 7.4
+     },
+     "r1": 7.0,
+     "r1_change_pct": -27.1,
+     "pop_range": [
+      3.8,
+      10.8
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      7.7,
+      6.4,
+      10.6
+     ],
+     "pre_median": 7.7,
+     "series": {
+      "L-92": 7.7,
+      "L-44": 6.4,
+      "L-3": 10.6,
+      "R+1": 8.1,
+      "R+45": 6.8,
+      "R+82": 7.9,
+      "R+194": 8.3
+     },
+     "r1": 8.1,
+     "r1_change_pct": 5.2,
+     "pop_range": [
+      3.8,
+      10.8
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -11.6,
+   "n_outside_personal_inside_pop": 2
+  },
+  {
+   "analyte": "ABSOLUTE EOSINOPHILS",
+   "unit": "cells/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      259.0,
+      204.0,
+      161.0
+     ],
+     "pre_median": 204.0,
+     "series": {
+      "L-92": 259.0,
+      "L-44": 204.0,
+      "L-3": 161.0,
+      "R+1": 170.0,
+      "R+45": 127.0,
+      "R+82": 181.0,
+      "R+194": 221.0
+     },
+     "r1": 170.0,
+     "r1_change_pct": -16.7,
+     "pop_range": [
+      15.0,
+      500.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      280.0,
+      211.0,
+      151.0
+     ],
+     "pre_median": 211.0,
+     "series": {
+      "L-92": 280.0,
+      "L-44": 211.0,
+      "L-3": 151.0,
+      "R+1": 160.0,
+      "R+45": 211.0,
+      "R+82": 90.0,
+      "R+194": 166.0
+     },
+     "r1": 160.0,
+     "r1_change_pct": -24.2,
+     "pop_range": [
+      15.0,
+      500.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      614.0,
+      130.0,
+      88.0
+     ],
+     "pre_median": 130.0,
+     "series": {
+      "L-92": 614.0,
+      "L-44": 130.0,
+      "L-3": 88.0,
+      "R+1": 140.0,
+      "R+45": 117.0,
+      "R+82": 176.0,
+      "R+194": 207.0
+     },
+     "r1": 140.0,
+     "r1_change_pct": 7.7,
+     "pop_range": [
+      15.0,
+      500.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      200.0,
+      173.0,
+      276.0
+     ],
+     "pre_median": 200.0,
+     "series": {
+      "L-92": 200.0,
+      "L-44": 173.0,
+      "L-3": 276.0,
+      "R+1": 300.0,
+      "R+45": 258.0,
+      "R+82": 269.0,
+      "R+194": 374.0
+     },
+     "r1": 300.0,
+     "r1_change_pct": 50.0,
+     "pop_range": [
+      15.0,
+      500.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 4.2,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "AST",
+   "unit": "U/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      15.0,
+      18.0,
+      15.0
+     ],
+     "pre_median": 15.0,
+     "series": {
+      "L-92": 15.0,
+      "L-44": 18.0,
+      "L-3": 15.0,
+      "R+1": 16.0,
+      "R+45": 13.0,
+      "R+82": 16.0,
+      "R+194": 12.0
+     },
+     "r1": 16.0,
+     "r1_change_pct": 6.7,
+     "pop_range": [
+      10.0,
+      40.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      19.0,
+      31.0,
+      40.0
+     ],
+     "pre_median": 31.0,
+     "series": {
+      "L-92": 19.0,
+      "L-44": 31.0,
+      "L-3": 40.0,
+      "R+1": 23.0,
+      "R+45": 17.0,
+      "R+82": 21.0,
+      "R+194": 24.0
+     },
+     "r1": 23.0,
+     "r1_change_pct": -25.8,
+     "pop_range": [
+      10.0,
+      35.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      15.0,
+      17.0,
+      13.0
+     ],
+     "pre_median": 15.0,
+     "series": {
+      "L-92": 15.0,
+      "L-44": 17.0,
+      "L-3": 13.0,
+      "R+1": 18.0,
+      "R+45": 19.0,
+      "R+82": 15.0,
+      "R+194": 15.0
+     },
+     "r1": 18.0,
+     "r1_change_pct": 20.0,
+     "pop_range": [
+      10.0,
+      30.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      36.0,
+      44.0,
+      39.0
+     ],
+     "pre_median": 39.0,
+     "series": {
+      "L-92": 36.0,
+      "L-44": 44.0,
+      "L-3": 39.0,
+      "R+1": 48.0,
+      "R+45": 33.0,
+      "R+82": 25.0,
+      "R+194": 38.0
+     },
+     "r1": 48.0,
+     "r1_change_pct": 23.1,
+     "pop_range": [
+      10.0,
+      40.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": false
+    }
+   ],
+   "mean_r1_change_pct": 6.0,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "BASOPHILS",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      1.3,
+      0.9,
+      0.7
+     ],
+     "pre_median": 0.9,
+     "series": {
+      "L-92": 1.3,
+      "L-44": 0.9,
+      "L-3": 0.7,
+      "R+1": 1.0,
+      "R+45": 1.2,
+      "R+82": 1.4,
+      "R+194": 1.0
+     },
+     "r1": 1.0,
+     "r1_change_pct": 11.1,
+     "pop_range": [
+      0.0,
+      2.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      0.5,
+      0.6,
+      0.4
+     ],
+     "pre_median": 0.5,
+     "series": {
+      "L-92": 0.5,
+      "L-44": 0.6,
+      "L-3": 0.4,
+      "R+1": 0.7,
+      "R+45": 0.8,
+      "R+82": 0.6,
+      "R+194": 0.3
+     },
+     "r1": 0.7,
+     "r1_change_pct": 40.0,
+     "pop_range": [
+      0.0,
+      2.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      0.4,
+      0.5,
+      0.5
+     ],
+     "pre_median": 0.5,
+     "series": {
+      "L-92": 0.4,
+      "L-44": 0.5,
+      "L-3": 0.5,
+      "R+1": 0.4,
+      "R+45": 0.8,
+      "R+82": 0.8,
+      "R+194": 0.8
+     },
+     "r1": 0.4,
+     "r1_change_pct": -20.0,
+     "pop_range": [
+      0.0,
+      2.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      1.0,
+      1.3,
+      0.9
+     ],
+     "pre_median": 1.0,
+     "series": {
+      "L-92": 1.0,
+      "L-44": 1.3,
+      "L-3": 0.9,
+      "R+1": 1.1,
+      "R+45": 1.3,
+      "R+82": 0.6,
+      "R+194": 1.2
+     },
+     "r1": 1.1,
+     "r1_change_pct": 10.0,
+     "pop_range": [
+      0.0,
+      2.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 10.3,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "CARBON DIOXIDE",
+   "unit": "mmol/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      23.0,
+      26.0,
+      26.0
+     ],
+     "pre_median": 26.0,
+     "series": {
+      "L-92": 23.0,
+      "L-44": 26.0,
+      "L-3": 26.0,
+      "R+1": 24.0,
+      "R+45": 28.0,
+      "R+82": 27.0,
+      "R+194": 23.0
+     },
+     "r1": 24.0,
+     "r1_change_pct": -7.7,
+     "pop_range": [
+      20.0,
+      32.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      23.0,
+      26.0,
+      24.0
+     ],
+     "pre_median": 24.0,
+     "series": {
+      "L-92": 23.0,
+      "L-44": 26.0,
+      "L-3": 24.0,
+      "R+1": 22.0,
+      "R+45": 21.0,
+      "R+82": 25.0,
+      "R+194": 20.0
+     },
+     "r1": 22.0,
+     "r1_change_pct": -8.3,
+     "pop_range": [
+      20.0,
+      32.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      20.0,
+      21.0,
+      23.0
+     ],
+     "pre_median": 21.0,
+     "series": {
+      "L-92": 20.0,
+      "L-44": 21.0,
+      "L-3": 23.0,
+      "R+1": 20.0,
+      "R+45": 23.0,
+      "R+82": 23.0,
+      "R+194": 22.0
+     },
+     "r1": 20.0,
+     "r1_change_pct": -4.8,
+     "pop_range": [
+      20.0,
+      32.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      23.0,
+      24.0,
+      24.0
+     ],
+     "pre_median": 24.0,
+     "series": {
+      "L-92": 23.0,
+      "L-44": 24.0,
+      "L-3": 24.0,
+      "R+1": 23.0,
+      "R+45": 24.0,
+      "R+82": 24.0,
+      "R+194": 19.0
+     },
+     "r1": 23.0,
+     "r1_change_pct": -4.2,
+     "pop_range": [
+      20.0,
+      32.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -6.2,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "HEMATOCRIT",
+   "unit": "%",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      42.5,
+      45.1,
+      44.5
+     ],
+     "pre_median": 44.5,
+     "series": {
+      "L-92": 42.5,
+      "L-44": 45.1,
+      "L-3": 44.5,
+      "R+1": 43.6,
+      "R+45": 43.3,
+      "R+82": 46.1,
+      "R+194": 41.8
+     },
+     "r1": 43.6,
+     "r1_change_pct": -2.0,
+     "pop_range": [
+      38.5,
+      50.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      40.8,
+      37.8,
+      35.9
+     ],
+     "pre_median": 37.8,
+     "series": {
+      "L-92": 40.8,
+      "L-44": 37.8,
+      "L-3": 35.9,
+      "R+1": 36.4,
+      "R+45": 37.1,
+      "R+82": 34.7,
+      "R+194": 38.3
+     },
+     "r1": 36.4,
+     "r1_change_pct": -3.7,
+     "pop_range": [
+      35.0,
+      45.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      40.7,
+      42.6,
+      41.6
+     ],
+     "pre_median": 41.6,
+     "series": {
+      "L-92": 40.7,
+      "L-44": 42.6,
+      "L-3": 41.6,
+      "R+1": 41.4,
+      "R+45": 44.3,
+      "R+82": 44.6,
+      "R+194": 40.4
+     },
+     "r1": 41.4,
+     "r1_change_pct": -0.5,
+     "pop_range": [
+      35.0,
+      45.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      49.1,
+      50.0,
+      49.0
+     ],
+     "pre_median": 49.1,
+     "series": {
+      "L-92": 49.1,
+      "L-44": 50.0,
+      "L-3": 49.0,
+      "R+1": 48.3,
+      "R+45": 49.0,
+      "R+82": 47.5,
+      "R+194": 48.0
+     },
+     "r1": 48.3,
+     "r1_change_pct": -1.6,
+     "pop_range": [
+      38.5,
+      50.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -2.0,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "HEMOGLOBIN",
+   "unit": "g/dL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      14.1,
+      14.9,
+      14.7
+     ],
+     "pre_median": 14.7,
+     "series": {
+      "L-92": 14.1,
+      "L-44": 14.9,
+      "L-3": 14.7,
+      "R+1": 14.7,
+      "R+45": 14.3,
+      "R+82": 15.7,
+      "R+194": 14.1
+     },
+     "r1": 14.7,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      13.2,
+      17.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      13.2,
+      12.8,
+      11.5
+     ],
+     "pre_median": 12.8,
+     "series": {
+      "L-92": 13.2,
+      "L-44": 12.8,
+      "L-3": 11.5,
+      "R+1": 12.1,
+      "R+45": 12.2,
+      "R+82": 11.5,
+      "R+194": 12.7
+     },
+     "r1": 12.1,
+     "r1_change_pct": -5.5,
+     "pop_range": [
+      11.7,
+      15.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      13.2,
+      14.4,
+      13.3
+     ],
+     "pre_median": 13.3,
+     "series": {
+      "L-92": 13.2,
+      "L-44": 14.4,
+      "L-3": 13.3,
+      "R+1": 13.5,
+      "R+45": 14.6,
+      "R+82": 14.4,
+      "R+194": 13.3
+     },
+     "r1": 13.5,
+     "r1_change_pct": 1.5,
+     "pop_range": [
+      11.7,
+      15.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      17.0,
+      16.6,
+      16.8
+     ],
+     "pre_median": 16.8,
+     "series": {
+      "L-92": 17.0,
+      "L-44": 16.6,
+      "L-3": 16.8,
+      "R+1": 16.5,
+      "R+45": 16.8,
+      "R+82": 16.4,
+      "R+194": 16.5
+     },
+     "r1": 16.5,
+     "r1_change_pct": -1.8,
+     "pop_range": [
+      13.2,
+      17.1
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -1.4,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "MCHC",
+   "unit": "g/dL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      33.2,
+      33.0,
+      33.0
+     ],
+     "pre_median": 33.0,
+     "series": {
+      "L-92": 33.2,
+      "L-44": 33.0,
+      "L-3": 33.0,
+      "R+1": 33.7,
+      "R+45": 33.0,
+      "R+82": 34.1,
+      "R+194": 33.7
+     },
+     "r1": 33.7,
+     "r1_change_pct": 2.1,
+     "pop_range": [
+      32.0,
+      36.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      29.6,
+      33.8,
+      32.0
+     ],
+     "pre_median": 32.0,
+     "series": {
+      "L-92": 29.6,
+      "L-44": 33.8,
+      "L-3": 32.0,
+      "R+1": 32.6,
+      "R+45": 33.0,
+      "R+82": 32.3,
+      "R+194": 32.9
+     },
+     "r1": 32.6,
+     "r1_change_pct": 1.9,
+     "pop_range": [
+      32.0,
+      36.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      34.6,
+      33.2,
+      34.3
+     ],
+     "pre_median": 34.3,
+     "series": {
+      "L-92": 34.6,
+      "L-44": 33.2,
+      "L-3": 34.3,
+      "R+1": 34.2,
+      "R+45": 34.3,
+      "R+82": 34.5,
+      "R+194": 34.4
+     },
+     "r1": 34.2,
+     "r1_change_pct": -0.3,
+     "pop_range": [
+      32.0,
+      36.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 1.2,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "POTASSIUM",
+   "unit": "mmol/L",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      4.6,
+      4.2,
+      3.9
+     ],
+     "pre_median": 4.2,
+     "series": {
+      "L-92": 4.6,
+      "L-44": 4.2,
+      "L-3": 3.9,
+      "R+1": 4.4,
+      "R+45": 4.0,
+      "R+82": 4.3,
+      "R+194": 4.3
+     },
+     "r1": 4.4,
+     "r1_change_pct": 4.8,
+     "pop_range": [
+      3.5,
+      5.3
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      3.9,
+      4.0,
+      3.8
+     ],
+     "pre_median": 3.9,
+     "series": {
+      "L-92": 3.9,
+      "L-44": 4.0,
+      "L-3": 3.8,
+      "R+1": 3.5,
+      "R+45": 4.1,
+      "R+82": 3.7,
+      "R+194": 4.4
+     },
+     "r1": 3.5,
+     "r1_change_pct": -10.3,
+     "pop_range": [
+      3.5,
+      5.3
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      3.7,
+      3.5,
+      3.3
+     ],
+     "pre_median": 3.5,
+     "series": {
+      "L-92": 3.7,
+      "L-44": 3.5,
+      "L-3": 3.3,
+      "R+1": 3.0,
+      "R+45": 4.4,
+      "R+82": 3.7,
+      "R+194": 3.8
+     },
+     "r1": 3.0,
+     "r1_change_pct": -14.3,
+     "pop_range": [
+      3.5,
+      5.3
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": false
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      4.2,
+      4.2,
+      3.7
+     ],
+     "pre_median": 4.2,
+     "series": {
+      "L-92": 4.2,
+      "L-44": 4.2,
+      "L-3": 3.7,
+      "R+1": 4.0,
+      "R+45": 5.9,
+      "R+82": 4.2,
+      "R+194": 3.8
+     },
+     "r1": 4.0,
+     "r1_change_pct": -4.8,
+     "pop_range": [
+      3.5,
+      5.3
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -6.2,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "RED BLOOD CELL COUNT",
+   "unit": "Million/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      4.58,
+      4.85,
+      4.69
+     ],
+     "pre_median": 4.69,
+     "series": {
+      "L-92": 4.58,
+      "L-44": 4.85,
+      "L-3": 4.69,
+      "R+1": 4.84,
+      "R+45": 4.63,
+      "R+82": 5.02,
+      "R+194": 4.66
+     },
+     "r1": 4.84,
+     "r1_change_pct": 3.2,
+     "pop_range": [
+      4.2,
+      5.8
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      4.36,
+      3.93,
+      3.72
+     ],
+     "pre_median": 3.93,
+     "series": {
+      "L-92": 4.36,
+      "L-44": 3.93,
+      "L-3": 3.72,
+      "R+1": 4.02,
+      "R+45": 4.02,
+      "R+82": 3.84,
+      "R+194": 4.11
+     },
+     "r1": 4.02,
+     "r1_change_pct": 2.3,
+     "pop_range": [
+      3.8,
+      5.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      4.46,
+      4.62,
+      4.5
+     ],
+     "pre_median": 4.5,
+     "series": {
+      "L-92": 4.46,
+      "L-44": 4.62,
+      "L-3": 4.5,
+      "R+1": 4.67,
+      "R+45": 5.09,
+      "R+82": 4.89,
+      "R+194": 4.64
+     },
+     "r1": 4.67,
+     "r1_change_pct": 3.8,
+     "pop_range": [
+      3.8,
+      5.1
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      5.48,
+      5.57,
+      5.4
+     ],
+     "pre_median": 5.48,
+     "series": {
+      "L-92": 5.48,
+      "L-44": 5.57,
+      "L-3": 5.4,
+      "R+1": 5.55,
+      "R+45": 5.54,
+      "R+82": 5.45,
+      "R+194": 5.58
+     },
+     "r1": 5.55,
+     "r1_change_pct": 1.3,
+     "pop_range": [
+      4.2,
+      5.8
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 2.6,
+   "n_outside_personal_inside_pop": 1
+  },
+  {
+   "analyte": "ABSOLUTE MONOCYTES",
+   "unit": "cells/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      481.0,
+      391.0,
+      553.0
+     ],
+     "pre_median": 481.0,
+     "series": {
+      "L-92": 481.0,
+      "L-44": 391.0,
+      "L-3": 553.0,
+      "R+1": 455.0,
+      "R+45": 368.0,
+      "R+82": 485.0,
+      "R+194": 392.0
+     },
+     "r1": 455.0,
+     "r1_change_pct": -5.4,
+     "pop_range": [
+      200.0,
+      950.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      364.0,
+      302.0,
+      446.0
+     ],
+     "pre_median": 364.0,
+     "series": {
+      "L-92": 364.0,
+      "L-44": 302.0,
+      "L-3": 446.0,
+      "R+1": 435.0,
+      "R+45": 499.0,
+      "R+82": 345.0,
+      "R+194": 518.0
+     },
+     "r1": 435.0,
+     "r1_change_pct": 19.5,
+     "pop_range": [
+      200.0,
+      950.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      1997.0,
+      632.0,
+      715.0
+     ],
+     "pre_median": 715.0,
+     "series": {
+      "L-92": 1997.0,
+      "L-44": 632.0,
+      "L-3": 715.0,
+      "R+1": 658.0,
+      "R+45": 624.0,
+      "R+82": 730.0,
+      "R+194": 762.0
+     },
+     "r1": 658.0,
+     "r1_change_pct": -8.0,
+     "pop_range": [
+      200.0,
+      950.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      870.0,
+      832.0,
+      965.0
+     ],
+     "pre_median": 870.0,
+     "series": {
+      "L-92": 870.0,
+      "L-44": 832.0,
+      "L-3": 965.0,
+      "R+1": 1029.0,
+      "R+45": 898.0,
+      "R+82": 916.0,
+      "R+194": 988.0
+     },
+     "r1": 1029.0,
+     "r1_change_pct": 18.3,
+     "pop_range": [
+      200.0,
+      950.0
+     ],
+     "outside_personal_range": true,
+     "inside_population_range": false
+    }
+   ],
+   "mean_r1_change_pct": 6.1,
+   "n_outside_personal_inside_pop": 0
+  },
+  {
+   "analyte": "ABSOLUTE NEUTROPHILS",
+   "unit": "cells/uL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      2349.0,
+      2998.0,
+      3570.0
+     ],
+     "pre_median": 2998.0,
+     "series": {
+      "L-92": 2349.0,
+      "L-44": 2998.0,
+      "L-3": 3570.0,
+      "R+1": 2685.0,
+      "R+45": 2200.0,
+      "R+82": 1994.0,
+      "R+194": 2391.0
+     },
+     "r1": 2685.0,
+     "r1_change_pct": -10.4,
+     "pop_range": [
+      1500.0,
+      7800.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      3705.0,
+      2873.0,
+      3701.0
+     ],
+     "pre_median": 3701.0,
+     "series": {
+      "L-92": 3705.0,
+      "L-44": 2873.0,
+      "L-3": 3701.0,
+      "R+1": 3328.0,
+      "R+45": 2765.0,
+      "R+82": 3132.0,
+      "R+194": 3123.0
+     },
+     "r1": 3328.0,
+     "r1_change_pct": -10.1,
+     "pop_range": [
+      1500.0,
+      7800.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      10.1,
+      6408.0,
+      5792.0
+     ],
+     "pre_median": 5792.0,
+     "series": {
+      "L-92": 10.1,
+      "L-44": 6408.0,
+      "L-3": 5792.0,
+      "R+1": 4088.0,
+      "R+45": 4618.0,
+      "R+82": 4576.0,
+      "R+194": 4151.0
+     },
+     "r1": 4088.0,
+     "r1_change_pct": -29.4,
+     "pop_range": [
+      1500.0,
+      7800.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      4766.0,
+      3699.0,
+      6318.0
+     ],
+     "pre_median": 4766.0,
+     "series": {
+      "L-92": 4766.0,
+      "L-44": 3699.0,
+      "L-3": 6318.0,
+      "R+1": 4528.0,
+      "R+45": 3618.0,
+      "R+82": 4361.0,
+      "R+194": 4200.0
+     },
+     "r1": 4528.0,
+     "r1_change_pct": -5.0,
+     "pop_range": [
+      1500.0,
+      7800.0
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -13.7,
+   "n_outside_personal_inside_pop": 0
+  },
+  {
+   "analyte": "ALBUMIN",
+   "unit": "g/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      5.0,
+      5.0,
+      4.9
+     ],
+     "pre_median": 5.0,
+     "series": {
+      "L-92": 5.0,
+      "L-44": 5.0,
+      "L-3": 4.9,
+      "R+1": 4.9,
+      "R+45": 4.9,
+      "R+82": 5.1,
+      "R+194": 4.6
+     },
+     "r1": 4.9,
+     "r1_change_pct": -2.0,
+     "pop_range": [
+      3.6,
+      5.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      4.9,
+      4.6,
+      4.3
+     ],
+     "pre_median": 4.6,
+     "series": {
+      "L-92": 4.9,
+      "L-44": 4.6,
+      "L-3": 4.3,
+      "R+1": 4.4,
+      "R+45": 4.2,
+      "R+82": 4.5,
+      "R+194": 4.3
+     },
+     "r1": 4.4,
+     "r1_change_pct": -4.3,
+     "pop_range": [
+      3.6,
+      5.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      4.4,
+      4.9,
+      4.2
+     ],
+     "pre_median": 4.4,
+     "series": {
+      "L-92": 4.4,
+      "L-44": 4.9,
+      "L-3": 4.2,
+      "R+1": 4.2,
+      "R+45": 4.5,
+      "R+82": 4.8,
+      "R+194": 4.4
+     },
+     "r1": 4.2,
+     "r1_change_pct": -4.5,
+     "pop_range": [
+      3.6,
+      5.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      4.6,
+      4.4,
+      4.6
+     ],
+     "pre_median": 4.6,
+     "series": {
+      "L-92": 4.6,
+      "L-44": 4.4,
+      "L-3": 4.6,
+      "R+1": 4.5,
+      "R+45": 4.5,
+      "R+82": 4.6,
+      "R+194": 4.3
+     },
+     "r1": 4.5,
+     "r1_change_pct": -2.2,
+     "pop_range": [
+      3.6,
+      5.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -3.2,
+   "n_outside_personal_inside_pop": 0
+  },
+  {
+   "analyte": "GLOBULIN",
+   "unit": "g/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      2.3,
+      2.7,
+      2.5
+     ],
+     "pre_median": 2.5,
+     "series": {
+      "L-92": 2.3,
+      "L-44": 2.7,
+      "L-3": 2.5,
+      "R+1": 2.6,
+      "R+45": 2.3,
+      "R+82": 2.7,
+      "R+194": 2.4
+     },
+     "r1": 2.6,
+     "r1_change_pct": 4.0,
+     "pop_range": [
+      1.9,
+      3.7
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      3.0,
+      3.0,
+      2.7
+     ],
+     "pre_median": 3.0,
+     "series": {
+      "L-92": 3.0,
+      "L-44": 3.0,
+      "L-3": 2.7,
+      "R+1": 3.0,
+      "R+45": 2.6,
+      "R+82": 2.8,
+      "R+194": 3.0
+     },
+     "r1": 3.0,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      1.9,
+      3.7
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      2.7,
+      3.9,
+      2.6
+     ],
+     "pre_median": 2.7,
+     "series": {
+      "L-92": 2.7,
+      "L-44": 3.9,
+      "L-3": 2.6,
+      "R+1": 2.9,
+      "R+45": 2.9,
+      "R+82": 2.7,
+      "R+194": 2.9
+     },
+     "r1": 2.9,
+     "r1_change_pct": 7.4,
+     "pop_range": [
+      1.9,
+      3.7
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      2.8,
+      2.9,
+      2.7
+     ],
+     "pre_median": 2.8,
+     "series": {
+      "L-92": 2.8,
+      "L-44": 2.9,
+      "L-3": 2.7,
+      "R+1": 2.9,
+      "R+45": 2.8,
+      "R+82": 2.8,
+      "R+194": 2.9
+     },
+     "r1": 2.9,
+     "r1_change_pct": 3.6,
+     "pop_range": [
+      1.9,
+      3.7
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 3.8,
+   "n_outside_personal_inside_pop": 0
+  },
+  {
+   "analyte": "MPV",
+   "unit": "fL",
+   "study": "OSD-569",
+   "panel": "cbc",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      10.3,
+      10.6,
+      10.9
+     ],
+     "pre_median": 10.6,
+     "series": {
+      "L-92": 10.3,
+      "L-44": 10.6,
+      "L-3": 10.9,
+      "R+1": 10.8,
+      "R+45": 10.5,
+      "R+82": 10.8,
+      "R+194": 10.5
+     },
+     "r1": 10.8,
+     "r1_change_pct": 1.9,
+     "pop_range": [
+      7.5,
+      12.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      10.1,
+      10.9,
+      10.8
+     ],
+     "pre_median": 10.8,
+     "series": {
+      "L-92": 10.1,
+      "L-44": 10.9,
+      "L-3": 10.8,
+      "R+1": 10.2,
+      "R+45": 11.0,
+      "R+82": 10.5,
+      "R+194": 10.8
+     },
+     "r1": 10.2,
+     "r1_change_pct": -5.6,
+     "pop_range": [
+      7.5,
+      12.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      330.0,
+      10.3,
+      10.8
+     ],
+     "pre_median": 10.8,
+     "series": {
+      "L-92": 330.0,
+      "L-44": 10.3,
+      "L-3": 10.8,
+      "R+1": 10.5,
+      "R+45": 10.4,
+      "R+82": 10.2,
+      "R+194": 10.2
+     },
+     "r1": 10.5,
+     "r1_change_pct": -2.8,
+     "pop_range": [
+      7.5,
+      12.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      9.5,
+      9.9,
+      10.1
+     ],
+     "pre_median": 9.9,
+     "series": {
+      "L-92": 9.5,
+      "L-44": 9.9,
+      "L-3": 10.1,
+      "R+1": 10.0,
+      "R+45": 9.9,
+      "R+82": 10.4,
+      "R+194": 9.8
+     },
+     "r1": 10.0,
+     "r1_change_pct": 1.0,
+     "pop_range": [
+      7.5,
+      12.5
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": -1.4,
+   "n_outside_personal_inside_pop": 0
+  },
+  {
+   "analyte": "PROTEIN; TOTAL",
+   "unit": "g/dL",
+   "study": "OSD-575",
+   "panel": "cmp",
+   "subjects": [
+    {
+     "subject": "C001",
+     "pre": [
+      7.3,
+      7.7,
+      7.4
+     ],
+     "pre_median": 7.4,
+     "series": {
+      "L-92": 7.3,
+      "L-44": 7.7,
+      "L-3": 7.4,
+      "R+1": 7.5,
+      "R+45": 7.2,
+      "R+82": 7.8,
+      "R+194": 7.0
+     },
+     "r1": 7.5,
+     "r1_change_pct": 1.4,
+     "pop_range": [
+      6.1,
+      8.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C002",
+     "pre": [
+      7.9,
+      7.6,
+      7.0
+     ],
+     "pre_median": 7.6,
+     "series": {
+      "L-92": 7.9,
+      "L-44": 7.6,
+      "L-3": 7.0,
+      "R+1": 7.4,
+      "R+45": 6.8,
+      "R+82": 7.3,
+      "R+194": 7.3
+     },
+     "r1": 7.4,
+     "r1_change_pct": -2.6,
+     "pop_range": [
+      6.1,
+      8.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C003",
+     "pre": [
+      7.1,
+      8.8,
+      6.8
+     ],
+     "pre_median": 7.1,
+     "series": {
+      "L-92": 7.1,
+      "L-44": 8.8,
+      "L-3": 6.8,
+      "R+1": 7.1,
+      "R+45": 7.4,
+      "R+82": 7.5,
+      "R+194": 7.3
+     },
+     "r1": 7.1,
+     "r1_change_pct": 0.0,
+     "pop_range": [
+      6.1,
+      8.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    },
+    {
+     "subject": "C004",
+     "pre": [
+      7.4,
+      7.3,
+      7.3
+     ],
+     "pre_median": 7.3,
+     "series": {
+      "L-92": 7.4,
+      "L-44": 7.3,
+      "L-3": 7.3,
+      "R+1": 7.4,
+      "R+45": 7.3,
+      "R+82": 7.4,
+      "R+194": 7.2
+     },
+     "r1": 7.4,
+     "r1_change_pct": 1.4,
+     "pop_range": [
+      6.1,
+      8.1
+     ],
+     "outside_personal_range": false,
+     "inside_population_range": true
+    }
+   ],
+   "mean_r1_change_pct": 0.0,
+   "n_outside_personal_inside_pop": 0
+  }
+ ]
+}

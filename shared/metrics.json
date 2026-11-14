@@ -1,0 +1,117 @@
+{
+  "_comment": "Metric definitions shared by web and server engines. floor = smallest scale used in the z-score (the minimal meaningful change), so a perfectly steady baseline (MAD = 0) cannot turn noise into alarms.",
+  "metrics": [
+    {
+      "id": "hr_rest",
+      "label": "Resting heart rate (estimate)",
+      "unit": "bpm",
+      "floor": 2,
+      "group": "face",
+      "source": "Face scan · rPPG"
+    },
+    {
+      "id": "resp_rate",
+      "label": "Breathing rate (estimate)",
+      "unit": "/min",
+      "floor": 1.5,
+      "group": "face",
+      "source": "Face scan · motion/colour"
+    },
+    {
+      "id": "blink_rate",
+      "label": "Blink rate",
+      "unit": "/min",
+      "floor": 2,
+      "group": "face",
+      "source": "Face scan · blendshapes"
+    },
+    {
+      "id": "perclos",
+      "label": "Eye closure (PERCLOS)",
+      "unit": "%",
+      "floor": 2,
+      "group": "face",
+      "source": "Face scan · blendshapes"
+    },
+    {
+      "id": "face_width",
+      "label": "Face-width ratio (fluid shift)",
+      "unit": "×IPD",
+      "floor": 0.015,
+      "group": "face",
+      "source": "Face scan · landmarks"
+    },
+    {
+      "id": "mood",
+      "label": "Mood",
+      "unit": "/10",
+      "floor": 1,
+      "group": "checkin",
+      "source": "Check-in"
+    },
+    {
+      "id": "energy",
+      "label": "Energy",
+      "unit": "/10",
+      "floor": 1,
+      "group": "checkin",
+      "source": "Check-in"
+    },
+    {
+      "id": "sleep_hours",
+      "label": "Sleep",
+      "unit": "h",
+      "floor": 0.5,
+      "group": "checkin",
+      "source": "Check-in"
+    },
+    {
+      "id": "sleep_quality",
+      "label": "Sleep quality",
+      "unit": "/10",
+      "floor": 1,
+      "group": "checkin",
+      "source": "Check-in"
+    },
+    {
+      "id": "sway_eo",
+      "label": "Sway, eyes open",
+      "unit": "% SW",
+      "floor": 0.3,
+      "group": "balance",
+      "source": "Balance · pose"
+    },
+    {
+      "id": "sway_ec",
+      "label": "Sway, eyes closed",
+      "unit": "% SW",
+      "floor": 0.4,
+      "group": "balance",
+      "source": "Balance · pose"
+    },
+    {
+      "id": "sway_tandem",
+      "label": "Sway, tandem stance",
+      "unit": "% SW",
+      "floor": 0.5,
+      "group": "balance",
+      "source": "Balance · pose"
+    },
+    {
+      "id": "sts_time",
+      "label": "5× sit-to-stand",
+      "unit": "s",
+      "floor": 0.5,
+      "group": "balance",
+      "source": "Balance · pose"
+    },
+    {
+      "id": "body_mass",
+      "label": "Body mass",
+      "unit": "kg",
+      "floor": 0.4,
+      "group": "body",
+      "source": "Scale / SLAMMD"
+    }
+  ]
+}
