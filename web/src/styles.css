@@ -1130,3 +1130,24 @@ html[lang="ko"] { --font-body: 'Inter', 'Apple SD Gothic Neo', 'Noto Sans KR', '
 .sos-sources a { font-size: .8rem; color: var(--muted-fg); text-decoration: none; border-bottom: 1px dotted currentColor; }
 .sos-sources a:hover { color: var(--foreground); }
 .pet-locked p { margin: 0 0 10px; line-height: 1.4; }
+
+/* Alertness test (PVT) */
+.pvt-box { display: grid; place-items: center; width: 100%; min-height: 240px; margin: 4px 0 10px; border-radius: 16px; border: 2px solid var(--ink); background: var(--muted); color: var(--muted-fg); font: inherit; cursor: pointer; touch-action: manipulation; user-select: none; -webkit-user-select: none; transition: background-color .08s; }
+.pvt-box.stim { background: hsl(0 80% 52%); color: #fff; border-color: hsl(0 70% 30%); }
+.pvt-box.good { background: var(--usual-bg); color: var(--usual); }
+.pvt-box.slow { background: var(--watch-bg); color: var(--watch); }
+.pvt-box.bad { background: var(--act-bg); color: var(--act); }
+.pvt-box:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
+.pvt-text { font: 700 clamp(1.4rem, 7vw, 3rem) var(--font-mono); font-variant-numeric: tabular-nums; text-align: center; padding: 0 12px; }
+.pvt-box.good .pvt-text, .pvt-box.slow .pvt-text, .pvt-box.bad .pvt-text { font-size: clamp(1.1rem, 5vw, 1.8rem); }
+.pvt-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+.pvt-kpis > span { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 10px; background: var(--muted); }
+.pvt-kpis b { font-size: 1.2rem; }
+@media (prefers-reduced-motion: reduce) { .pvt-box { transition: none; } }
+
+/* NASA DONKI panel inside the solar storm card */
+.donki { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.donki h4 { margin: 0; font-size: .95rem; }
+.donki-key { margin: 8px 0; }
+.donki-key summary { cursor: pointer; font-size: .85rem; color: var(--violet-text); }
+.donki-key form { margin-top: 6px; }

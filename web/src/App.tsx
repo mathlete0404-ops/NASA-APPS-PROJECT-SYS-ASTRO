@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   CalendarDays, ChevronDown, CircleHelp, Ellipsis, Globe, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
-  ScanFace, Settings as SettingsIcon, Siren, Stethoscope, TrendingUp,
+  ScanFace, Settings as SettingsIcon, Siren, Stethoscope, Timer, TrendingUp,
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
@@ -12,6 +12,7 @@ import { Today } from './screens/Today'
 import { DailyCheck } from './screens/DailyCheck'
 import { Report } from './screens/Report'
 import { Balance } from './screens/Balance'
+import { Alertness } from './screens/Alertness'
 import { Trends } from './screens/Trends'
 import { Evidence } from './screens/Evidence'
 import { Medical } from './screens/Medical'
@@ -39,6 +40,7 @@ const TABS = [
   { id: 'trends', label: 'Trends', short: 'Trends', icon: TrendingUp, title: 'Trends', group: 'More' },
   { id: 'coach', label: 'Exercise coach', short: 'Coach', icon: Dumbbell, title: 'Exercise coach', group: 'More' },
   { id: 'balance', label: 'Balance', short: 'Balance', icon: Footprints, title: 'Balance', group: 'More' },
+  { id: 'alert', label: 'Alertness test', short: 'Alert', icon: Timer, title: 'Alertness test', group: 'More' },
   { id: 'evidence', label: 'NASA evidence', short: 'Evidence', icon: Database, title: 'NASA evidence', group: 'More' },
   { id: 'medical', label: 'Medical officer', short: 'Medical', icon: Stethoscope, title: 'Crew medical officer', group: 'More' },
   { id: 'settings', label: 'Settings', short: 'Settings', icon: SettingsIcon, title: 'Settings', group: 'footer' },
@@ -172,6 +174,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
               {tab === 'report' && <Report key={p?.id} go={go} />}
               {tab === 'coach' && <Coach key={p?.id} go={go} />}
               {tab === 'balance' && <Balance key={p?.id} />}
+              {tab === 'alert' && <Alertness />}
               {tab === 'trends' && <Trends go={go} />}
               {tab === 'evidence' && <Evidence />}
               {tab === 'medical' && <Medical go={go} />}

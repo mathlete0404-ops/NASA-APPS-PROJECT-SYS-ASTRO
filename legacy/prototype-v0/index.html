@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SYS-ASTRO | Crew Health Monitor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- ================= Sidebar ================= -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>SYS-ASTRO</h1>
+        <span class="sub">Crew Health Monitor</span>
+      </div>
+
+      <label class="crew-pick">Crew member
+        <select id="crewSelect"></select>
+      </label>
+
+      <div class="mission-chip">
+        <span id="missionName">Mission</span>
+        <b id="missionDay">Day 1</b>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+        <button class="nav-btn" data-page="checkin">Daily Check-in</button>
+        <button class="nav-btn" data-page="scan">Body Scan</button>
+        <button class="nav-btn" data-page="exercise">Exercise</button>
+        <button class="nav-btn" data-page="pvt">Alertness Test</button>
+        <button class="nav-btn" data-page="symptoms">Symptoms</button>
+        <button class="nav-btn" data-page="trends">Trends &amp; Records</button>
+        <button class="nav-btn" data-page="radiation">Space Weather</button>
+        <button class="nav-btn" data-page="settings">Settings &amp; About</button>
+      </nav>
+
+      <p class="disclaimer">Prototype for NASA Space Apps 2026. Not a medical device.</p>
+    </aside>
+
+    <!-- ================= Main ================= -->
+    <main class="content">
+
+      <!-- ===== Dashboard ===== -->
+      <section class="page active" id="page-dashboard">
+        <div class="page-head">
+          <h2>Dashboard</h2>
+          <span class="muted" id="dashUpdated"></span>
+        </div>
+
+        <div class="status-banner" id="statusBanner">
+          <div>
+            <span class="label">Overall status</span>
+            <b id="overallStatus">--</b>
+          </div>
+          <p id="overallText"></p>
+        </div>
+
+        <div class="grid tiles" id="metricTiles"></div>
+
+        <div class="grid two">
+          <div class="card">
+            <h3>Alerts &amp; Recommended Actions</h3>
+            <ul class="insights" id="insightList"></ul>
+          </div>
+
+          <div class="card">
+            <h3>Today</h3>
+            <div class="today">
+              <div class="today-row"><span>Daily check-in</span><b id="todayCheckin">--</b></div>
+              <div class="today-row"><span>Alertness test</span><b id="todayPvt">--</b></div>
+              <div class="today-row"><span>Symptoms (24 h)</span><b id="todaySymptoms">--</b></div>
+              <div class="today-row col">
+                <span>Exercise <b id="todayExMin">0</b> / <b id="todayExTarget">120</b> min</span>
+                <div class="bar"><div id="todayExBar"></div></div>
+              </div>
+            </div>
+            <h3 class="mt">Space Weather</h3>
+            <div id="dashWeather" class="muted">Loading NASA DONKI data...</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Crew Overview</h3>
+          <table>
+            <thead><tr><th>Crew</th><th>Role</th><th>Status</th><th>Last check-in</th><th>Alerts</th><th>Exercise today</th></tr></thead>
+            <tbody id="crewTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ===== Daily Check-in ===== -->
+      <section class="page" id="page-checkin">
+        <div class="page-head">
+          <h2>Daily Check-in</h2>
+          <span class="muted">Record health indicators. Results are compared with general ranges and your own baseline.</span>
+        </div>
+
+        <div class="grid two">
+          <form id="checkinForm" class="card form">
+            <h3>Vitals</h3>
+            <div class="row3">
+              <label>Heart rate (bpm)<input type="number" name="hr" min="20" max="250" step="1" /></label>
+              <label>Systolic BP (mmHg)<input type="number" name="sys" min="50" max="260" /></label>
+              <label>Diastolic BP (mmHg)<input type="number" name="dia" min="30" max="160" /></label>
+              <label>SpO2 (%)<input type="number" name="spo2" min="50" max="100" step="0.1" /></label>
+              <label>Temperature (C)<input type="number" name="temp" min="30" max="43" step="0.1" /></label>
+              <label>Breathing rate (/min)<input type="number" name="rr" min="4" max="60" /></label>
+            </div>
+            <button type="button" class="secondary" id="useScanBtn">Fill from latest Body Scan</button>
+
+            <h3>Sleep</h3>
+            <div class="row3">
+              <label>Hours slept<input type="number" name="sleep" min="0" max="24" step="0.25" /></label>
+              <label>Sleep quality (1-5)<input type="number" name="sleepQ" min="1" max="5" /></label>
+              <label>Caffeine (cups)<input type="number" name="caffeine" min="0" max="20" /></label>
+            </div>
+
+            <h3>Wellbeing</h3>
+            <div class="row3">
+              <label>Mood: <b data-out="mood">3</b>/5<input type="range" name="mood" min="1" max="5" value="3" /></label>
+              <label>Stress: <b data-out="stress">3</b>/10<input type="range" name="stress" min="1" max="10" value="3" /></label>
+              <label>Fatigue: <b data-out="fatigue">3</b>/10<input type="range" name="fatigue" min="1" max="10" value="3" /></label>
+              <label>Workload: <b data-out="workload">5</b>/10<input type="range" name="workload" min="1" max="10" value="5" /></label>
+              <label>Water (L)<input type="number" name="water" min="0" max="10" step="0.1" /></label>
+              <label>Feeling isolated: <b data-out="isolation">2</b>/5<input type="range" name="isolation" min="1" max="5" value="2" /></label>
+            </div>
+
+            <label>Notes<textarea name="notes" rows="3" placeholder="Anything unusual today?"></textarea></label>
+            <button type="submit" class="primary">Save Check-in</button>
+          </form>
+
+          <div class="card">
+            <h3>Result</h3>
+            <div id="checkinResult" class="muted">Save a check-in to see how each reading compares.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Body Scan ===== -->
+      <section class="page" id="page-scan">
+        <div class="page-head">
+          <h2>Body Scan</h2>
+          <span class="muted">Camera-based estimates using MediaPipe. Sit still, face the camera in good light.</span>
+        </div>
+
+        <div class="layout-cam">
+          <div id="scanStageSlot">
+            <div class="stage" id="stage">
+              <video id="video" autoplay playsinline muted></video>
+              <canvas id="overlay"></canvas>
+              <div class="stage-msg" id="stageMsg">Camera off</div>
+            </div>
+          </div>
+
+          <aside class="panel">
+            <button id="camBtn" class="primary">Start Camera</button>
+            <div class="toggles">
+              <label><input type="checkbox" id="togPose" checked /> Body</label>
+              <label><input type="checkbox" id="togHands" checked /> Hands</label>
+              <label><input type="checkbox" id="togFace" checked /> Face</label>
+              <label><input type="checkbox" id="togSkeleton" /> Skeleton only</label>
+            </div>
+
+            <div class="stats">
+              <div><span>Heart rate</span><b id="vHr">--</b><small id="vHrQ">needs ~10 s</small></div>
+              <div><span>Breathing</span><b id="vRr">--</b><small>breaths/min</small></div>
+              <div><span>Blink rate</span><b id="vBlink">--</b><small>per min</small></div>
+              <div><span>Eyes closed</span><b id="vPerclos">--</b><small>% last min</small></div>
+              <div><span>Shoulder tilt</span><b id="vTilt">--</b><small>degrees</small></div>
+              <div><span>Head tilt</span><b id="vHead">--</b><small>degrees</small></div>
+            </div>
+            <div class="stats small">
+              <div><span>FPS</span><b id="vFps">--</b></div>
+              <div><span>Tracked</span><b id="vTracked">--</b></div>
+            </div>
+
+            <button id="saveScanBtn" class="secondary">Save Scan</button>
+            <span class="save-msg" id="scanMsg"></span>
+            <p class="hint">Heart rate uses remote photoplethysmography (skin color changes with each pulse). Breathing uses shoulder movement. These are experimental estimates.</p>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ===== Exercise ===== -->
+      <section class="page" id="page-exercise">
+        <div class="page-head">
+          <h2>Exercise Countermeasures</h2>
+          <span class="muted">Without gravity, bone and muscle weaken. ISS crews average about 2 hours of exercise per day.</span>
+        </div>
+
+        <div class="layout-cam">
+          <div id="exStageSlot"></div>
+
+          <aside class="panel">
+            <label>Exercise
+              <select id="exType">
+                <option value="squat">Squats (legs)</option>
+                <option value="raise">Lateral arm raises (shoulders)</option>
+                <option value="curl">Bicep curls (arms)</option>
+                <option value="rom">Shoulder mobility test</option>
+              </select>
+            </label>
+            <div class="stats">
+              <div><span>Reps</span><b id="exReps">0</b></div>
+              <div><span>Time</span><b id="exTime">0:00</b></div>
+              <div><span>Joint angle</span><b id="exAngle">--</b></div>
+              <div><span>Best range</span><b id="exBest">--</b></div>
+            </div>
+            <div class="ex-cue" id="exCue">Start the camera and stand so your whole body is visible.</div>
+            <div class="btn-row">
+              <button id="exStart" class="primary">Start Set</button>
+              <button id="exStop" class="secondary" disabled>Finish &amp; Save</button>
+            </div>
+
+            <h3 class="mt">Log equipment exercise</h3>
+            <form id="manualEx" class="form inline">
+              <select name="type">
+                <option>Treadmill</option>
+                <option>Cycle ergometer</option>
+                <option>Resistance device</option>
+                <option>Other</option>
+              </select>
+              <input type="number" name="minutes" min="1" max="300" placeholder="min" required />
+              <button class="secondary">Add</button>
+            </form>
+
+            <div class="today-row col mt">
+              <span>Today: <b id="exTodayMin">0</b> / <b id="exTarget">120</b> min</span>
+              <div class="bar"><div id="exBar"></div></div>
+            </div>
+            <ul class="mini-list" id="exList"></ul>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ===== PVT ===== -->
+      <section class="page" id="page-pvt">
+        <div class="page-head">
+          <h2>Alertness Test (PVT)</h2>
+          <span class="muted">Based on the Psychomotor Vigilance Test used in NASA's Reaction Self Test on the ISS.</span>
+        </div>
+
+        <div class="grid two">
+          <div class="card">
+            <div class="btn-row">
+              <label>Length
+                <select id="pvtLen">
+                  <option value="180">3 minutes (standard)</option>
+                  <option value="60">1 minute (quick)</option>
+                </select>
+              </label>
+              <button id="pvtStart" class="primary">Start Test</button>
+            </div>
+            <div class="pvt-box" id="pvtBox" tabindex="0">
+              <span id="pvtText">Press Start. When the red counter appears, press SPACE or tap here as fast as you can.</span>
+            </div>
+            <div class="pvt-progress"><div id="pvtProgress"></div></div>
+          </div>
+
+          <div class="card">
+            <h3>Result</h3>
+            <div id="pvtResult" class="muted">No test yet.</div>
+            <h3 class="mt">Recent tests</h3>
+            <ul class="mini-list" id="pvtList"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Symptoms ===== -->
+      <section class="page" id="page-symptoms">
+        <div class="page-head">
+          <h2>Symptoms</h2>
+          <span class="muted">Log anything you notice. Current body tracking values are saved with each entry.</span>
+        </div>
+
+        <div class="grid two">
+          <form id="symptomForm" class="card form">
+            <div class="row2">
+              <label>Symptom
+                <select name="symptom" required>
+                  <option value="">Select...</option>
+                  <option>Headache</option>
+                  <option>Nausea / Motion sickness</option>
+                  <option>Dizziness / Balance problems</option>
+                  <option>Back pain</option>
+                  <option>Muscle or joint pain</option>
+                  <option>Fatigue</option>
+                  <option>Sleep problems</option>
+                  <option>Nasal congestion / Head fullness</option>
+                  <option>Vision changes</option>
+                  <option>Skin irritation / Rash</option>
+                  <option>Eye irritation</option>
+                  <option>Cough / Sore throat</option>
+                  <option>Fever / Chills</option>
+                  <option>Stress / Anxiety</option>
+                  <option>Low mood</option>
+                  <option>Trouble concentrating</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label>Body area
+                <select name="area">
+                  <option>Head</option><option>Eyes</option><option>Ears</option><option>Neck</option>
+                  <option>Shoulders</option><option>Arms / Hands</option><option>Chest</option>
+                  <option>Stomach</option><option>Back</option><option>Legs / Feet</option>
+                  <option>Skin</option><option>Whole body</option><option>Mind / Mood</option>
+                </select>
+              </label>
+              <label>Duration
+                <select name="duration">
+                  <option>Just started</option><option>Under 1 hour</option><option>1-6 hours</option>
+                  <option>6-24 hours</option><option>More than 1 day</option><option>Comes and goes</option>
+                </select>
+              </label>
+              <label>Severity: <b data-out="severity">5</b>/10
+                <input type="range" name="severity" min="1" max="10" value="5" />
+              </label>
+            </div>
+            <label>Notes<textarea name="notes" rows="3" placeholder="What were you doing? What made it better or worse?"></textarea></label>
+            <button type="submit" class="primary">Save Symptom</button>
+            <span class="save-msg" id="symMsg"></span>
+          </form>
+
+          <div class="card">
+            <h3>Recent symptoms</h3>
+            <table>
+              <thead><tr><th>Time</th><th>Symptom</th><th>Area</th><th>Sev.</th><th>Duration</th><th></th></tr></thead>
+              <tbody id="symTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Trends ===== -->
+      <section class="page" id="page-trends">
+        <div class="page-head">
+          <h2>Trends &amp; Records</h2>
+          <div class="btn-row">
+            <button class="secondary" id="exportCsv">Export CSV</button>
+            <button class="secondary" id="exportJson">Backup (JSON)</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="btn-row">
+            <label>Metric <select id="trendMetric"></select></label>
+            <label>Range
+              <select id="trendRange">
+                <option value="7">7 days</option>
+                <option value="30" selected>30 days</option>
+                <option value="90">90 days</option>
+                <option value="3650">All</option>
+              </select>
+            </label>
+          </div>
+          <canvas id="trendChart" class="chart"></canvas>
+          <p class="hint" id="trendNote"></p>
+        </div>
+
+        <div class="card">
+          <div class="btn-row">
+            <h3>Records</h3>
+            <select id="recordType">
+              <option value="checkins">Check-ins</option>
+              <option value="symptoms">Symptoms</option>
+              <option value="pvt">Alertness tests</option>
+              <option value="exercise">Exercise</option>
+              <option value="scans">Body scans</option>
+            </select>
+          </div>
+          <div class="table-wrap"><table id="recordTable"></table></div>
+        </div>
+      </section>
+
+      <!-- ===== Space Weather ===== -->
+      <section class="page" id="page-radiation">
+        <div class="page-head">
+          <h2>Space Weather &amp; Radiation</h2>
+          <button class="secondary" id="swRefresh">Refresh</button>
+        </div>
+
+        <div class="status-banner" id="swBanner">
+          <div><span class="label">Radiation advisory</span><b id="swLevel">--</b></div>
+          <p id="swText"></p>
+        </div>
+
+        <div class="grid three">
+          <div class="card"><h3>Solar flares</h3><ul class="mini-list" id="swFlr"></ul></div>
+          <div class="card"><h3>Solar energetic particles</h3><ul class="mini-list" id="swSep"></ul></div>
+          <div class="card"><h3>Geomagnetic storms</h3><ul class="mini-list" id="swGst"></ul></div>
+        </div>
+        <p class="hint">Live data: NASA DONKI (Space Weather Database Of Notifications, Knowledge, Information), last 30 days. <span id="swSource"></span></p>
+      </section>
+
+      <!-- ===== Settings ===== -->
+      <section class="page" id="page-settings">
+        <div class="page-head"><h2>Settings &amp; About</h2></div>
+
+        <div class="grid two">
+          <form id="missionForm" class="card form">
+            <h3>Mission</h3>
+            <label>Mission name<input type="text" name="name" /></label>
+            <div class="row2">
+              <label>Mission type
+                <select name="type">
+                  <option value="iss">ISS (low Earth orbit)</option>
+                  <option value="orion">Artemis / Orion (lunar transit)</option>
+                  <option value="lunar">Lunar surface</option>
+                  <option value="mars">Mars transit</option>
+                </select>
+              </label>
+              <label>Mission start<input type="date" name="start" /></label>
+              <label>Exercise target (min/day)<input type="number" name="exTarget" min="0" max="300" /></label>
+              <label>NASA API key<input type="text" name="apiKey" placeholder="DEMO_KEY" /></label>
+            </div>
+            <button class="primary">Save Mission</button>
+            <span class="save-msg" id="missionMsg"></span>
+          </form>
+
+          <div class="card">
+            <h3>Crew</h3>
+            <ul class="crew-list" id="crewList"></ul>
+            <form id="crewForm" class="form inline">
+              <input type="text" name="name" placeholder="Name" required />
+              <input type="text" name="role" placeholder="Role" />
+              <button class="secondary">Add</button>
+            </form>
+
+            <h3 class="mt">Data</h3>
+            <div class="btn-row wrap">
+              <button class="secondary" id="demoBtn">Load demo data</button>
+              <label class="secondary file-btn">Import backup<input type="file" id="importFile" accept=".json" hidden /></label>
+              <button class="danger" id="clearBtn">Clear all data</button>
+            </div>
+            <p class="hint">All data stays in this browser (localStorage). Demo crew members and readings are fictional.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>How SYS-ASTRO covers NASA's five spaceflight hazards (RIDGE)</h3>
+          <table>
+            <thead><tr><th>Hazard</th><th>Health risk</th><th>SYS-ASTRO feature</th></tr></thead>
+            <tbody>
+              <tr><td>Space Radiation</td><td>Cancer, CNS and tissue damage from galactic cosmic rays and solar particle events</td><td>Space Weather page with live NASA DONKI flare, solar particle and storm alerts</td></tr>
+              <tr><td>Isolation &amp; Confinement</td><td>Stress, low mood, sleep loss, reduced alertness</td><td>Mood, stress, isolation and sleep check-ins; Alertness Test (PVT); trend alerts</td></tr>
+              <tr><td>Distance from Earth</td><td>Communication delay, no real-time doctor</td><td>Works fully on board in the browser; automatic personal-baseline anomaly detection and recommended actions</td></tr>
+              <tr><td>Gravity Fields</td><td>Bone and muscle loss, fluid shift, balance problems</td><td>Exercise countermeasure tracker with camera rep counting and shoulder mobility test; blood pressure and posture tracking</td></tr>
+              <tr><td>Hostile / Closed Environment</td><td>Illness, skin and eye irritation, poor air quality</td><td>Symptom log with severity trends; temperature and SpO2 checks</td></tr>
+            </tbody>
+          </table>
+          <h3 class="mt">How the analysis works</h3>
+          <p class="body-text">Each reading is checked two ways: against general adult ranges, and against the astronaut's own baseline (mean and spread of their previous readings, once at least 5 exist). A reading 2 or more standard deviations from baseline is flagged "Watch"; it becomes "Alert" when it is 3 or more standard deviations off and also outside the general range, or far outside the general range on its own. Personal baselines matter in space: body temperature, blood pressure and heart rate shift in microgravity, so Earth ranges alone can miss or over-flag changes. Trend checks look for patterns such as several nights under 6 hours of sleep, which NASA's Reaction Self Test study linked to slower responses and higher stress.</p>
+          <p class="hint">Not a medical device. Ranges are general adult guidance. Always follow flight rules and the Crew Medical Officer / flight surgeon.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/store.js"></script>
+  <script src="js/health.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/spaceweather.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/pvt.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

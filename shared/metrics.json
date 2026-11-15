@@ -112,6 +112,22 @@
       "floor": 0.4,
       "group": "body",
       "source": "Scale / SLAMMD"
+    },
+    {
+      "id": "pvt_rt",
+      "label": "Reaction time (alertness)",
+      "unit": "ms",
+      "floor": 15,
+      "group": "alert",
+      "source": "Alertness test · PVT"
+    },
+    {
+      "id": "pvt_lapses",
+      "label": "Slow responses (alertness)",
+      "unit": "%",
+      "floor": 5,
+      "group": "alert",
+      "source": "Alertness test · PVT"
     }
   ]
 }

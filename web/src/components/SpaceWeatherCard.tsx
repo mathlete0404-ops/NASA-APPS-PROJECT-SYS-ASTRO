@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Phase } from '../content/mission'
 import { isStale, parseProtons, stormAdvice, summarize, SWPC_PROTONS_URL, type SpaceWeather } from '../engine/spaceweather'
 import { EvidenceChips, Spark } from './ui'
+import { DonkiPanel } from './DonkiPanel'
 
 const CACHE_KEY = 'crew-mirror:spaceweather:v1'
 
@@ -82,6 +83,7 @@ export function SpaceWeatherCard({ phase }: { phase: Phase }) {
       )}
       <p><small className="muted">Context only: NOAA GOES proton flux, scaled with the NOAA S-scale. Vehicle dosimetry and mission storm rules come first.</small></p>
       <EvidenceChips ids={['swpc', 'radlab']} />
+      <DonkiPanel phase={phase} />
     </div>
   )
 }

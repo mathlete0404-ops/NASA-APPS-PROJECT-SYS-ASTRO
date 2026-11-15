@@ -19,6 +19,7 @@ const GROUPS: { id: string; label: string }[] = [
   { id: 'checkin', label: 'Mood & sleep' },
   { id: 'balance', label: 'Balance (measured with gravity)' },
   { id: 'body', label: 'Body' },
+  { id: 'alert', label: 'Alertness (reaction test)' },
 ]
 const seen = (k: string) => { try { return localStorage.getItem(`crew-mirror:seen:${k}`) === '1' } catch { return false } }
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening' }

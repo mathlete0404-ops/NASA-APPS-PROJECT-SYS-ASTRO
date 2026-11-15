@@ -7,6 +7,8 @@ export const EVIDENCE: Record<string, Evidence> = {
   osd569: { id: 'osd569', kind: 'nasa-data', label: 'OSDR OSD-569 · Inspiration4 blood count', url: 'https://osdr.nasa.gov/bio/repo/data/studies/OSD-569' },
   osd575: { id: 'osd575', kind: 'nasa-data', label: 'OSDR OSD-575 · Inspiration4 metabolic panel', url: 'https://osdr.nasa.gov/bio/repo/data/studies/OSD-575' },
   radlab: { id: 'radlab', kind: 'nasa-data', label: 'RadLab Portal · space radiation', url: 'https://visualization.osdr.nasa.gov/radlab/gui/overview/' },
+  pvt: { id: 'pvt', kind: 'paper', label: 'Basner & Dinges 2011 · PVT sensitivity to sleep loss', url: 'https://pubmed.ncbi.nlm.nih.gov/21532951/' },
+  donki: { id: 'donki', kind: 'nasa-data', label: 'NASA DONKI · flares, particle events, storms', url: 'https://kauai.ccmc.gsfc.nasa.gov/DONKI/' },
   swpc: { id: 'swpc', kind: 'paper', label: 'NOAA SWPC · space weather scales and GOES proton flux', url: 'https://www.swpc.noaa.gov/noaa-scales-explanation' },
   eda: { id: 'eda', kind: 'nasa-data', label: 'OSDR Environmental Data App · cabin CO₂', url: 'https://visualization.osdr.nasa.gov/eda/' },
   nlsp: { id: 'nlsp', kind: 'nasa-data', label: 'NASA Life Sciences Portal (data.nasa.gov)', url: 'https://data.nasa.gov/dataset/nasa-life-sciences-portal-nlsp' },

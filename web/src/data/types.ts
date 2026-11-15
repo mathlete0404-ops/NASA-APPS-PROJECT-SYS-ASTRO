@@ -31,7 +31,7 @@ export interface Session {
   crewId: string
   ts: string // ISO
   missionDay: number
-  kind: 'daily' | 'balance' | 'mass'
+  kind: 'daily' | 'balance' | 'mass' | 'pvt'
   measurements: Measurement[]
 }
 
