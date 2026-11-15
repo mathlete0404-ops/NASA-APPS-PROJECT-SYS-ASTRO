@@ -1127,3 +1127,4 @@ html[lang="ko"] { --font-body: 'Inter', 'Apple SD Gothic Neo', 'Noto Sans KR', '
 .sos-sources ul { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .sos-sources a { font-size: .8rem; color: var(--muted-fg); text-decoration: none; border-bottom: 1px dotted currentColor; }
 .sos-sources a:hover { color: var(--foreground); }
+.pet-locked p { margin: 0 0 10px; line-height: 1.4; }
