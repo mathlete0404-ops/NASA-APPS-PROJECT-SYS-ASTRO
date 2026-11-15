@@ -54,25 +54,25 @@ export function Medical({ go }: { go: (t: string) => void }) {
         </div>
         <p className="muted">All crew, worst status first. Every alert shows the rule that fired.</p>
         <div className="scroll-x">
-          <table>
+          <table className="stack-table">
             <thead><tr><th>Crew</th><th>Status</th><th>Alerts (reason)</th><th>Latest symptom</th><th /></tr></thead>
             <tbody>
               {rows.map(({ c, alerts, sym, lvl, started }) => (
                 <tr key={c.id}>
-                  <td><b>{c.id}</b><br /><small>{c.role}</small></td>
-                  <td>{started ? <StatusChip level={lvl} /> : <small className="muted">No checks yet</small>}</td>
-                  <td>
+                  <td data-label="Crew"><b>{c.id}</b><br /><small>{c.role}</small></td>
+                  <td data-label="Status">{started ? <StatusChip level={lvl} /> : <small className="muted">No checks yet</small>}</td>
+                  <td data-label="Alerts">
                     {alerts.length ? alerts.map(([id, r]) => (
-                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> — failed quality check today</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
+                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> (failed quality check today)</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
                     )) : <small className="muted">none</small>}
                   </td>
-                  <td>
+                  <td data-label="Latest symptom">
                     {sym[0] ? <>
                       <span className={`chip ${sym[0].result.level === 'act_now' ? 'act' : sym[0].result.level === 'cmo' ? 'watch' : 'usual'}`}>{sym[0].result.level === 'act_now' ? 'Act now' : sym[0].result.level === 'cmo' ? 'See CMO' : 'Self-care'}</span>{' '}
                       {REGION_LABEL[sym[0].region]} · {sym[0].intensity}/10<br /><small className="muted">{PATTERN_LABEL[sym[0].result.pattern]} · {new Date(sym[0].ts).toLocaleString()}</small>
                     </> : <small className="muted">none</small>}
                   </td>
-                  <td><button className="btn small" onClick={() => { setActiveCrew(c.id); go('today') }}>Open</button></td>
+                  <td data-label=""><button className="btn small" onClick={() => { setActiveCrew(c.id); go('today') }}>Open</button></td>
                 </tr>
               ))}
             </tbody>

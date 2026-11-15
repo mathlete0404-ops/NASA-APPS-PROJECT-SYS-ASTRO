@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ArrowRight, Bell, Check, CheckCircle2, Circle, Dumbbell, HeartPulse, ListChecks, ScanFace, Sparkles, X } from 'lucide-react'
+import { Activity, ArrowRight, Bell, Check, CheckCircle2, Circle, Dumbbell, HeartPulse, ListChecks, ScanFace, Sparkles, X } from 'lucide-react'
 import { activeProfile, crewStatus, dayKey, history, useStore } from '../data/store'
 import { recommendations } from '../engine/plan'
 import { LEVEL_RANK, METRICS, worst, type Level } from '../engine/status'
@@ -7,7 +7,7 @@ import { plain, technical } from '../engine/describe'
 import { PHASES } from '../content/mission'
 import { PATTERN_LABEL } from '../engine/triage'
 import { REGION_LABEL } from '../content/cards'
-import { fmtNum, Spark, StatusChip } from '../components/ui'
+import { fmtNum, StatusChip } from '../components/ui'
 import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
 import { PetCard } from '../components/Pet'
 import { SpaceWeatherPill } from '../components/SpaceWeatherPill'
@@ -32,7 +32,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
   useEffect(() => { const id = window.setInterval(() => setTick((t) => t + 1), 60_000); return () => window.clearInterval(id) }, [])
   if (!p) return null
   const st = crewStatus(s, p.id)
-  const recs = recommendations(s, p)
+  const recs = recommendations(s, p).filter((r) => r.id !== 'check') // the big Start button already covers today's check
   const phase = PHASES[p.phase]
   const today = dayKey(new Date())
   const checkDays = new Set(s.sessions.filter((x) => x.crewId === p.id && x.kind === 'daily').map((x) => dayKey(x.ts)))
@@ -119,41 +119,38 @@ export function Today({ go }: { go: (tab: string) => void }) {
             </div>
           </div>
         )}
-        <div className="card">
-          <div className="card-h"><span className="ic"><Sparkles /></span><h3>Today’s plan</h3></div>
-          {recs.slice(0, 4).map((r) => (
-            <div key={r.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
-              <b style={{ fontSize: '.95rem' }}>{r.title}</b><br /><small>{r.detail}</small>
-            </div>
-          ))}
-          {recs.length === 0 && <p className="muted">Nothing extra today. Follow your exercise and food plan.</p>}
-          <button className="btn violet small" style={{ marginTop: 10 }} onClick={() => go('plan')}>Exercise & food for today <ArrowRight /></button>
-        </div>
+        {!showStart && (
+          <div className="card">
+            <div className="card-h"><span className="ic"><Sparkles /></span><h3>Next up</h3><span className="sub">{recs.length} today</span></div>
+            {recs.slice(0, 2).map((r) => (
+              <div key={r.id} className="next-item"><b>{r.title}</b><small>{r.detail}</small></div>
+            ))}
+            {recs.length === 0 && <p className="muted">Nothing extra today. Follow your exercise and food plan.</p>}
+            <button className="btn small" style={{ marginTop: 10 }} onClick={() => go('plan')}>Open today’s plan <ArrowRight /></button>
+          </div>
+        )}
       </div>
 
-      {hasData && GROUPS.map((g) => {
-        const ids = Object.keys(METRICS).filter((id) => METRICS[id].group === g.id && st[id])
-        if (!ids.length) return null
-        return (
-          <div key={g.id}>
-            <h3 style={{ marginTop: 8 }}>{g.label}</h3>
-            <div className="grid g4">
-              {ids.map((id) => {
-                const r = st[id]
-                const h = history(s.sessions, p.id, id).slice(-21)
-                const latest = h[h.length - 1]
-                return (
-                  <button className="card tight tile lift" key={id} style={{ textAlign: 'left', cursor: 'pointer', font: 'inherit', color: 'inherit' }} title={plain(id, r)} onClick={() => go('trends')}>
-                    <div className="row between"><small>{METRICS[id].label}</small><StatusChip level={r.level} n={r.n} /></div>
-                    <div className="val">{latest?.ok ? fmtNum(latest.value) : '—'} <small>{METRICS[id].unit}</small></div>
-                    <Spark values={h.map((x) => (x.ok ? x.value : null))} median={r.median} scale={r.scale} />
-                  </button>
-                )
-              })}
-            </div>
+      {hasData && (
+        <div className="card">
+          <div className="card-h"><span className="ic"><Activity /></span><h3>Your numbers</h3><span className="sub">latest, against your normal</span></div>
+          <div className="numbers">
+            {GROUPS.flatMap((g) => Object.keys(METRICS).filter((id) => METRICS[id].group === g.id && st[id])).map((id) => {
+              const r = st[id]
+              const h = history(s.sessions, p.id, id)
+              const latest = h[h.length - 1]
+              return (
+                <button key={id} className={`num-row lv-${r.level}`} title={plain(id, r)} onClick={() => go('trends')}>
+                  <span className="num-l">{METRICS[id].label.replace(/ \(estimate\)$/, '')}</span>
+                  <span className="num-v">{latest?.ok ? fmtNum(latest.value) : '—'}<small> {METRICS[id].unit}</small></span>
+                  <StatusChip level={r.level} n={r.n} />
+                </button>
+              )
+            })}
           </div>
-        )
-      })}
+          <button className="btn small ghost" style={{ marginTop: 8 }} onClick={() => go('trends')}>See trends <ArrowRight /></button>
+        </div>
+      )}
 
       <div id="space-weather" style={{ scrollMarginTop: 72 }}><SpaceWeatherCard phase={p.phase} /></div>
     </div>

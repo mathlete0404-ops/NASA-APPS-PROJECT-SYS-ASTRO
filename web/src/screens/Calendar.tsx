@@ -13,6 +13,9 @@ import { EmptyState, StatusChip } from '../components/ui'
 const DOW = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const KIND_LABEL: Record<CalendarEvent['kind'], string> = { note: 'Note', eva: 'EVA', exercise: 'Exercise', landing: 'Landing / arrival', medical: 'Medical', other: 'Mission event' }
 
+/** Names for sessions ticked by hand in the Plan (stored as "plan:<item id>"). */
+const PLAN_NAME: Record<string, string> = { ared: 'Resistive session (ARED)', aero: 'Aerobic session', mob: 'Spine & hip mobility', shoulder: 'Shoulder range check', strength: 'Strength training', walk: 'Walking', balance: 'Balance practice', sts: 'Sit-to-stand practice', rehab: 'Reconditioning' }
+
 export function CalendarPage({ go }: { go: (t: string) => void }) {
   const s = useStore()
   const p = activeProfile(s)
@@ -109,7 +112,7 @@ export function CalendarPage({ go }: { go: (t: string) => void }) {
             {lvl ? <p>Daily check: <StatusChip level={lvl} /></p> : <p className="muted">No daily check this day.{sel === today && <> <button className="btn small" onClick={() => go('check')}>Do it now</button></>}</p>}
             {dSym.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>🩹 <b>{REGION_LABEL[x.region]}</b> {x.kind} {x.intensity}/10 — {PATTERN_LABEL[x.result.pattern]}{x.source ? ` · source: ${x.source.label}` : ''}</p>)}
             {dBal.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>⚖️ Balance: {x.measurements.map((m) => `${METRICS[m.metric]?.label ?? m.metric} ${m.ok ? m.value : 'No data'}`).join(', ')}</p>)}
-            {dWo.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>🏋️ {COACH[x.exercise as CoachExercise]?.name ?? x.exercise}: {x.reps} reps, form {x.formScore}%</p>)}
+            {dWo.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>🏋️ {x.exercise.startsWith('plan:') ? `${PLAN_NAME[x.exercise.slice(5)] ?? 'Exercise'}: done` : `${COACH[x.exercise as CoachExercise]?.name ?? x.exercise}: ${x.reps} reps, form ${x.formScore}%`}</p>)}
             {dEv.map((x) => (
               <div key={x.id} className="row between" style={{ fontSize: '.9rem' }}>
                 <span>📌 <b>{KIND_LABEL[x.kind]}</b> · {x.title}</span>

@@ -2,6 +2,12 @@
 // crew nutritionist (editable in Settings). Food values are approximate per serving, for
 // general reference only — a flight menu would use the mission food database.
 //
+// Defaults follow NASA's exploration nutrition requirements, JSC-67378 (2020), written for a
+// 70-kg crewmember: protein 1.2-1.8 g/kg, calcium 1000-1200 mg, vitamin D 25 ug (1000 IU),
+// sodium 1500-2300 mg, potassium 3400 mg (men) / 2600 mg (women), fluid 32 mL/kg and at least
+// 2500 mL (men) / 2100 mL (women). Energy uses the DRI estimated-energy equation in JSC-67378;
+// ~35 kcal/kg is a close stand-in for a 70-kg adult until the nutritionist sets it.
+//
 // Why these nutrients (NASA space-nutrition research, see evidence links):
 //  - Energy: crews often eat less than they need in flight → mass and muscle loss.
 //  - Protein: supports muscle during unloading (with resistive exercise).
@@ -9,8 +15,8 @@
 //  - Sodium: high intake is linked to bone loss and fluid shifts — keep it moderate.
 //  - Potassium + fluid: help offset bone/kidney-stone risk and dehydration.
 
-export interface Targets { kcalPerKg: number; proteinPerKg: number; calciumMg: number; vitDug: number; sodiumMaxMg: number; potassiumMg: number; fluidMl: number }
-export const DEFAULT_TARGETS: Targets = { kcalPerKg: 35, proteinPerKg: 1.2, calciumMg: 1000, vitDug: 20, sodiumMaxMg: 2300, potassiumMg: 3500, fluidMl: 2500 }
+export interface Targets { kcalPerKg: number; proteinPerKg: number; calciumMg: number; vitDug: number; sodiumMaxMg: number; potassiumMg: number; fluidMlPerKg: number; fluidMl: number }
+export const DEFAULT_TARGETS: Targets = { kcalPerKg: 35, proteinPerKg: 1.2, calciumMg: 1000, vitDug: 25, sodiumMaxMg: 2300, potassiumMg: 3400, fluidMlPerKg: 32, fluidMl: 2500 }
 
 export interface Nutrients { kcal: number; protein: number; calcium: number; sodium: number; potassium: number; fluid: number; vitD: number }
 export interface FoodItem { id: string; name: string; serving: string; n: Nutrients; tags: string[] }
@@ -37,7 +43,7 @@ export const PANTRY: FoodItem[] = [
   { id: 'veg', name: 'Spinach & vegetables', serving: '1 pouch', n: N(50, 3, 100, 300, 450, 80), tags: ['potassium', 'vegetable'] },
   { id: 'banana', name: 'Banana (fresh cargo)', serving: '1', n: N(105, 1.3, 6, 1, 420, 90), tags: ['potassium', 'fruit'] },
   { id: 'water', name: 'Water', serving: '250 mL', n: N(0, 0, 0, 0, 0, 250), tags: ['drink'] },
-  { id: 'vitd', name: 'Vitamin D supplement', serving: '1 tablet (20 µg)', n: N(0, 0, 0, 0, 0, 0, 20), tags: ['vitamin D'] },
+  { id: 'vitd', name: 'Vitamin D supplement', serving: '1 tablet (25 µg, 1000 IU)', n: N(0, 0, 0, 0, 0, 0, 25), tags: ['vitamin D'] },
 ]
 
 export const zero = (): Nutrients => N(0, 0, 0, 0, 0, 0, 0)
@@ -46,7 +52,7 @@ export function add(a: Nutrients, b: Nutrients, k = 1): Nutrients {
 }
 
 export function goals(massKg: number, t: Targets) {
-  return { kcal: Math.round(t.kcalPerKg * massKg), protein: Math.round(t.proteinPerKg * massKg), calcium: t.calciumMg, sodiumMax: t.sodiumMaxMg, potassium: t.potassiumMg, fluid: t.fluidMl, vitD: t.vitDug }
+  return { kcal: Math.round(t.kcalPerKg * massKg), protein: Math.round(t.proteinPerKg * massKg), calcium: t.calciumMg, sodiumMax: t.sodiumMaxMg, potassium: t.potassiumMg, fluid: Math.max(Math.round((t.fluidMlPerKg ?? 32) * massKg / 50) * 50, t.fluidMl), vitD: t.vitDug }
 }
 
 /**

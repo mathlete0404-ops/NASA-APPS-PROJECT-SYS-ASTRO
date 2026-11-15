@@ -139,3 +139,11 @@ export function CountUp({ to, ms = 1500 }: { to: number; ms?: number }) {
   }, [to, ms])
   return <>{v.toLocaleString()}</>
 }
+
+/** Turn a camera/model error into what the astronaut should do next. */
+export function cameraHelp(err: string): string {
+  if (/NotAllowed|Permission|denied/i.test(err)) return 'Camera access is blocked. Allow the camera for Crew Mirror in your browser or device settings, then press Try again.'
+  if (/NotFound|DevicesNotFound|no camera/i.test(err)) return 'No camera found. Connect or turn on a camera, or skip today.'
+  if (/NotReadable|in use|TrackStart/i.test(err)) return 'Another app is using the camera. Close it, then press Try again.'
+  return 'The camera or the face model did not start. The model downloads once on first use, so check your connection, then press Try again.'
+}

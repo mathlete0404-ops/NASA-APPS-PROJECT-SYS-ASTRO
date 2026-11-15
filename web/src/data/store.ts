@@ -209,6 +209,11 @@ export function addWorkout(w: Workout) {
   if (isMine(w.crewId)) void cloud.pushWorkout(w).catch(() => undefined)
 }
 
+/** Undo a manually ticked plan session. Local only: cloud.ts (teammate-owned) has no workout delete yet. */
+export function removeWorkout(id: string) {
+  setState({ workouts: state.workouts.filter((w) => w.id !== id) })
+}
+
 export function addFood(f: FoodEntry) {
   setState({ food: [...state.food, f] })
   if (isMine(f.crewId)) void cloud.pushFood(f).catch(() => undefined)

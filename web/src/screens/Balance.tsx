@@ -3,7 +3,7 @@ import { activeProfile, addSession, crewStatus, missionDay, uid, useStore } from
 import { SitToStand, swayMetrics, type BalanceResult, type PoseSample, type WalkVerdict } from '../engine/balance'
 import { METRICS, type StatusResult } from '../engine/status'
 import { drawPose, VisionSession } from '../vision/camera'
-import { EvidenceChips, StatusChip } from '../components/ui'
+import { EvidenceChips, StatusChip, cameraHelp } from '../components/ui'
 import { PHASES } from '../content/mission'
 
 type TestId = 'sway_eo' | 'sway_ec' | 'sway_tandem' | 'sts_time'
@@ -116,13 +116,13 @@ export function Balance() {
           <p style={{ fontSize: '.9rem' }}>In flight, keep up resistive and treadmill sessions (see Plan). They protect the leg strength that balance relies on after landing.</p>
         </div>
       )}
-      <div className={`banner ${verdict.level}`}>
+      {!(floating && verdict.title === 'No balance data yet') && <div className={`banner ${verdict.level}`}>
         <div className="row between"><h2>{floating ? 'Last balance result' : 'Safe to walk / EVA?'}: {verdict.title}</h2>{st.sway_ec && <StatusChip level={st.sway_ec.level} n={st.sway_ec.n} />}</div>
         <p>{verdict.detail}</p>
         <small>Compared with your pre-flight baseline (first 7 balance sessions). Rule: eyes-closed or tandem sway |z| &gt; 3 → stop; &gt; 2 → spotter.</small>
-      </div>
-      <div className="grid g2">
-        <div className="stack">
+      </div>}
+      <div className={floating ? 'stack' : 'grid g2'}>
+        {!floating && <div className="stack">
           <div className="stage">
             <canvas ref={canvas} width={640} height={480} />
             {(phase === 'running' || phase === 'get-ready') && <div className="count">{phase === 'get-ready' ? `Ready ${left}` : test === 'sts_time' ? `${count}/5` : `${left}s`}</div>}
@@ -131,21 +131,21 @@ export function Balance() {
               {phase === 'loading' && 'Loading on-device pose model…'}
               {phase === 'get-ready' && def.how}
               {phase === 'running' && (test === 'sway_ec' ? 'Eyes closed. Stay still.' : 'Hold still.')}
-              {phase === 'error' && `Camera or model failed: ${err}`}
+              {phase === 'error' && cameraHelp(err)}
               {phase === 'done' && 'Test finished.'}
             </div>
           </div>
           <p className="privacy">🔒 Video stays in this browser. Only the skeleton is drawn and only numbers are saved.</p>
-        </div>
+        </div>}
         <div className="card stack">
-          <h2>Balance test</h2>
-          <div className="row">
+          <h2>{floating ? 'Your balance results' : 'Balance test'}</h2>
+          {!floating && <><div className="row">
             {TESTS.map((t) => (
               <button key={t.id} className={`btn small${test === t.id ? ' sel' : ''}`} disabled={phase === 'running' || phase === 'loading' || phase === 'get-ready'} onClick={() => { setTest(t.id); setPhase('idle'); setResult(null) }}>{t.name}</button>
             ))}
           </div>
           <p>{def.how}</p>
-          <button className="btn primary" onClick={run} disabled={floating || phase === 'running' || phase === 'loading' || phase === 'get-ready'}>{floating ? 'Available after landing' : `Start ${def.name.toLowerCase()}`}</button>
+          <button className="btn primary" onClick={run} disabled={phase === 'running' || phase === 'loading' || phase === 'get-ready'}>{`Start ${def.name.toLowerCase()}`}</button>
           {result && (
             <div className="card tight">
               <div className="row between">
@@ -155,7 +155,7 @@ export function Balance() {
               <div className="tile"><div className="val">{result.ok ? result.value : '—'} <small>{METRICS[test].unit}</small></div></div>
               <small>{result.note} {st[test]?.reasons.join(' ')}</small>
             </div>
-          )}
+          )}</>}
           <table>
             <thead><tr><th>Test</th><th className="num">Last</th><th>Status</th></tr></thead>
             <tbody>

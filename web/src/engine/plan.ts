@@ -65,6 +65,7 @@ export function exercisePlan(s: State, p: CrewProfile): { headline: string; item
   const st = crewStatus(s, p.id)
   const today = dayKey(new Date())
   const done = (ex: string) => s.workouts.some((w) => w.crewId === p.id && w.exercise === ex && dayKey(w.ts) === today)
+  // A session ticked by hand in the Plan (ARED, treadmill and stretches are not camera-coached) is stored as "plan:<item id>".
   const recent = s.symptoms.filter((x) => x.crewId === p.id && Date.now() - Date.parse(x.ts) < RECENT && x.result.level !== 'self_care')
   const blockedRegions = new Set<Region>(recent.map((x) => x.region))
   const legsBlocked = ['hip', 'thigh', 'knee', 'lower_leg', 'ankle_foot', 'lower_back'].some((r) => blockedRegions.has(r as Region))
@@ -101,7 +102,7 @@ export function exercisePlan(s: State, p: CrewProfile): { headline: string; item
       { id: 'sts', label: 'Sit-to-stand & squats', detail: 'Track depth and form with the coach', minutes: 15, coach: 'squat', skip: skip(legsBlocked) },
     ],
   }
-  const list = items[ph].map((i) => ({ ...i, done: i.coach ? done(i.coach) : false }))
+  const list = items[ph].map((i) => ({ ...i, done: done(`plan:${i.id}`) || (i.coach ? done(i.coach) : false) }))
   const total = list.filter((i) => !i.skip).reduce((a, b) => a + b.minutes, 0)
   const headline = ph === 'transit'
     ? `About ${total} minutes of exercise today. On long missions crews exercise about 2 hours a day to protect bone and muscle.`

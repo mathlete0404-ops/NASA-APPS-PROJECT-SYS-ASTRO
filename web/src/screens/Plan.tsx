@@ -1,7 +1,7 @@
 // Today's plan: what to do (rules + reasons), the exercise plan for this phase, and food.
 import { useMemo, useState } from 'react'
 import { ArrowRight, Check, Droplets, Dumbbell, Pill, Plus, Salad, Sparkles, Trash2 } from 'lucide-react'
-import { activeProfile, addFood, dayKey, removeFood, uid, useStore } from '../data/store'
+import { activeProfile, addFood, addWorkout, dayKey, removeFood, removeWorkout, uid, useStore } from '../data/store'
 import { exercisePlan, latestMass, recommendations, type Area } from '../engine/plan'
 import { add, DEFAULT_TARGETS, goals, PANTRY, suggest, zero } from '../content/nutrition'
 import { EvidenceChips } from '../components/ui'
@@ -22,10 +22,9 @@ function Nutrient({ label, value, goal, unit, max = false }: { label: string; va
     <div className="nutrient">
       <div className="row between" style={{ gap: 6 }}>
         <span className="n-label">{label}</span>
-        <span className="n-val"><b>{Math.round(value).toLocaleString()}</b> / {goal.toLocaleString()} {unit}{max ? ' max' : ''}</span>
+        <span className="n-val"><b>{Math.round(value).toLocaleString()}</b> / {goal.toLocaleString()} {unit}{max ? ' max' : ''}{over ? ' · over' : ''}</span>
       </div>
       <div className="n-bar"><span style={{ width: `${Math.max(w, value > 0 ? 3 : 0)}%`, background: color }} /></div>
-      <span className="n-pct" style={{ color: over ? 'var(--act)' : undefined }}>{max ? (over ? 'over the limit' : `${pct}% of limit`) : `${pct}%`}</span>
     </div>
   )
 }
@@ -40,6 +39,11 @@ export function Plan({ go }: { go: (t: string) => void }) {
   if (!p) return null
   const recs = recommendations(s, p)
   const ex = exercisePlan(s, p)
+  const toggleDone = (itemId: string) => {
+    const mine = s.workouts.find((w) => w.crewId === p.id && w.exercise === `plan:${itemId}` && dayKey(w.ts) === dayKey(new Date()))
+    if (mine) removeWorkout(mine.id)
+    else addWorkout({ id: uid(), crewId: p.id, ts: new Date().toISOString(), exercise: `plan:${itemId}`, reps: 0, formScore: 100, faults: {}, source: 'manual' })
+  }
   const mass = latestMass(s, p.id) ?? p.massKg ?? 75
   const g = goals(mass, { ...DEFAULT_TARGETS, ...p.targets })
   const eaten = log.reduce((acc, f) => add(acc, PANTRY.find((x) => x.id === f.itemId)?.n ?? zero(), f.servings), zero())
@@ -75,7 +79,8 @@ export function Plan({ go }: { go: (t: string) => void }) {
           <div className="todo" style={{ marginTop: 10 }}>
             {ex.items.map((i) => (
               <div key={i.id} className="todo-row" style={{ opacity: i.skip ? 0.5 : 1 }}>
-                <span className={`check-dot${i.done ? ' on' : ''}`}>{i.done && <Check size={13} />}</span>
+                <button type="button" className={`check-dot${i.done ? ' on' : ''}`} disabled={!!i.skip} aria-pressed={!!i.done}
+                  aria-label={i.done ? `Mark ${i.label} as not done` : `Mark ${i.label} as done`} onClick={() => toggleDone(i.id)}>{i.done && <Check size={13} />}</button>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <b>{i.label}</b>
                   <p className="muted" style={{ margin: '2px 0 0', fontSize: '.88rem' }}>{i.skip ?? i.detail}</p>
@@ -89,16 +94,6 @@ export function Plan({ go }: { go: (t: string) => void }) {
 
         <div className="card">
           <div className="card-h"><span className="ic"><Salad /></span><h3>Food today</h3><span className="sub">targets for {Math.round(mass)} kg</span></div>
-          <div className="nutrients">
-            <Nutrient label="Energy" value={eaten.kcal} goal={g.kcal} unit="kcal" />
-            <Nutrient label="Protein" value={eaten.protein} goal={g.protein} unit="g" />
-            <Nutrient label="Calcium" value={eaten.calcium} goal={g.calcium} unit="mg" />
-            <Nutrient label="Vitamin D" value={eaten.vitD} goal={g.vitD} unit="µg" />
-            <Nutrient label="Potassium" value={eaten.potassium} goal={g.potassium} unit="mg" />
-            <Nutrient label="Fluid" value={eaten.fluid} goal={g.fluid} unit="mL" />
-            <Nutrient label="Sodium" value={eaten.sodium} goal={g.sodiumMax} unit="mg" max />
-          </div>
-
           <div className="food-add">
             <select value={pick} onChange={(e) => setPick(e.target.value)} aria-label="Food">
               {PANTRY.map((f) => <option key={f.id} value={f.id}>{f.name} — {f.serving}</option>)}
@@ -108,6 +103,16 @@ export function Plan({ go }: { go: (t: string) => void }) {
           <div className="row" style={{ gap: 8, marginTop: 8 }}>
             <button className="btn small" onClick={() => eat('water')}><Droplets /> Water 250 mL</button>
             <button className="btn small" onClick={() => eat('vitd')} disabled={eaten.vitD >= g.vitD}><Pill /> {eaten.vitD >= g.vitD ? 'Vitamin D taken' : 'Vitamin D tablet'}</button>
+          </div>
+
+          <div className="nutrients">
+            <Nutrient label="Energy" value={eaten.kcal} goal={g.kcal} unit="kcal" />
+            <Nutrient label="Protein" value={eaten.protein} goal={g.protein} unit="g" />
+            <Nutrient label="Calcium" value={eaten.calcium} goal={g.calcium} unit="mg" />
+            <Nutrient label="Vitamin D" value={eaten.vitD} goal={g.vitD} unit="µg" />
+            <Nutrient label="Potassium" value={eaten.potassium} goal={g.potassium} unit="mg" />
+            <Nutrient label="Fluid" value={eaten.fluid} goal={g.fluid} unit="mL" />
+            <Nutrient label="Sodium" value={eaten.sodium} goal={g.sodiumMax} unit="mg" max />
           </div>
 
           {ideas.length > 0 && (
@@ -135,7 +140,7 @@ export function Plan({ go }: { go: (t: string) => void }) {
               )}
             </div>
           )}
-          <p className="muted" style={{ fontSize: '.8rem', marginTop: 12 }}>No sunlight on board, so vitamin D comes from a daily tablet. Targets are defaults for the crew nutritionist to adjust in Settings; food values are approximate.</p>
+          <p className="muted" style={{ fontSize: '.8rem', marginTop: 12 }}>Targets follow NASA's exploration nutrition requirements (JSC-67378) for your body mass. No sunlight on board, so vitamin D comes from a daily tablet. Food values are typical per serving, not from the flight food database.</p>
           <EvidenceChips ids={['nutrition', 'mass']} />
         </div>
       </div>

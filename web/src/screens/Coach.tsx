@@ -6,7 +6,7 @@ import { activeProfile, addWorkout, uid, useStore } from '../data/store'
 import { COACH, faultText, formScore, initCoach, joints, stepCoach, type CoachExercise, type CoachState } from '../engine/coach'
 import { drawPose, VisionSession, type PoseFrame } from '../vision/camera'
 import { PHASES } from '../content/mission'
-import { StatusChip } from '../components/ui'
+import { StatusChip, cameraHelp } from '../components/ui'
 
 const LANDMARK_NAMES = ['nose', 'l_eye_in', 'l_eye', 'l_eye_out', 'r_eye_in', 'r_eye', 'r_eye_out', 'l_ear', 'r_ear', 'mouth_l', 'mouth_r', 'l_shoulder', 'r_shoulder', 'l_elbow', 'r_elbow', 'l_wrist', 'r_wrist', 'l_pinky', 'r_pinky', 'l_index', 'r_index', 'l_thumb', 'r_thumb', 'l_hip', 'r_hip', 'l_knee', 'r_knee', 'l_ankle', 'r_ankle', 'l_heel', 'r_heel', 'l_foot', 'r_foot']
 const HL: Record<CoachExercise, number[]> = { squat: [25, 26], lunge: [25, 26], arm_raise: [11, 12], calf_raise: [27, 28], sit_to_stand: [23, 24, 25, 26] }
@@ -42,7 +42,7 @@ export function Coach({ go }: { go: (t: string) => void }) {
   const def = COACH[ex]
   const floating = PHASES[p.phase].microgravity
   const blocked = floating && def.needsGravity
-  const history = s.workouts.filter((w) => w.crewId === p.id).sort((a, b) => b.ts.localeCompare(a.ts)).slice(0, 6)
+  const history = s.workouts.filter((w) => w.crewId === p.id && !w.exercise.startsWith('plan:')).sort((a, b) => b.ts.localeCompare(a.ts)).slice(0, 6)
 
   const start = async () => {
     setPhase('loading'); setSt(initCoach()); setSaved(false); setHurtAt(null); frames.current = []
@@ -109,7 +109,7 @@ export function Coach({ go }: { go: (t: string) => void }) {
               {phase === 'loading' && 'Loading on-device pose model…'}
               {phase === 'live' && <><b>{def.angleLabel}: {st.live}{ex === 'calf_raise' ? ' cm' : '°'}</b> — {st.cue}</>}
               {phase === 'done' && `Done: ${st.reps.length} reps, form ${score}%.`}
-              {phase === 'error' && `Camera or model failed: ${err}`}
+              {phase === 'error' && cameraHelp(err)}
             </div>
           </div>
           <div className="row">
