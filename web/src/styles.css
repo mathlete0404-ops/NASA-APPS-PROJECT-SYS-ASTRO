@@ -192,7 +192,7 @@ html.dark .btn.danger { --layer: hsl(0 86% 80%); }
 .yn button { min-width: 58px; }
 .yn .yes.sel { background: var(--act); color: #fff; --layer: var(--act); border-color: var(--ink); }
 .yn .no.sel { background: var(--usual-bg); color: var(--usual); --layer: var(--usual); border-color: var(--ink); }
-input[type=text], input[type=search], input[type=date], input[type=number], select, textarea {
+input[type=text], input[type=search], input[type=date], input[type=time], input[type=number], select, textarea {
   background: var(--card); color: var(--foreground); border: 1.5px solid var(--border); border-radius: 8px; padding: 7px 10px; font: inherit;
 }
 input:focus, select:focus, textarea:focus { outline: 2px solid var(--violet); outline-offset: 1px; }
@@ -606,3 +606,19 @@ button.pet-task:hover, button.pet-task:focus-visible { border-color: var(--viole
 .empty-state h3 { margin: 2px 0 4px; font-size: 1.05rem; }
 .empty-state p { margin: 0 0 12px; font-size: .92rem; max-width: 60ch; }
 .empty-state .btn { margin-top: 2px; }
+
+/* Reminders: on/off switch, and the quiet lines on Today */
+input.switch { appearance: none; -webkit-appearance: none; width: 42px; height: 24px; border-radius: 999px; background: var(--muted); border: 1.5px solid var(--border); position: relative; cursor: pointer; flex: none; margin: 0; transition: background var(--press-ms), border-color var(--press-ms); }
+input.switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px; border-radius: 50%; background: var(--muted-fg); transition: transform var(--press-ms), background var(--press-ms); }
+input.switch:checked { background: var(--violet); border-color: var(--violet); }
+input.switch:checked::after { transform: translateX(18px); background: #fff; }
+input.switch:disabled { opacity: .5; cursor: default; }
+.remind-line { display: flex; align-items: center; gap: 6px; margin: 10px 0 0; font-size: .88rem; color: var(--muted-fg); }
+.remind-line svg { width: 15px; height: 15px; flex: none; }
+.sw-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; max-width: 100%; padding: 3px 10px; border-radius: 8px; border: 1px solid currentColor; font: 600 .78rem var(--font-mono); cursor: pointer; text-align: left; }
+.sw-pill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sw-pill svg { width: 14px; height: 14px; flex: none; }
+.sw-pill.usual { color: var(--usual); background: var(--usual-bg); }
+.sw-pill.watch { color: var(--watch); background: var(--watch-bg); }
+.sw-pill.act { color: var(--act); background: var(--act-bg); }
+.sw-pill.nodata { color: var(--nodata); background: var(--nodata-bg); }

@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
+import { useReminderSync } from './data/notify'
 import { Footer, Logo, ThemeToggle } from './components/ui'
 import { Auth } from './site/Auth'
 import { Today } from './screens/Today'
@@ -71,6 +72,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
   const [guide, setGuide] = useState(false)
   const [collapsed, setCollapsed] = useState(() => { try { return localStorage.getItem('crew-mirror:nav-collapsed') === '1' } catch { return false } })
   const [moreOpen, setMoreOpen] = useState(false)
+  useReminderSync()
   useEffect(() => {
     const open = () => setGuide(true)
     addEventListener('crew-mirror:guide', open)

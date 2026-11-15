@@ -5,7 +5,8 @@ import { EvidenceChips, Spark } from './ui'
 
 const CACHE_KEY = 'crew-mirror:spaceweather:v1'
 
-function loadCache(): SpaceWeather | null {
+/** Also read by the Today status pill, so both show the same saved reading. */
+export function loadCache(): SpaceWeather | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
@@ -15,8 +16,11 @@ function loadCache(): SpaceWeather | null {
   } catch { return null }
 }
 
+export const CACHE_EVENT = 'crew-mirror:spaceweather'
+
 function saveCache(w: SpaceWeather) {
   try { localStorage.setItem(CACHE_KEY, JSON.stringify({ series: w.series, fetchedAt: w.fetchedAt })) } catch { /* private mode */ }
+  window.dispatchEvent(new Event(CACHE_EVENT))
 }
 
 const fmtFlux = (f: number) => (f < 10 ? f.toFixed(2) : String(Math.round(f)))

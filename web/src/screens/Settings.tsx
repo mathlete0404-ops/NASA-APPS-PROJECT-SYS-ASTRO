@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Cloud, Database, Download, LogOut, Moon, Rocket, Salad, ScanFace, Server, Shield, User } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Bell, Cloud, Database, Download, LogOut, Moon, Rocket, Salad, ScanFace, Server, Shield, User } from 'lucide-react'
 import { activeProfile, exportData, missionDay, resetEmpty, updateProfile, useStore } from '../data/store'
 import { cloudConfigured, signOut } from '../data/cloud'
 import { api } from '../data/api'
@@ -7,6 +7,7 @@ import { PHASES, type Phase } from '../content/mission'
 import { DEFAULT_TARGETS, type Targets } from '../content/nutrition'
 import { useTheme } from '../components/ui'
 import { latestMass } from '../engine/plan'
+import { checkPermission, isNative, requestPermission, saveReminderSettings, sendReminderNow, useReminderSettings, type NotifyPermission } from '../data/notify'
 
 function Section({ icon: I, title, children }: { icon: typeof User; title: string; children: React.ReactNode }) {
   return (
@@ -22,6 +23,59 @@ const Row = ({ label, children, hint }: { label: string; children: React.ReactNo
     <div className="set-ctrl">{children}</div>
   </div>
 )
+
+const PERM_TEXT: Record<NotifyPermission, string> = {
+  granted: 'Notifications allowed',
+  denied: isNative()
+    ? 'Blocked in system settings: turn them on in Settings › Notifications › Crew Mirror'
+    : 'Blocked in browser settings: allow notifications for this site',
+  prompt: 'Not allowed yet. Turn reminders on to allow them.',
+  unsupported: 'Not supported in this browser',
+}
+
+function RemindersSection() {
+  const r = useReminderSettings()
+  const [perm, setPerm] = useState<NotifyPermission | null>(null)
+  const [sent, setSent] = useState<'ok' | 'fail' | null>(null)
+  useEffect(() => {
+    const refresh = () => void checkPermission().then(setPerm)
+    refresh()
+    // Coming back from the system settings app.
+    const onVisible = () => { if (document.visibilityState === 'visible') refresh() }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => document.removeEventListener('visibilitychange', onVisible)
+  }, [])
+  const toggle = async (on: boolean) => {
+    saveReminderSettings({ ...r, enabled: on })
+    if (on) setPerm(await requestPermission())
+  }
+  const sendNow = async () => {
+    const ok = await sendReminderNow()
+    setPerm(await checkPermission())
+    setSent(ok ? 'ok' : 'fail')
+  }
+  return (
+    <Section icon={Bell} title="Reminders">
+      <Row label="Daily check reminder" hint="A reminder each morning to do your 2-minute check.">
+        <input type="checkbox" className="switch" aria-label="Daily check reminder" checked={r.enabled} onChange={(e) => void toggle(e.target.checked)} />
+      </Row>
+      <Row label="Time">
+        <input type="time" aria-label="Reminder time" value={r.time} disabled={!r.enabled} onChange={(e) => { if (e.target.value) saveReminderSettings({ ...r, time: e.target.value }) }} />
+      </Row>
+      <Row label="Evening nudge if not done" hint="A second reminder at 20:00 if today’s check isn’t done.">
+        <input type="checkbox" className="switch" aria-label="Evening nudge if not done" checked={r.nudge} disabled={!r.enabled} onChange={(e) => saveReminderSettings({ ...r, nudge: e.target.checked })} />
+      </Row>
+      <Row label="Status">
+        {perm && <span className={`chip ${perm === 'granted' ? 'usual' : perm === 'denied' ? 'act' : 'nodata'}`}>{perm === 'granted' ? 'allowed' : perm === 'denied' ? 'blocked' : perm === 'prompt' ? 'not asked' : 'not supported'}</span>}
+      </Row>
+      {perm && <small className="muted" data-testid="notify-status">{PERM_TEXT[perm]}</small>}
+      <button className="btn small" disabled={perm === 'unsupported' || perm === 'denied'} onClick={() => void sendNow()}><Bell /> Send a reminder now</button>
+      {sent === 'ok' && <small className="muted">Sent. It should appear in a moment.</small>}
+      {sent === 'fail' && <small className="muted">The reminder could not be shown. Check that notifications are allowed.</small>}
+      {!isNative() && <small className="muted">On the web, reminders appear only while Crew Mirror is open. The iPhone app reminds you even when it’s closed.</small>}
+    </Section>
+  )
+}
 
 export function Settings({ go }: { go: (t: string) => void }) {
   const s = useStore()
@@ -51,6 +105,8 @@ export function Settings({ go }: { go: (t: string) => void }) {
         <Row label="Height"><input type="number" min={120} max={220} value={p.heightCm ?? ''} placeholder="cm" onChange={(e) => updateProfile({ ...p, heightCm: e.target.value ? +e.target.value : undefined })} style={{ width: 90 }} /> cm</Row>
         {s.account && <Row label="Mission"><span className="mono">{s.account.mission}{s.account.isCmo ? ' · medical officer' : ''}</span></Row>}
       </Section>
+
+      <RemindersSection />
 
       <Section icon={Rocket} title="Mission">
         <Row label="Phase" hint={PHASES[p.phase].focus}>

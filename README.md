@@ -43,6 +43,8 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | Habitat server (FastAPI + SQLite): same rules in Python, sync, crew overview, downlink, NASA search | ✅ | `server/` |
 | Offline PWA (service worker, bundled models) | ✅ (production build) | `web/public/sw.js` |
 | **Crew pet**: a companion that grows from daily care (check, exercise, food, pain reports), never from health results; missing days make it sleepy, nothing is lost | ✅ | `web/src/engine/pet.ts`, `web/src/components/Pet.tsx` |
+| **Daily check reminders**: morning reminder at a chosen time plus an optional 20:00 nudge if the check isn't done, planned 7 days ahead and re-planned after each check; a quiet "You haven't done today's check yet" line on Today. iOS: local notifications that arrive when the app is closed; web: shown only while the app is open | ✅ | `web/src/engine/reminders.ts`, `web/src/data/notify.ts`, `web/src/screens/Settings.tsx` |
+| **Space weather at a glance**: one-line pill at the top of Today ("Space weather: Quiet", "Radiation storm S3: shelter rules apply", "Last known: Quiet" offline), using the storm card's saved reading; tap to jump to the card | ✅ | `web/src/components/SpaceWeatherPill.tsx` |
 | **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
 | 30-second ad: one phone, animated screens, rendered to MP4 | ✅ | `ad/index.html`, `docs/AD_DEMO_PLAN.md` |
 
@@ -142,6 +144,7 @@ The UI uses a "layered surfaces" style shared with the team's NullBase project: 
 - **Food values** are approximate reference values, and the targets are defaults for a crew nutritionist to set.
 - **RadLab** and the Environmental Data App are linked as evidence. Their data are not ingested; dose rates are published averages with citations.
 - **Solar storm card** reads Earth-orbit GOES data from NOAA (not NASA). Far from Earth the real flux differs, so it is context only and defers to vehicle dosimetry and mission storm rules. Without a network it shows the last saved reading, labelled "Last known".
+- **Reminders on the web** appear only while Crew Mirror is open (no push server). The iPhone app schedules real local notifications 7 days ahead; if the app is not opened for a week, they stop until it is opened again.
 - The data.nasa.gov API sometimes timed out during ingest, so the offline catalog is a partial snapshot (76 datasets).
 - The app ships with **no data**. Each astronaut builds their own baseline over their first 7 daily checks; until then pages show what will appear and how to start. Saved data from older builds that contained a sample crew is dropped on load, and setup opens again.
 
@@ -168,6 +171,7 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | Draco decoder (three.js examples) | Decompress the GLBs offline | Apache-2.0 |
 | @supabase/supabase-js | Optional accounts & sync | MIT |
 | Capacitor 8 (@capacitor/core, @capacitor/ios, @capacitor/cli) — https://capacitorjs.com | iOS app shell | MIT |
+| @capacitor/local-notifications 8.3 — https://capacitorjs.com/docs/apis/local-notifications | Daily check reminders in the iOS app (`web/src/data/notify.ts`) | MIT |
 | Playwright + ffmpeg (imageio-ffmpeg) | Render the ad to MP4 (tools only, not shipped) | Apache-2.0 / LGPL |
 | Wang et al. 2017, "Algorithmic Principles of Remote PPG", IEEE TBME — https://doi.org/10.1109/TBME.2016.2609282 | rPPG POS method | Paper (method only) |
 | Zeitlin et al. 2013 (Science), Hassler et al. 2014 (Science), Zhang et al. 2020 (Science Advances) | Radiation dose-rate context | Papers (values cited) |

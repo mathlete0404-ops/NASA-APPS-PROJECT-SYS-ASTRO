@@ -16,3 +16,13 @@ self.addEventListener('fetch', (e) => {
     }).catch(() => (e.request.mode === 'navigate' ? caches.match('./index.html') : Response.error())))
   )
 })
+
+// Daily check reminders (web): tapping one opens the daily check.
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close()
+  const hash = (e.notification.data && e.notification.data.url) || '#/app/check'
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+    for (const c of list) if ('focus' in c) { c.navigate(new URL(hash, c.url).href).catch(() => undefined); return c.focus() }
+    return self.clients.openWindow(new URL('./' + hash, self.registration.scope).href)
+  }))
+})

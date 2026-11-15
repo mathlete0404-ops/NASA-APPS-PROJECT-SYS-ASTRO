@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ArrowLeft, ArrowRight, CalendarDays, CloudOff, Dumbbell, HeartPulse, ListChecks, PersonStanding, ScanFace, Shield, Stethoscope } from 'lucide-react'
 import { createProfile } from '../data/store'
+import { loadReminderSettings, requestPermission, saveReminderSettings } from '../data/notify'
 import { PHASES, type Phase } from '../content/mission'
 import { Footer, Logo, StatusChip } from '../components/ui'
 
@@ -74,6 +75,7 @@ export function Welcome({ go }: { go: (t: string) => void }) {
   const [launch, setLaunch] = useState(today())
   const [weightless, setWeightless] = useState(0)
   const [mass, setMass] = useState('')
+  const [remind, setRemind] = useState(false)
   const valid = /^[A-Z0-9-]{2,12}$/.test(callSign)
 
   const finish = (next: string) => {
@@ -81,6 +83,10 @@ export function Welcome({ go }: { go: (t: string) => void }) {
       id: callSign, role, phase, launchDate: launch, transitDays: weightless,
       massKg: mass ? +mass : undefined, scanSeconds: 60, isCmo: role === 'Crew medical officer',
     })
+    if (remind) {
+      saveReminderSettings({ ...loadReminderSettings(), enabled: true })
+      void requestPermission() // optional; setup carries on whatever the answer
+    }
     go(next)
   }
 
@@ -156,6 +162,10 @@ export function Welcome({ go }: { go: (t: string) => void }) {
           <div className="stack">
             <div><p className="kicker">You’re set, {callSign}</p><h2>Start with today’s check</h2></div>
             <p>It takes about two minutes: sit facing the screen in even light for a one-minute face scan, then answer four quick questions.</p>
+            <label className="row" style={{ gap: 8, fontSize: '.92rem', cursor: 'pointer' }}>
+              <input type="checkbox" className="switch" checked={remind} onChange={(e) => setRemind(e.target.checked)} />
+              Remind me each morning at 08:00
+            </label>
             <div className="row">
               <button className="btn primary" onClick={() => finish('check')}><ScanFace /> Start today’s check</button>
               <button className="btn" onClick={() => finish('today')}>Go to my home screen</button>
