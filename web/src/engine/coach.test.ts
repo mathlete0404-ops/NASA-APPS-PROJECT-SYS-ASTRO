@@ -51,4 +51,15 @@ describe('breathing estimate', () => {
   it('No data when too short', () => {
     expect(estimateBreathing(synth(14, 0.0005, 15)).ok).toBe(false)
   })
+  it('recovers 9 and 22 breaths/min within 1 (60 s, realistic noise)', () => {
+    for (const bpm of [9, 22]) {
+      const r = estimateBreathing(synth(bpm, 0.0025, 60))
+      expect(r.ok).toBe(true)
+      expect(Math.abs(r.bpm! - bpm)).toBeLessThanOrEqual(1)
+    }
+  })
+  it('No data when the rhythm changes half-way', () => {
+    const a = synth(10, 0.0005, 30), b = synth(24, 0.0005, 30).map((s) => ({ ...s, t: s.t + 30000 }))
+    expect(estimateBreathing([...a, ...b]).ok).toBe(false)
+  })
 })

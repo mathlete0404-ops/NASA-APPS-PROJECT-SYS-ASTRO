@@ -140,14 +140,14 @@ export function Coach({ go }: { go: (t: string) => void }) {
           <div className="card stack">
             <div className="slider"><label htmlFor="pb">Pain before</label><input id="pb" type="range" min={0} max={10} value={painBefore} onChange={(e) => setPainBefore(+e.target.value)} /><output>{painBefore}/10</output></div>
             <div className="slider"><label htmlFor="pa">Pain after</label><input id="pa" type="range" min={0} max={10} value={painAfter} onChange={(e) => setPainAfter(+e.target.value)} /><output>{painAfter}/10</output></div>
-            {painAfter - painBefore >= 2 && <div className="notice err">Pain rose by {painAfter - painBefore} points — stop this exercise and report the pain.</div>}
+            {painAfter - painBefore >= 2 && <div className="notice err">Pain rose by {painAfter - painBefore} points. Stop this exercise and report the pain.</div>}
             <div className="row">
               <button className="btn primary" disabled={phase !== 'done' || !st.reps.length || saved} onClick={save}>{saved ? 'Saved ✓' : 'Save set'}</button>
               {painAfter - painBefore >= 2 && <button className="btn danger" onClick={() => go('report')}>Report pain</button>}
               <button className="btn small" disabled={!frames.current.length || phase === 'live'} onClick={exportJSON}><Download /> 3D JSON</button>
               <button className="btn small" disabled={!frames.current.length || phase === 'live'} onClick={exportCSV}><Download /> CSV</button>
             </div>
-            <small className="muted">Exports contain only 3D joint coordinates (no video) — usable in Blender or a spreadsheet.</small>
+            <small className="muted">Exports contain only 3D joint coordinates (no video). Open them in Blender or a spreadsheet.</small>
           </div>
           <div className="card">
             <p className="kicker">Recent sets</p>

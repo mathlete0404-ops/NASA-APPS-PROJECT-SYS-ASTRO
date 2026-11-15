@@ -1,5 +1,6 @@
 import { activeProfile, crewStatus, history, useStore } from '../data/store'
 import { METRICS } from '../engine/status'
+import { plain } from '../engine/describe'
 import { Spark, StatusChip } from '../components/ui'
 
 export function Trends() {
@@ -12,7 +13,7 @@ export function Trends() {
     <div className="stack">
       <div className="card">
         <h2>Trends · {p.id}</h2>
-        <p className="muted">Each line is you against yourself. Shaded band = your usual range (baseline median ± 2 robust SD, from your first 7 good sessions). Grey dots failed the quality gate and are not used.</p>
+        <p className="muted">Each line is you compared with yourself. The shaded band is your normal range, learned from your first 7 days. Grey dots were measurements that weren’t good enough to use.</p>
         <div className="legend"><span><i style={{ background: '#34d39933' }} />usual range</span><span><i style={{ background: '#93c5fd' }} />your values</span><span><i style={{ background: '#94a3b8' }} />No data</span></div>
       </div>
       {ids.length === 0 && <div className="card">No measurements yet.</div>}
@@ -32,7 +33,8 @@ export function Trends() {
                 <small>{h.length} sessions · {METRICS[id].source}</small>
                 <small>{new Date(h[h.length - 1].ts).toLocaleDateString()}</small>
               </div>
-              <small className="muted">{r.reasons.join(' ')}</small>
+              <small className="muted">{plain(id, r)}</small>
+              <details className="why-details"><summary>How we know</summary><p>{r.reasons.join(' ')}</p></details>
             </div>
           )
         })}

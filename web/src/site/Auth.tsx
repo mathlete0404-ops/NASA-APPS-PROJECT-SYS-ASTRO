@@ -33,7 +33,7 @@ export function Auth({ done }: { done: () => void }) {
     <div className="auth-wrap">
       <div className="side">
         <div className="gridbg" />
-        <a className="brand" href="#/" style={{ color: '#fff', position: 'relative' }}><Logo /> Crew Mirror</a>
+        <a className="brand" href="#/app/today" style={{ color: '#fff', position: 'relative' }}><Logo /> Crew Mirror</a>
         <div style={{ position: 'relative' }}>
           <p className="kicker">Your account</p>
           <h2 style={{ fontSize: '2.2rem', color: '#fff' }}>Your baseline follows you — from pre-flight to landing.</h2>
@@ -44,7 +44,7 @@ export function Auth({ done }: { done: () => void }) {
       <div className="form">
         <div className="auth-card">
           <div className="row between" style={{ marginBottom: 18 }}>
-            <a className="btn ghost small" href="#/"><ArrowLeft /> Back</a>
+            <a className="btn ghost small" href="#/app/today"><ArrowLeft /> Back</a>
             <ThemeToggle />
           </div>
           <h1 style={{ fontSize: '1.8rem' }}>{mode === 'in' ? 'Sign in' : mode === 'up' ? 'Create your crew account' : 'Reset password'}</h1>

@@ -29,7 +29,7 @@ const say = (t: string) => { try { speechSynthesis.speak(new SpeechSynthesisUtte
 export function walkVerdict(st: Record<string, StatusResult>): WalkVerdict {
   const ec = st.sway_ec
   if (!ec) return { level: 'nodata', title: 'No balance data yet', detail: 'Record your pre-flight baseline (7 sessions), then test again after landing.' }
-  if (ec.level === 'nodata') return { level: 'nodata', title: 'No data — repeat the test', detail: 'The last eyes-closed test failed the quality check.' }
+  if (ec.level === 'nodata') return { level: 'nodata', title: 'No data. Repeat the test', detail: 'The last eyes-closed test failed the quality check.' }
   if (ec.level === 'baseline') return { level: 'baseline', title: 'Building your balance baseline', detail: `${ec.n}/7 sessions recorded.` }
   const tandem = st.sway_tandem?.level
   if (ec.level === 'act' || tandem === 'act')
@@ -83,7 +83,7 @@ export function Balance() {
         const n = sts.update(r.ts, r.pose ?? null)
         setCount(n)
         if (sts.done != null) return finish({ value: Math.round(sts.done * 10) / 10, ok: true, quality: 1, note: '5 full stands counted from hip height.' })
-        if (el >= def.seconds) return finish({ value: null, ok: false, quality: 0, note: `Only ${n}/5 stands detected — keep hips and knees in view.` })
+        if (el >= def.seconds) return finish({ value: null, ok: false, quality: 0, note: `Only ${n}/5 stands detected. Keep your hips and knees in view.` })
       } else {
         samples.push({ t: r.ts, p: r.pose ?? null })
         if (el >= def.seconds) return finish(swayMetrics(samples, def.seconds))
@@ -112,12 +112,12 @@ export function Balance() {
       {floating && (
         <div className="banner nodata">
           <h2>Balance tests need gravity</h2>
-          <p>You are floating ({PHASES[p.phase].label}). Standing balance and sit-to-stand have no meaning without an “up” and “down”, so they are switched off. NASA tests balance <b>before flight</b> (your baseline) and <b>right after landing</b> — Crew Mirror does the same and will ask for it when the phase changes to Landing, Surface or Return.</p>
-          <p style={{ fontSize: '.9rem' }}>In flight, keep up resistive and treadmill sessions (see Plan) — they protect the leg strength that balance relies on after landing.</p>
+          <p>You are weightless right now. Standing balance and sit-to-stand have no meaning without an “up” and “down”, so they are switched off. NASA tests balance <b>before flight</b> (your baseline) and <b>right after landing</b> — Crew Mirror does the same and will ask for it when the phase changes to Landing, Surface or Return.</p>
+          <p style={{ fontSize: '.9rem' }}>In flight, keep up resistive and treadmill sessions (see Plan). They protect the leg strength that balance relies on after landing.</p>
         </div>
       )}
       <div className={`banner ${verdict.level}`}>
-        <div className="row between"><h2>{floating ? 'Last balance result' : 'Safe to walk / EVA?'} — {verdict.title}</h2>{st.sway_ec && <StatusChip level={st.sway_ec.level} n={st.sway_ec.n} />}</div>
+        <div className="row between"><h2>{floating ? 'Last balance result' : 'Safe to walk / EVA?'}: {verdict.title}</h2>{st.sway_ec && <StatusChip level={st.sway_ec.level} n={st.sway_ec.n} />}</div>
         <p>{verdict.detail}</p>
         <small>Compared with your pre-flight baseline (first 7 balance sessions). Rule: eyes-closed or tandem sway |z| &gt; 3 → stop; &gt; 2 → spotter.</small>
       </div>
@@ -164,7 +164,7 @@ export function Balance() {
               ))}
             </tbody>
           </table>
-          <small className="muted">% SW = hip-midpoint sway as a percentage of shoulder width, so camera distance does not matter.</small>
+          <small className="muted">Sway is how far your hips move, as a percentage of your shoulder width, so your distance from the camera doesn't matter.</small>
           <EvidenceChips ids={['walkline', 'fieldtest']} />
         </div>
       </div>

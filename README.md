@@ -17,7 +17,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 | Area | Status | Where |
 | --- | --- | --- |
-| Landing site (hero with scroll-driven "daily check" build, how-it-works scroll story, mission-phase shelf, NASA-evidence section, crew medical officer (CMO) board, safety section) | ✅ | `web/src/site/` |
+| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. Sample crew only on request, clearly labelled | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
 | App shell: sidebar dashboard, light/dark theme, works on phones (no horizontal scroll at 375 px) | ✅ | `web/src/App.tsx`, `web/src/styles.css` |
 | Daily face scan (MediaPipe Face Landmarker in a Web Worker): rPPG heart-rate **estimate** (POS method), blink rate, PERCLOS, face-width ÷ IPD ratio, light/motion/presence quality gate → "No data" | ✅ | `web/src/vision/`, `web/src/engine/face.ts`, `rppg.ts` |
 | Mood & sleep check-in, optional body mass | ✅ | `web/src/screens/DailyCheck.tsx` |
@@ -101,6 +101,8 @@ For a different project, set:
 VITE_SUPABASE_URL=https://<project>.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
+
+Login and identity: see `docs/IDENTITY_PLAN.md` for the current design and proposed improvements.
 
 Static build: `cd web && npm run build` → `web/dist/` (no server needed; the demo crew loads on first open).
 

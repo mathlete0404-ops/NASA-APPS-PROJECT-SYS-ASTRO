@@ -24,11 +24,22 @@ export const LAYER_LABEL: Record<Layer, string> = { skin: 'Skin regions', muscle
 
 const BASE_MAT: Record<Layer, THREE.MeshStandardMaterialParameters> = {
   skin: { color: '#e3b49a', roughness: 0.75, metalness: 0, transparent: true, opacity: 0.22, depthWrite: false },
-  muscles: { color: '#b4483f', roughness: 0.55, metalness: 0.02 },
-  skeleton: { color: '#ece3cf', roughness: 0.7, metalness: 0 },
-  nerves: { color: '#f2c94c', roughness: 0.4, emissive: '#5a4300', emissiveIntensity: 0.4 },
-  joints: { color: '#8fb3d9', roughness: 0.5 },
+  muscles: { color: '#b85a4c', roughness: 0.62, metalness: 0 },
+  skeleton: { color: '#eee6d6', roughness: 0.78, metalness: 0 },
+  nerves: { color: '#f2c94c', roughness: 0.45, emissive: '#5a4300', emissiveIntensity: 0.35 },
+  joints: { color: '#9cb8d6', roughness: 0.55 },
 }
+// "Body" view: a smooth matte mannequin surface (no skin tone, sex-neutral).
+const SOLID_SKIN: THREE.MeshStandardMaterialParameters = { color: '#c9ced8', roughness: 0.88, metalness: 0, transparent: false, opacity: 1, depthWrite: true }
+
+export type View = 'body' | 'muscles' | 'bones' | 'nerves' | 'custom'
+const VIEWS: Record<Exclude<View, 'custom'>, { label: string; layers: Layer[]; xray: number }> = {
+  body: { label: 'Body', layers: ['skin'], xray: 0 },
+  muscles: { label: 'Muscles', layers: ['muscles', 'skeleton'], xray: 0 },
+  bones: { label: 'Bones', layers: ['skeleton', 'joints'], xray: 0 },
+  nerves: { label: 'Nerves', layers: ['muscles', 'skeleton', 'nerves'], xray: 0.75 },
+}
+
 const TONE: Record<Tone, { color: string; emissive: string; intensity: number }> = {
   pain: { color: '#ef4444', emissive: '#ff1f1f', intensity: 0.85 },
   act: { color: '#ef4444', emissive: '#b91c1c', intensity: 0.55 },
@@ -48,22 +59,23 @@ function matches(ud: Record<string, string>, h: Highlight, layer: Layer) {
   return Boolean(h.region || h.match)
 }
 
-function LayerMesh({ layer, visible, xray, highlights, selected, onPick, onHover }: {
-  layer: Layer; visible: boolean; xray: number; highlights: Highlight[]; selected?: string
+function LayerMesh({ layer, visible, xray, highlights, selected, onPick, onHover, solidSkin }: {
+  layer: Layer; visible: boolean; xray: number; highlights: Highlight[]; selected?: string; solidSkin?: boolean
   onPick?: (p: Picked, obj: THREE.Object3D, stack: Picked[]) => void; onHover?: (p: Picked | null) => void
 }) {
   const { scene } = useGLTF(BASE + FILES[layer], BASE + 'draco/')
-  const base = useMemo(() => new THREE.MeshStandardMaterial({ ...BASE_MAT[layer], side: THREE.DoubleSide }), [layer])
+  const solid = layer === 'skin' && !!solidSkin
+  const base = useMemo(() => new THREE.MeshStandardMaterial({ ...BASE_MAT[layer], ...(solid ? SOLID_SKIN : {}), side: THREE.DoubleSide }), [layer, solid])
   const toneMats = useMemo(() => {
     const m = {} as Record<Tone, THREE.MeshStandardMaterial>
     for (const t of Object.keys(TONE) as Tone[]) {
       m[t] = new THREE.MeshStandardMaterial({
         color: TONE[t].color, emissive: TONE[t].emissive, emissiveIntensity: TONE[t].intensity, roughness: 0.45,
-        side: THREE.DoubleSide, transparent: layer === 'skin', opacity: layer === 'skin' ? 0.55 : 1, depthWrite: layer !== 'skin',
+        side: THREE.DoubleSide, transparent: layer === 'skin' && !solid, opacity: layer === 'skin' && !solid ? 0.55 : 1, depthWrite: layer !== 'skin' || solid,
       })
     }
     return m
-  }, [layer])
+  }, [layer, solid])
 
   // x-ray: fade skin and muscles so bones/nerves show through
   useEffect(() => {
@@ -84,9 +96,9 @@ function LayerMesh({ layer, visible, xray, highlights, selected, onPick, onHover
       let best: Tone | null = null
       for (const h of highlights) if (matches(ud, h, layer) && (!best || TONE_RANK[h.tone] > TONE_RANK[best])) best = h.tone
       mesh.material = best ? toneMats[best] : base
-      mesh.renderOrder = layer === 'skin' ? 2 : 0
+      mesh.renderOrder = layer === 'skin' && !solid ? 2 : 0
     })
-  }, [scene, highlights, selected, base, toneMats, layer])
+  }, [scene, highlights, selected, base, toneMats, layer, solid])
 
   const toPicked = (o: THREE.Object3D): Picked | null => {
     const ud = o.userData as Record<string, string>
@@ -128,15 +140,20 @@ export interface BodyViewerProps {
   pickLayers?: Layer[]
   /** 0..1 — fade muscles so nerves, discs and bones show through. */
   initialXray?: number
+  /** Start in a preset view (ignored when initialLayers is given). */
+  initialView?: Exclude<View, 'custom'>
 }
 
 const POSTERIOR = new Set<Region>(['upper_back', 'lower_back'])
 
 export function BodyViewer({
-  highlights = [], selected, onPick, initialLayers = ['skin', 'muscles', 'skeleton'], height = 560, focus, showControls = true, pickLayers, initialXray = 0,
+  highlights = [], selected, onPick, initialLayers, height = 560, focus, showControls = true, pickLayers, initialXray, initialView = 'body',
 }: BodyViewerProps) {
-  const [layers, setLayers] = useState<Set<Layer>>(new Set(initialLayers))
-  const [xray, setXray] = useState(initialXray)
+  const [view, setView] = useState<View>(initialLayers ? 'custom' : initialView)
+  const [layers, setLayers] = useState<Set<Layer>>(new Set(initialLayers ?? VIEWS[initialView].layers))
+  const [xray, setXray] = useState(initialXray ?? (initialLayers ? 0 : VIEWS[initialView].xray))
+  const [showLayers, setShowLayers] = useState(false)
+  const pickView = (v: Exclude<View, 'custom'>) => { setView(v); setLayers(new Set(VIEWS[v].layers)); setXray(VIEWS[v].xray) }
   const [hover, setHover] = useState<Picked | null>(null)
   const controls = useRef<CameraControls>(null)
   const group = useRef<THREE.Group>(null)
@@ -155,7 +172,7 @@ export function BodyViewer({
     controls.current = c
     if (c && !aimed.current) { aimed.current = true; void c.setLookAt(0, 0.95, 2.6, 0, 0.9, 0, false) }
   }
-  const view = (side: 'front' | 'back' | 'left' | 'right') => {
+  const view3 = (side: 'front' | 'back' | 'left' | 'right') => {
     const p = { front: [0, 0.95, 2.6], back: [0, 0.95, -2.6], left: [2.6, 0.95, 0], right: [-2.6, 0.95, 0] }[side]
     void controls.current?.setLookAt(p[0], p[1], p[2], 0, 0.9, 0, true)
   }
@@ -169,8 +186,12 @@ export function BodyViewer({
       if (!hit) return
       // make sure the chosen structure can be seen: show its layer, and x-ray the muscles for deep ones
       const lyr = ((hit as THREE.Object3D).userData as Record<string, string>).layer as Layer
-      setLayers((cur) => (cur.has(lyr) ? cur : new Set([...cur, lyr])))
-      if (lyr === 'skeleton' || lyr === 'joints' || lyr === 'nerves') setXray((x) => Math.max(x, 0.7))
+      if (view === 'body' && lyr !== 'skin') {
+        pickView(lyr === 'muscles' ? 'muscles' : lyr === 'nerves' ? 'nerves' : 'bones')
+      } else {
+        setLayers((cur) => (cur.has(lyr) ? cur : new Set([...cur, lyr])))
+        if ((lyr === 'skeleton' || lyr === 'joints' || lyr === 'nerves') && layers.has('muscles')) setXray((x) => Math.max(x, 0.7))
+      }
       flyTo(hit)
     }, 120)
     return () => clearTimeout(t)
@@ -201,23 +222,37 @@ export function BodyViewer({
   }, [focus])
 
   const { active, progress } = useProgress()
-  const toggle = (l: Layer) => setLayers((s) => { const n = new Set(s); if (n.has(l)) n.delete(l); else n.add(l); return n })
+  const toggle = (l: Layer) => { setView('custom'); setLayers((s) => { const n = new Set(s); if (n.has(l)) n.delete(l); else n.add(l); return n }) }
 
   return (
     <div className="body3d" style={{ height }}>
       <Canvas camera={{ position: [0, 0.95, 2.6], fov: 35, near: 0.01, far: 20 }} dpr={[1, 2]} gl={{ antialias: true }}>
-        <color attach="background" args={['#070b14']} />
-        <hemisphereLight args={['#dbeafe', '#1e1b4b', 0.9]} />
-        <directionalLight position={[2, 3, 3]} intensity={1.6} />
-        <directionalLight position={[-2, 2, -3]} intensity={0.7} color="#a5b4fc" />
+        <color attach="background" args={['#0a0f1c']} />
+        <fog attach="fog" args={['#0a0f1c', 5, 9]} />
+        <hemisphereLight args={['#f1f5ff', '#1b2236', 1.05]} />
+        <directionalLight position={[1.6, 3, 2.6]} intensity={1.7} color="#fff7ee" />
+        <directionalLight position={[-2.4, 1.6, 1.2]} intensity={0.55} color="#c7d2fe" />
+        <directionalLight position={[0, 2.2, -3]} intensity={0.9} color="#99f6e4" />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.002, 0]}>
+          <circleGeometry args={[0.55, 48]} />
+          <meshBasicMaterial color="#000000" transparent opacity={0.28} />
+        </mesh>
         <CameraControls ref={controlsRef} minDistance={0.25} maxDistance={5} makeDefault />
         <Suspense fallback={null}>
           <group ref={group}>
+            {view === 'body' && layers.has('skin') && (
+              // neutral mannequin surface where sex-specific anatomy was removed from the model
+              <mesh position={[0, 0.8, -0.03]} scale={[0.07, 0.06, 0.062]}>
+                <sphereGeometry args={[1, 40, 28]} />
+                <meshStandardMaterial {...SOLID_SKIN} />
+              </mesh>
+            )}
             {(['skeleton', 'joints', 'nerves', 'muscles', 'skin'] as Layer[]).map((l) => (
               <LayerMesh
                 key={l} layer={l} visible={layers.has(l)} xray={xray} highlights={highlights} selected={selected}
                 onPick={onPick && (!pickLayers || pickLayers.includes(l)) ? (p, obj, stack) => { onPick(p, stack); flyTo(obj) } : undefined}
                 onHover={setHover}
+                solidSkin={view === 'body'}
               />
             ))}
           </group>
@@ -226,20 +261,31 @@ export function BodyViewer({
       {active && <div className="body3d-hover mono" style={{ left: '50%', top: '45%', transform: 'translateX(-50%)' }}>Loading 3D anatomy… {Math.round(progress)}%</div>}
       {hover && <div className="body3d-hover mono">{hover.label}{hover.side !== 'middle' ? ` · ${hover.side}` : ''}</div>}
       {showControls && (
-        <div className="body3d-controls">
-          <div className="row" style={{ gap: 6 }}>
-            {(Object.keys(LAYER_LABEL) as Layer[]).map((l) => (
-              <button key={l} className={`btn small${layers.has(l) ? ' sel' : ''}`} onClick={() => toggle(l)}>{LAYER_LABEL[l]}</button>
+        <>
+          <div className="body3d-views">
+            {(Object.keys(VIEWS) as Exclude<View, 'custom'>[]).map((v) => (
+              <button key={v} className={view === v ? 'on' : ''} onClick={() => pickView(v)}>{VIEWS[v].label}</button>
             ))}
           </div>
-          <div className="row" style={{ gap: 6 }}>
-            <label className="mono" style={{ fontSize: '.72rem', color: '#cbd5e1' }}>X-ray
-              <input type="range" min={0} max={1} step={0.05} value={xray} onChange={(e) => setXray(+e.target.value)} style={{ width: 90, verticalAlign: 'middle', marginLeft: 6 }} />
-            </label>
-            {(['front', 'back', 'left', 'right'] as const).map((v) => <button key={v} className="btn small" onClick={() => view(v)}>{v}</button>)}
-            <button className="btn small" onClick={reset}>reset</button>
+          <div className="body3d-controls">
+            {showLayers && (
+              <div className="row" style={{ gap: 6 }}>
+                {(Object.keys(LAYER_LABEL) as Layer[]).map((l) => (
+                  <button key={l} className={`btn small${layers.has(l) ? ' sel' : ''}`} onClick={() => toggle(l)}>{LAYER_LABEL[l]}</button>
+                ))}
+              </div>
+            )}
+            <div className="row" style={{ gap: 6 }}>
+              <button className={`btn small${showLayers ? ' sel' : ''}`} onClick={() => setShowLayers((v) => !v)}>Layers</button>
+              <label className="mono xray">X-ray
+                <input type="range" min={0} max={1} step={0.05} value={xray} onChange={(e) => setXray(+e.target.value)} />
+              </label>
+              <span className="spacer" />
+              {(['front', 'back', 'left', 'right'] as const).map((v) => <button key={v} className="btn small" onClick={() => view3(v)}>{v}</button>)}
+              <button className="btn small" onClick={reset}>reset</button>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )

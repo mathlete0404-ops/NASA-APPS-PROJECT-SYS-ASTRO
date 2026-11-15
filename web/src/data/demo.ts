@@ -18,16 +18,7 @@ function rng(seed: number) {
 const MISSION_DAY = 96
 const iso = (d: Date) => d.toISOString().slice(0, 10)
 
-export function emptyState(): Omit<State, 'loaded' | 'online' | 'account'> {
-  const launch = new Date()
-  launch.setDate(launch.getDate() - 1)
-  return {
-    crew: [{ id: 'ME', role: 'Crew member', launchDate: iso(launch), phase: 'transit', transitDays: 0 }],
-    activeCrew: 'ME', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [],
-  }
-}
-
-export function demoState(): Omit<State, 'loaded' | 'online' | 'account'> {
+export function demoState(): Omit<State, 'loaded' | 'online' | 'account' | 'onboarded' | 'sample'> {
   const today = new Date()
   const launch = new Date(today)
   launch.setDate(today.getDate() - MISSION_DAY)

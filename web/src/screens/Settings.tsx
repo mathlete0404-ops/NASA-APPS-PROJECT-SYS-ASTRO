@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Cloud, Database, Download, LogOut, Moon, Rocket, Salad, ScanFace, Server, Shield, User } from 'lucide-react'
-import { activeProfile, exportData, microgravityDays, missionDay, resetDemo, resetEmpty, updateProfile, useStore } from '../data/store'
+import { activeProfile, exportData, missionDay, resetDemo, resetEmpty, updateProfile, useStore } from '../data/store'
 import { cloudConfigured, signOut } from '../data/cloud'
 import { api } from '../data/api'
 import { PHASES, type Phase } from '../content/mission'
@@ -11,15 +11,15 @@ import { latestMass } from '../engine/plan'
 function Section({ icon: I, title, children }: { icon: typeof User; title: string; children: React.ReactNode }) {
   return (
     <div className="card">
-      <p className="kicker"><I size={13} style={{ verticalAlign: -2 }} /> {title}</p>
-      <div className="stack">{children}</div>
+      <div className="card-h"><span className="ic"><I /></span><h3>{title}</h3></div>
+      <div className="set-rows">{children}</div>
     </div>
   )
 }
 const Row = ({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) => (
-  <div className="row between" style={{ borderBottom: '1px solid var(--border)', paddingBottom: 10 }}>
-    <div><b style={{ fontSize: '.92rem' }}>{label}</b>{hint && <><br /><small>{hint}</small></>}</div>
-    <div className="row">{children}</div>
+  <div className="set-row">
+    <div className="set-label"><b>{label}</b>{hint && <small>{hint}</small>}</div>
+    <div className="set-ctrl">{children}</div>
   </div>
 )
 
@@ -41,9 +41,9 @@ export function Settings({ go }: { go: (t: string) => void }) {
   }
 
   return (
-    <div className="grid g2">
+    <div className="settings-grid">
       <Section icon={User} title="Profile">
-        <Row label="Call sign" hint="Call signs only — no real names are stored."><b className="mono">{p.id}</b></Row>
+        <Row label="Call sign" hint="We store call signs only, never real names."><b className="mono">{p.id}</b></Row>
         <Row label="Role"><input type="text" value={p.role} onChange={(e) => updateProfile({ ...p, role: e.target.value })} /></Row>
         <Row label="Body mass" hint={scaleMass ? `Latest scale/SLAMMD reading ${scaleMass} kg is used for targets.` : 'Used for food targets until a scale reading exists.'}>
           <input type="number" step="0.1" min={30} max={200} value={p.massKg ?? ''} placeholder="kg" onChange={(e) => updateProfile({ ...p, massKg: e.target.value ? +e.target.value : undefined })} style={{ width: 90 }} /> kg
@@ -58,14 +58,14 @@ export function Settings({ go }: { go: (t: string) => void }) {
             {Object.values(PHASES).map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
           </select>
         </Row>
-        <Row label="Launch date" hint={`Mission day ${missionDay(p)} · ${microgravityDays(p)} days floating`}><input type="date" value={p.launchDate} onChange={(e) => updateProfile({ ...p, launchDate: e.target.value })} /></Row>
+        <Row label="Launch date" hint={missionDay(p) >= 0 ? `Flight day ${missionDay(p)}` : `${-missionDay(p)} days to launch`}><input type="date" value={p.launchDate} onChange={(e) => updateProfile({ ...p, launchDate: e.target.value })} /></Row>
         {!PHASES[p.phase].microgravity && p.phase !== 'preflight' && (
-          <Row label="Days spent floating" hint="Drives the bone-loss weighting of bony pain."><input type="number" min={0} value={p.transitDays} onChange={(e) => updateProfile({ ...p, transitDays: +e.target.value })} style={{ width: 90 }} /></Row>
+          <Row label="Days spent weightless" hint="Bones weaken while weightless, so bony pain is treated more carefully."><input type="number" min={0} value={p.transitDays} onChange={(e) => updateProfile({ ...p, transitDays: +e.target.value })} style={{ width: 90 }} /></Row>
         )}
-        <small className="muted">Phase changes which tests are offered (no balance tests while floating), how cautiously bony pain is treated, and the exercise plan.</small>
+        <small className="muted">Phase changes which tests are offered (no balance tests while weightless), how cautiously bony pain is treated, and the exercise plan.</small>
       </Section>
 
-      <Section icon={Salad} title="Nutrition targets (crew nutritionist)">
+      <Section icon={Salad} title="Nutrition targets">
         {([
           ['kcalPerKg', 'Energy', 'kcal / kg / day', 1], ['proteinPerKg', 'Protein', 'g / kg / day', 0.1], ['calciumMg', 'Calcium', 'mg / day', 50],
           ['vitDug', 'Vitamin D', 'µg / day', 1], ['sodiumMaxMg', 'Sodium (max)', 'mg / day', 100], ['potassiumMg', 'Potassium', 'mg / day', 100], ['fluidMl', 'Fluid', 'mL / day', 100],
@@ -88,7 +88,7 @@ export function Settings({ go }: { go: (t: string) => void }) {
       </Section>
 
       <Section icon={Cloud} title="Account & cloud sync">
-        {!cloudConfigured ? <p className="muted">Cloud accounts are not configured on this build — everything is stored on this device.</p>
+        {!cloudConfigured ? <p className="muted">Cloud accounts aren’t set up in this build. Everything is stored on this device.</p>
           : s.account ? (
             <>
               <Row label="Signed in" hint={s.account.email}><span className="chip usual">synced</span></Row>
@@ -105,7 +105,7 @@ export function Settings({ go }: { go: (t: string) => void }) {
 
       <Section icon={Database} title="Data on this device">
         <Row label="Export everything" hint="JSON of your numbers, reports, workouts, food and calendar."><button className="btn small" onClick={download}><Download /> Export</button></Row>
-        <Row label="Demo crew" hint="Synthetic history for CDR, PLT, MS1, MS2."><button className="btn small" onClick={() => void resetDemo()}>Reload demo</button></Row>
+        <Row label="Sample crew" hint="Look around with made-up people and data. Your own data is replaced — export first."><button className="btn small" onClick={() => void resetDemo()}>Show sample crew</button></Row>
         <Row label="Start fresh" hint="Erase this device and build your own baseline.">
           {confirmWipe ? <><button className="btn small danger" onClick={() => { void resetEmpty(); setConfirmWipe(false); go('today') }}>Erase now</button><button className="btn small" onClick={() => setConfirmWipe(false)}>Cancel</button></>
             : <button className="btn small" onClick={() => setConfirmWipe(true)}>Erase…</button>}

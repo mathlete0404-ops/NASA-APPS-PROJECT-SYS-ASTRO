@@ -45,7 +45,7 @@ LAYERS = {
     "joints": "3: Joints",
 }
 # Triangle budget per layer (after decimation).
-BUDGET = {"skeleton": 320_000, "muscles": 420_000, "skin": 60_000, "nerves": 60_000, "joints": 36_000}
+BUDGET = {"skeleton": 470_000, "muscles": 640_000, "skin": 70_000, "nerves": 110_000, "joints": 80_000}
 MIN_TRIS = 160  # small bones/muscles keep their shape
 
 # Sex-specific anatomy is left out so the model is neutral (genital region, pubic hair, breast/nipple, anal region).
@@ -58,16 +58,12 @@ SKIP_ALL = re.compile(r"tooth|teeth|molar|incisor|canine tooth|premolar|malleus|
                       r"eyeball|lens|cornea|iris|retina|vitreous|tongue|intrinsic muscles of tongue|"
                       r"ocular|rectus muscle$|oblique muscle$|levator palpebrae|tarsus|tarsal plate|"
                       r"auricular muscle|tympan|cochlea|uvula|palat|pharyn|laryn|vocal", re.I)
-NERVE_KEEP = re.compile(r"^(sciatic nerve|tibial nerve|common fibular nerve|deep fibular nerve|superficial fibular nerve|"
-                        r"sural nerve|femoral nerve|saphenous nerve|obturator nerve|lateral femoral cutaneous nerve|"
-                        r"posterior femoral cutaneous nerve|superior gluteal nerve|pudendal nerve|lumbar plexus|"
-                        r"sacral plexus|lumbosacral plexus|lumbar nerves|spinal cord|spinal nerves|cervical nerves|"
-                        r"thoracic nerves|intercostal nerves|cervical plexus|brachial plexus|roots of brachial plexus|"
-                        r"superior trunk of brachial plexus|middle trunk of brachial plexus|inferior trunk of brachial plexus|"
-                        r"median nerve|ulnar nerve|radial nerve|superficial branch of radial nerve|deep branch of radial nerve|"
-                        r"musculocutaneous nerve|axillary nerve|suprascapular nerve|dorsal scapular nerve|long thoracic nerve|"
-                        r"medial plantar nerve|lateral plantar nerve|greater occipital nerve|accessory nerve \(xi\))$", re.I)
-JOINT_KEEP = re.compile(r"intervertebral disc|meniscus|articular disc of temporomandibular|pubic symphysis|"
+NERVE_KEEP = re.compile(r"nerve|plexus|branch|ram(i|us)|root|trunk|cord|spinal", re.I)
+NERVE_SKIP = re.compile(r"nucle|sulc|gyr|tract|horn|matter|funicul|cortex|lobe|ventric|cerebr|thalam|brainstem|pons|medulla|"
+                        r"dura|pia mater|arachnoid|choroid|optic|olfactory|cochlear|vestibul|oculomotor|trochlear|abducens|"
+                        r"intermediate zone|central structures|hypoglossal|glossopharyngeal|vagus|trigeminal|facial nerve|"
+                        r"mandibular|maxillary|ophthalmic|lingual|alveolar|buccal nerve|mental nerve|mylohyoid|sympathetic", re.I)
+JOINT_KEEP = re.compile(r"ligament|capsule|membrane|disc|menisc|symphysis|labrum|joint|intervertebral disc|meniscus|articular disc of temporomandibular|pubic symphysis|"
                         r"articular capsule of (hip|knee|shoulder|glenohumeral)|anterior cruciate|posterior cruciate|"
                         r"medial collateral ligament of knee|lateral collateral ligament of knee|"
                         r"anterior talofibular|calcaneofibular|iliolumbar|sacro-?iliac", re.I)
@@ -149,7 +145,7 @@ def selected(layer: str, obj) -> bool:
     if SKIP_ALL.search(base) or SEX_SPECIFIC.search(base):
         return False
     if layer == "nerves":
-        return bool(NERVE_KEEP.match(base))
+        return bool(NERVE_KEEP.search(base)) and not NERVE_SKIP.search(base)
     if layer == "joints":
         return bool(JOINT_KEEP.search(base))
     return True

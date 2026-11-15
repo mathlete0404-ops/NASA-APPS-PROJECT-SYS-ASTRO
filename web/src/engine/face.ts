@@ -57,7 +57,7 @@ export function analyseFaceScan(samples: FaceSample[]): FaceScanResult {
   }
 
   // Breathing rate (estimate)
-  const rs = estimateBreathing(samples.map((x) => ({ t: x.t, y: x.f ? x.f.nose[1] : null, g: x.f?.rgb ? x.f.rgb[1] : null })))
+  const rs = estimateBreathing(samples.map((x) => ({ t: x.t, y: x.f ? (x.f.hy ?? x.f.nose[1]) : null, g: x.f?.rgb ? x.f.rgb[1] : null })))
   const resp: FaceMetric = rs.ok ? { value: rs.bpm!, ok: true, quality: rs.quality, note: rs.reason + ' Estimate.' } : { value: null, ok: false, quality: rs.quality, note: rs.reason }
 
   // Blinks (hysteresis) and PERCLOS

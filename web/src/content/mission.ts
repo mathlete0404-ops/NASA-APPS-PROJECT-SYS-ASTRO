@@ -11,27 +11,27 @@ export interface PhaseInfo {
 
 export const PHASES: Record<Phase, PhaseInfo> = {
   preflight: {
-    id: 'preflight', label: 'Pre-flight', gravity: '1 g', microgravity: false,
+    id: 'preflight', label: 'Before launch', gravity: '1 g', microgravity: false,
     body: 'Normal Earth body.',
     focus: 'Record your baseline: face scan, check-in, balance, body mass.',
   },
   transit: {
-    id: 'transit', label: 'Transit (floating)', gravity: '0 g', microgravity: true,
+    id: 'transit', label: 'In flight (weightless)', gravity: '0 g', microgravity: true,
     body: 'Weight-bearing bone loses ~1%/month without countermeasures; the spine lengthens and back muscles shrink; fluid shifts to the head; crews often eat less than they need.',
     focus: 'Daily face scan, pain check, exercise coach, mass trend.',
   },
   landing: {
-    id: 'landing', label: 'Landing (G-transition)', gravity: '1 g / 0.38 g / 0.17 g', microgravity: false,
+    id: 'landing', label: 'Just landed', gravity: '1 g / 0.38 g / 0.17 g', microgravity: false,
     body: 'The brain must relearn balance; motion sickness and muscle weakness are common for days.',
     focus: 'Balance test before walking or EVA: “safe to walk?” check.',
   },
   surface: {
-    id: 'surface', label: 'Moon / Mars surface', gravity: '0.17 g / 0.38 g', microgravity: false,
+    id: 'surface', label: 'On the Moon or Mars', gravity: '0.17 g / 0.38 g', microgravity: false,
     body: 'Partial gravity: some loading returns, but much less than on Earth (Mars ≈ 38% of Earth gravity).',
     focus: 'Balance trend, recovery plan, EVA readiness.',
   },
   return: {
-    id: 'return', label: 'Return to Earth', gravity: '1 g', microgravity: false,
+    id: 'return', label: 'Back on Earth', gravity: '1 g', microgravity: false,
     body: 'Bone and muscle recovery is slow — months to years for bone.',
     focus: 'Recovery tracking against your pre-flight baseline.',
   },
