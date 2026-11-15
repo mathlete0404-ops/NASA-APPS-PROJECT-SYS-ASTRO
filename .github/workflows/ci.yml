@@ -1,9 +1,22 @@
 name: CI and Pages
 
+# The website only. The Xcode project (web/ios/**) is built by ios.yml, never here:
+# changes that touch only the iOS project, the ad or the docs do not run tests,
+# rebuild the site or redeploy Pages. (Run this workflow by hand to republish the ad.)
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'web/ios/**'
+      - 'ad/**'
+      - 'docs/**'
+      - '.github/workflows/ios.yml'
   pull_request:
+    paths-ignore:
+      - 'web/ios/**'
+      - 'ad/**'
+      - 'docs/**'
+      - '.github/workflows/ios.yml'
   workflow_dispatch:
 
 permissions:
@@ -34,6 +47,17 @@ jobs:
           npm run build
       - name: Keep a single-page fallback for deep links
         run: cp web/dist/index.html web/dist/404.html
+      - name: Add the ad page at /ad/
+        run: |
+          mkdir -p web/dist/ad
+          cp ad/index.html ad/crew-mirror-ad.mp4 web/dist/ad/
+          for d in vendor textures clips shots img data; do cp -R "ad/$d" web/dist/ad/; done
+      - name: Check the site has no Xcode project in it
+        run: |
+          if find web/dist \( -name '*.xcodeproj' -o -name '*.xcworkspace' -o -name 'Package.swift' -o -path 'web/dist/ios' -o -path 'web/dist/ad/capture' \) | grep .; then
+            echo "::error::Pages artifact must contain only the built website (web/dist) and the ad"; exit 1
+          fi
+          du -sh web/dist web/dist/ad
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist

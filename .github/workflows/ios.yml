@@ -1,0 +1,101 @@
+name: iOS app
+
+# Builds the Capacitor iOS app (web/ios) on its own, separate from the website/Pages
+# workflow (ci.yml). Every run uploads an unsigned iOS Simulator build as an artifact;
+# pushing a tag like ios-v0.1.0 also publishes it as a GitHub Release.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['ios-v*'] # path filters are not applied to tag pushes
+    paths:
+      - 'web/**'
+      - '.github/workflows/ios.yml'
+  pull_request:
+    paths:
+      - 'web/ios/**'
+      - 'web/package.json'
+      - 'web/package-lock.json'
+      - 'web/capacitor.config.ts'
+      - '.github/workflows/ios.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Project made with Xcode 26.6 + Capacitor 8 (Swift Package Manager).
+    runs-on: macos-26
+    timeout-minutes: 45
+    permissions:
+      contents: write # create the Release on ios-v* tags
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26.6
+        run: |
+          if [ -d /Applications/Xcode_26.6.app ]; then sudo xcode-select -s /Applications/Xcode_26.6.app; fi
+          xcodebuild -version
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        working-directory: web
+        run: npm ci
+
+      - name: Bundle MediaPipe models (offline-ready; optional)
+        working-directory: web
+        run: npm run models || echo "::warning::Model download failed; the app will fetch models on first use instead"
+
+      # No Supabase env vars, same as the Pages build: the app runs device-only without cloud.
+      - name: Build the web app
+        working-directory: web
+        run: npm run build
+
+      - name: Copy the web build into the iOS project
+        working-directory: web
+        run: npx cap sync ios
+
+      - name: Build for iOS Simulator (unsigned)
+        working-directory: web
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
+            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO build
+
+      - name: Zip App.app
+        run: |
+          cd web/ios/build/Build/Products/Release-iphonesimulator
+          ditto -c -k --sequesterRsrc --keepParent App.app "$GITHUB_WORKSPACE/CrewMirror-iOS-Simulator.zip"
+          ls -lh "$GITHUB_WORKSPACE/CrewMirror-iOS-Simulator.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CrewMirror-iOS-Simulator
+          path: CrewMirror-iOS-Simulator.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/ios-v')
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Crew Mirror iOS ${{ github.ref_name }} (simulator build)
+          files: CrewMirror-iOS-Simulator.zip
+          body: |
+            **iOS Simulator build (unsigned).** It runs in the iOS Simulator on a Mac, not on a real iPhone.
+
+            Install: unzip `CrewMirror-iOS-Simulator.zip`, boot a simulator (Xcode → Open Developer Tool → Simulator), then
+            ```
+            xcrun simctl install booted App.app && xcrun simctl launch booted org.sysastro.crewmirror
+            ```
+            A real iPhone needs Xcode signing: `cd web && npm run ios`, then set your team under Signing & Capabilities.
+
+            Built from ${{ github.sha }} by `.github/workflows/ios.yml`. Prototype, not a medical device.

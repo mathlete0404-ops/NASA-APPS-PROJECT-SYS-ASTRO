@@ -7,6 +7,8 @@ Challenge: *Create Health Monitoring Software for Astronauts on Space Missions*.
 
 **Live app:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
 
+**30-second ad:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/ (video: [`ad/crew-mirror-ad.mp4`](https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/crew-mirror-ad.mp4)) · **iOS app:** simulator build on the [Releases page](https://github.com/mathlete0404-ops/NASA-APPS-PROJECT-SYS-ASTRO/releases) (see [iOS app](#ios-app-xcode))
+
 A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 - measures fatigue, fluid shift, balance, pain and recovery against **each astronaut's own baseline**,
@@ -119,8 +121,16 @@ npm run ios          # downloads models if missing, builds, syncs, opens ios/App
 ```
 In Xcode pick the **App** scheme and an iPhone simulator, then Run. On a real iPhone, set your team under Signing & Capabilities. After changing web code, run `npm run ios:sync`.
 
+**Download instead of building:** each [GitHub Release](https://github.com/mathlete0404-ops/NASA-APPS-PROJECT-SYS-ASTRO/releases) tagged `ios-v*` has `CrewMirror-iOS-Simulator.zip`. It is an unsigned **iOS Simulator build** (Mac only, not for a real iPhone). Unzip it, boot a simulator (Xcode → Open Developer Tool → Simulator), then:
+```bash
+xcrun simctl install booted App.app && xcrun simctl launch booted org.sysastro.crewmirror
+```
+A real iPhone needs Xcode signing: `cd web && npm run ios`, then set your team under Signing & Capabilities.
+
+CI: `.github/workflows/ios.yml` builds the app on a macOS runner (Xcode 26.6) for pushes to `main` that touch `web/`, and publishes a Release when a tag `ios-v*` is pushed (`git tag ios-v0.1.1 && git push origin ios-v0.1.1`). The website workflow (`ci.yml`) ignores changes that only touch `web/ios/`, `ad/` or `docs/`, and the Pages site never contains the Xcode project.
+
 ### Ad video
-Open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart); it works straight from disk, no server needed. The rendered video is `ad/crew-mirror-ad.mp4`.
+The ad is live at https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/ (published with the site by `ci.yml`; after an ad-only change, run that workflow by hand from the Actions tab). Locally, open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart); it works straight from disk, no server needed. The rendered video is `ad/crew-mirror-ad.mp4`.
 To re-capture the app clips, run the web app (`npm run dev` in `web/`) and `python ad/capture/capture.py` (Playwright). The capture writes a 21-day history for one astronaut into the capture browser's IndexedDB only (`ad/capture/fixture.js`); nothing is added to the app.
 
 ## How the rules work
