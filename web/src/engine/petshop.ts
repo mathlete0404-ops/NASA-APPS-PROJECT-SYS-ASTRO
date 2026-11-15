@@ -10,13 +10,14 @@
 // Pure logic: no store, no DOM, no clock.
 import type { StageId } from './pet'
 
-export type Slot = 'head' | 'face' | 'back' | 'scene'
+export type Slot = 'head' | 'face' | 'back' | 'scene' | 'color'
 
 export const SLOTS: readonly { id: Slot; label: string; one: string }[] = [
   { id: 'head', label: 'Hats', one: 'hat' },
   { id: 'face', label: 'Faces', one: 'face accessory' },
   { id: 'back', label: 'Backs', one: 'back accessory' },
   { id: 'scene', label: 'Scenes', one: 'scene' },
+  { id: 'color', label: 'Colors', one: 'colour' },
 ]
 
 export interface ShopItem {
@@ -48,6 +49,29 @@ export const ITEMS: readonly ShopItem[] = [
   { id: 'moon', slot: 'scene', name: 'Crescent moon', blurb: 'The view from a long-haul window.', price: 30 },
   { id: 'planet', slot: 'scene', name: 'Ringed planet', blurb: 'A gas giant drifting past.', price: 40 },
   { id: 'aurora', slot: 'scene', name: 'Aurora', blurb: 'Green and violet curtains of light.', price: 70, minStage: 'cadet' },
+  // More hats
+  { id: 'flower', slot: 'head', name: 'Moon daisy', blurb: 'Grown in the station greenhouse.', price: 22 },
+  { id: 'wizard', slot: 'head', name: 'Star wizard hat', blurb: 'The antenna doubles as the tip.', price: 55, minStage: 'cadet' },
+  { id: 'halo', slot: 'head', name: 'Halo', blurb: 'A ring of light for a very well-behaved pet.', price: 70, minStage: 'explorer' },
+  // More faces
+  { id: 'mustache', slot: 'face', name: 'Big mustache', blurb: 'Distinguished. Slightly itchy.', price: 28 },
+  { id: 'monocle', slot: 'face', name: 'Gold monocle', blurb: 'For inspecting the fine print.', price: 32 },
+  { id: 'starshades', slot: 'face', name: 'Star shades', blurb: 'Bright enough to need them.', price: 38, minStage: 'cadet' },
+  // More backs
+  { id: 'fins', slot: 'back', name: 'Rocket fins', blurb: 'Does nothing, looks fast.', price: 40 },
+  { id: 'comet', slot: 'back', name: 'Comet trail', blurb: 'A glowing tail that follows you around.', price: 65, minStage: 'cadet' },
+  // More scenes
+  { id: 'shooting', slot: 'scene', name: 'Shooting stars', blurb: 'Make a wish. Any wish.', price: 35 },
+  { id: 'earthrise', slot: 'scene', name: 'Earthrise', blurb: 'Home, from a long way off.', price: 50 },
+  { id: 'nebula', slot: 'scene', name: 'Nebula', blurb: 'A glowing cloud where stars are born.', price: 55, minStage: 'cadet' },
+  // Colours: the body colour of the pet itself (teal is the free default)
+  { id: 'coral', slot: 'color', name: 'Coral', blurb: 'Warm, like the sunrise on the station.', price: 20 },
+  { id: 'sunny', slot: 'color', name: 'Sunny', blurb: 'A cheerful yellow.', price: 20 },
+  { id: 'sky', slot: 'color', name: 'Sky blue', blurb: 'Cool and calm.', price: 25 },
+  { id: 'lavender', slot: 'color', name: 'Lavender', blurb: 'Soft and a little dreamy.', price: 25 },
+  { id: 'rose', slot: 'color', name: 'Rose', blurb: 'Pink as a space-food strawberry.', price: 30 },
+  { id: 'graphite', slot: 'color', name: 'Graphite', blurb: 'Sleek, like the tech on the bench.', price: 30 },
+  { id: 'gold', slot: 'color', name: 'Gold', blurb: 'Shiny, for pets that have come a long way.', price: 90, minStage: 'explorer' },
 ]
 
 export const itemById = (id: string): ShopItem | undefined => ITEMS.find((i) => i.id === id)

@@ -146,12 +146,117 @@ const Aurora = () => {
   )
 }
 
-/** One drawing per shop item. A test keeps this in step with the catalog. */
+// ── More hats ────────────────────────────────────────────────────────────────
+const Flower = () => (
+  <g transform="translate(86 55)">
+    {[0, 72, 144, 216, 288].map((a) => <ellipse key={a} className="pet-ac-petal" cx={0} cy={-4.4} rx={2.9} ry={3.7} transform={`rotate(${a})`} />)}
+    <circle className="pet-ac-ctr" r={2.3} />
+  </g>
+)
+const Wizard = () => (
+  <g>
+    <path className="pet-ac-wiz" d="M52 64 Q62 58 67 48 L74 32 L80 48 Q86 58 90 64 Q71 70 52 64 Z" />
+    <ellipse className="pet-ac-wiz-brim" cx={71} cy={64} rx={23} ry={5} />
+    <Star cx={67} cy={56} r={2.6} className="pet-gold" />
+    <Star cx={77} cy={48} r={2.2} className="pet-gold" />
+    <Star cx={82} cy={58} r={2} className="pet-gold" />
+    <circle className="pet-bulb on" cx={74} cy={31.5} r={4.4} />
+  </g>
+)
+const Halo = () => (
+  <g>
+    <ellipse className="pet-ac-halo-glow" cx={70} cy={46} rx={17} ry={4.6} />
+    <ellipse className="pet-ac-halo" cx={70} cy={46} rx={17} ry={4.6} />
+  </g>
+)
+
+// ── More faces ───────────────────────────────────────────────────────────────
+const Mustache = () => (
+  <path className="pet-ac-mus" d="M59 82.5 Q64.5 77.2 70 81 Q75.5 77.2 81 82.5 Q76 86.4 70 83.8 Q64 86.4 59 82.5 Z" />
+)
+const Monocle = () => (
+  <g>
+    <circle className="pet-ac-lens pet-ac-gold-frame" cx={80} cy={74} r={8.6} />
+    <path className="pet-ac-chain" d="M87.5 78.5 Q93 89 88.5 103" />
+  </g>
+)
+const StarShades = () => (
+  <g>
+    <Star cx={60} cy={74.5} r={10} className="pet-ac-shade" />
+    <Star cx={80} cy={74.5} r={10} className="pet-ac-shade" />
+    <path className="pet-ac-frame" d="M66.5 73.5 Q70 71.5 73.5 73.5" />
+    <circle cx={56.6} cy={71.4} r={1.1} fill="#fff" opacity={0.85} />
+    <circle cx={76.6} cy={71.4} r={1.1} fill="#fff" opacity={0.85} />
+  </g>
+)
+
+// ── More backs ───────────────────────────────────────────────────────────────
+const Fins = () => (
+  <g>
+    <path className="pet-ac-fin" d="M47 88 L27 113 L53 108 Z" />
+    <path className="pet-ac-fin" d="M93 88 L113 113 L87 108 Z" />
+  </g>
+)
+const Comet = () => (
+  <g>
+    <path className="pet-ac-comet" opacity={0.55} d="M113 34 Q80 56 50 94 Q76 82 113 34 Z" />
+    <path className="pet-ac-comet" opacity={0.38} d="M120 54 Q94 72 64 102 Q90 90 120 54 Z" />
+    <circle cx={113} cy={34} r={4.2} fill="#fff" opacity={0.95} />
+  </g>
+)
+
+// ── More scenes ──────────────────────────────────────────────────────────────
+const Shooting = () => (
+  <g>
+    <Stars n={6} />
+    <g stroke="#fff" strokeWidth={1.6} strokeLinecap="round" opacity={0.9}>
+      <path d="M99 27 L80 40" /><path d="M61 20 L47 29" opacity={0.7} /><path d="M108 62 L93 72" opacity={0.8} />
+    </g>
+    <circle cx={99} cy={27} r={2} fill="#fff" /><circle cx={61} cy={20} r={1.6} fill="#fff" /><circle cx={108} cy={62} r={1.8} fill="#fff" />
+  </g>
+)
+const Earthrise = () => (
+  <g>
+    <Stars n={6} />
+    <circle cx={98} cy={42} r={13} fill="hsl(210 82% 48%)" />
+    <path d="M90 38 Q95 33 100 37 Q98 42 102 46 Q96 50 92 46 Z" fill="hsl(130 48% 42%)" />
+    <circle cx={98} cy={42} r={13} fill="none" stroke="hsl(200 95% 78%)" strokeWidth={1.2} opacity={0.8} />
+    <ellipse cx={70} cy={119} rx={66} ry={15} fill="hsl(220 8% 62%)" />
+    <ellipse cx={46} cy={107} rx={6} ry={2} fill="hsl(220 8% 52%)" /><ellipse cx={100} cy={110} rx={8} ry={2.4} fill="hsl(220 8% 52%)" />
+  </g>
+)
+const Nebula = () => {
+  const id = useId().replace(/:/g, '')
+  return (
+    <g>
+      <defs><filter id={`n${id}`} x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7" /></filter></defs>
+      <g filter={`url(#n${id})`}>
+        <circle cx={48} cy={46} r={22} fill="hsl(320 82% 56%)" opacity={0.55} />
+        <circle cx={92} cy={58} r={24} fill="hsl(262 86% 60%)" opacity={0.55} />
+        <circle cx={70} cy={30} r={16} fill="hsl(200 92% 60%)" opacity={0.5} />
+      </g>
+      <Stars n={9} />
+    </g>
+  )
+}
+
+/** One drawing per shop item (colours have none: they recolour the pet). A test keeps this in step with the catalog. */
 export const ART: Record<string, () => ReactNode> = {
-  beanie: Beanie, headphones: Headphones, captain: Captain, crown: Crown,
-  glasses: Glasses, hearts: Hearts, visor: Visor,
-  cape: Cape, wings: Wings,
-  stars: Starfield, moon: Moon, planet: Planet, aurora: Aurora,
+  beanie: Beanie, headphones: Headphones, captain: Captain, crown: Crown, flower: Flower, wizard: Wizard, halo: Halo,
+  glasses: Glasses, hearts: Hearts, visor: Visor, mustache: Mustache, monocle: Monocle, starshades: StarShades,
+  cape: Cape, wings: Wings, fins: Fins, comet: Comet,
+  stars: Starfield, moon: Moon, planet: Planet, aurora: Aurora, shooting: Shooting, earthrise: Earthrise, nebula: Nebula,
+}
+
+/** Body colours for the colour items: the pet's body, its shade (arms, feet, antenna) and its belly. */
+export const COLORS: Record<string, { body: string; shade: string; belly: string }> = {
+  coral: { body: 'hsl(10 85% 66%)', shade: 'hsl(8 65% 46%)', belly: 'hsl(14 90% 86%)' },
+  sunny: { body: 'hsl(46 95% 60%)', shade: 'hsl(40 80% 40%)', belly: 'hsl(50 100% 86%)' },
+  sky: { body: 'hsl(205 90% 66%)', shade: 'hsl(210 65% 44%)', belly: 'hsl(200 95% 88%)' },
+  lavender: { body: 'hsl(262 75% 76%)', shade: 'hsl(262 50% 52%)', belly: 'hsl(262 90% 91%)' },
+  rose: { body: 'hsl(335 85% 72%)', shade: 'hsl(335 60% 48%)', belly: 'hsl(335 95% 90%)' },
+  graphite: { body: 'hsl(222 14% 44%)', shade: 'hsl(222 18% 28%)', belly: 'hsl(220 12% 66%)' },
+  gold: { body: 'hsl(44 96% 56%)', shade: 'hsl(36 80% 38%)', belly: 'hsl(48 100% 82%)' },
 }
 
 const draw = (id: string | undefined) => {

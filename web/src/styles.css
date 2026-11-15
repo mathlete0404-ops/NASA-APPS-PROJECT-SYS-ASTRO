@@ -961,8 +961,8 @@ html.dark { --pet-gold-ink: hsl(44 96% 62%); }
 
 .pet-views { align-self: flex-start; margin-top: 6px; }
 .shop-trying { color: var(--violet-text); border-color: var(--violet); }
-.pet-shop .shop-balance { display: inline-flex; align-items: center; gap: 4px; color: var(--pet-gold-ink); font-weight: 700; }
-.pet-shop .shop-balance svg, .shop-pts svg { fill: var(--pet-gold); stroke: var(--pet-gold-ink); }
+.shop-balance { display: inline-flex; align-items: center; gap: 4px; color: var(--pet-gold-ink); font-weight: 700; }
+.shop-balance svg, .shop-pts svg { fill: var(--pet-gold); stroke: var(--pet-gold-ink); }
 .shop-intro { margin: 0 0 12px; font-size: .88rem; line-height: 1.4; }
 .shop-tabs { display: flex; width: 100%; }
 .shop-tabs button { flex: 1; justify-content: center; flex-wrap: wrap; }
@@ -1063,3 +1063,54 @@ html.dark { --pet-gold-ink: hsl(44 96% 62%); }
   .sos-top span { display: none; }
   .sos-q { font-size: 1.25rem; }
 }
+
+/* Pet shop, round two: more accessories */
+.pet-svg .pet-ac-petal { fill: hsl(330 90% 86%); stroke: hsl(330 60% 58%); stroke-width: .7; }
+.pet-svg .pet-ac-ctr { fill: hsl(44 96% 56%); stroke: hsl(36 80% 38%); stroke-width: .6; }
+.pet-svg .pet-ac-wiz { fill: hsl(255 62% 38%); stroke: hsl(255 55% 22%); stroke-width: .9; stroke-linejoin: round; }
+.pet-svg .pet-ac-wiz-brim { fill: hsl(255 55% 30%); stroke: hsl(255 55% 18%); stroke-width: .9; }
+.pet-svg .pet-ac-halo { fill: none; stroke: var(--pet-gold); stroke-width: 3.2; }
+.pet-svg .pet-ac-halo-glow { fill: none; stroke: hsl(48 100% 70% / .45); stroke-width: 7; filter: blur(1.5px); }
+.pet-svg .pet-ac-mus { fill: hsl(24 50% 22%); stroke: hsl(24 50% 12%); stroke-width: .6; stroke-linejoin: round; }
+.pet-svg .pet-ac-gold-frame { stroke: hsl(40 88% 48%); stroke-width: 2.2; }
+.pet-svg .pet-ac-chain { fill: none; stroke: hsl(40 88% 48%); stroke-width: 1.2; stroke-linecap: round; }
+.pet-svg .pet-ac-shade { fill: var(--pet-ink); stroke: var(--pet-accent); stroke-width: 1; stroke-linejoin: round; }
+.pet-svg .pet-ac-fin { fill: hsl(350 78% 52%); stroke: hsl(350 60% 30%); stroke-width: 1; stroke-linejoin: round; }
+.pet-svg .pet-ac-comet { fill: hsl(196 92% 56%); }
+
+/* Pet trips and the Space Exchange */
+.pet-views { max-width: 100%; }
+.pet-views button { padding: 7px 9px; }
+.trip-status { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 12px; background: var(--muted); }
+.trip-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.trip-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); }
+.trip-row.locked { opacity: .6; }
+.trip-row-t { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 190px; }
+.trip-row-a { display: flex; align-items: center; gap: 10px; flex: none; }
+.trip-odo, .trip-mult { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.trip-mult-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.trip-mult-chip { display: inline-flex; gap: 6px; align-items: baseline; padding: 4px 10px; border-radius: 8px; border: 1px solid var(--border); font-size: .8rem; color: var(--muted-fg); }
+.trip-mult-chip.on { border-color: var(--violet); background: var(--violet-soft); color: var(--violet-text); }
+.mk-locked { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border-radius: 12px; background: var(--muted); }
+.mk-locked > div { display: flex; flex-direction: column; gap: 4px; }
+.mk-folio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.mk-folio > span { display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 10px; background: var(--muted); }
+.mk-list { display: flex; flex-direction: column; gap: 6px; }
+.mk-row { display: grid; grid-template-columns: 3.2rem 1fr auto auto; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.mk-row:hover, .mk-row:focus-visible { border-color: var(--violet); }
+.mk-row.sel { border-color: var(--violet); background: var(--violet-soft); }
+.mk-tick { font-weight: 700; font-size: .82rem; }
+.mk-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .9rem; }
+.mk-px { font-weight: 600; }
+.mk-ch { min-width: 4.4rem; text-align: right; font-size: .82rem; }
+.up { color: var(--usual); }
+.down { color: var(--act); }
+.mk-detail { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; padding: 12px; border-radius: 12px; background: var(--muted); }
+.mk-detail svg { max-width: 100%; }
+.mk-trade { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.mk-qty { display: inline-flex; align-items: center; gap: 8px; }
+.mk-qty .mono { min-width: 2ch; text-align: center; font-weight: 700; }
+.mk-qty .btn.icon svg { width: 14px; height: 14px; }
+@media (max-width: 480px) { .mk-row { grid-template-columns: 2.9rem 1fr auto; } .mk-ch { display: none; } }
+
+.pet-trips .card-h, .pet-market .card-h { flex-wrap: wrap; row-gap: 4px; }

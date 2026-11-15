@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { STAGES } from './pet'
-import { ART } from '../components/PetAccessories'
+import { ART, COLORS } from '../components/PetAccessories'
 import { availability, balance, buy, EMPTY_WARDROBE, ITEMS, itemById, outfit, sanitize, SLOTS, takeOff, wear, type Wardrobe } from './petshop'
 
 const own = (ids: string[], spent = 0): Wardrobe => {
@@ -23,7 +23,10 @@ describe('catalog', () => {
     }
   })
   it('has artwork for every item and no artwork without an item', () => {
-    expect(Object.keys(ART).sort()).toEqual(ITEMS.map((i) => i.id).sort())
+    expect(Object.keys(ART).sort()).toEqual(ITEMS.filter((i) => i.slot !== 'color').map((i) => i.id).sort())
+  })
+  it('has a body colour for every colour item and no colour without an item', () => {
+    expect(Object.keys(COLORS).sort()).toEqual(ITEMS.filter((i) => i.slot === 'color').map((i) => i.id).sort())
   })
   it('has something every slot can buy with a few days of care points (a full care day is 18)', () => {
     for (const s of SLOTS) expect(ITEMS.some((i) => i.slot === s.id && !i.minStage && i.price <= 25), s.id).toBe(true)
