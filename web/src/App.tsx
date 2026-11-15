@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
-  CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
+  CalendarDays, ChevronDown, CircleHelp, Ellipsis, Globe, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
   ScanFace, Settings as SettingsIcon, Siren, Stethoscope, TrendingUp,
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
@@ -131,6 +131,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           </a>
           {cloudConfigured && !s.account && <a className="nav-item" href="#/login" title="Sign in"><LogIn /><span className="nav-text">Sign in to sync</span></a>}
           <button className="nav-item" onClick={() => window.dispatchEvent(new Event('crew-mirror:guide'))} title="How to use Crew Mirror"><CircleHelp /><span className="nav-text">How to use</span></button>
+          {!NATIVE && <a className="nav-item" href="#/" title="Back to the website"><Globe /><span className="nav-text">Website home</span></a>}
         </div>
       </aside>
 
@@ -190,6 +191,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
                 <a key={t.id} href={`#/app/${t.id}`} className={`sheet-item${t.id === 'report' || t.id === 'sos' ? ' warn' : ''}`} aria-current={t.id === tab ? 'page' : undefined}><t.icon /><span>{t.label}</span></a>
               ))}
               <button type="button" className="sheet-item" onClick={() => { setSheet(false); setGuide(true) }}><CircleHelp /><span>How to use</span></button>
+              {!NATIVE && <a className="sheet-item" href="#/"><Globe /><span>Website home</span></a>}
               {cloudConfigured && !s.account && <a className="sheet-item" href="#/login"><LogIn /><span>Sign in to sync</span></a>}
             </div>
           </div>

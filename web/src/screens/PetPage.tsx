@@ -180,8 +180,8 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
               return (
                 <div key={st.id} className={`pet-rung${reached ? '' : ' locked'}${current ? ' current' : ''}`}>
                   <span className="pet-rung-art"><Pet stage={st.id} mood="content" name={st.name} size={52} /></span>
-                  <span className="pet-rung-t"><b>{st.name}</b><small>{st.id === 'egg' ? 'Day 1' : st.id === 'hatchling' ? `Hatches at ${st.min} checks` : `${st.min} check days`}</small></span>
-                  {!reached && <Lock size={14} className="muted" />}
+                  <span className="pet-rung-t"><b>{st.name}</b><small>{st.id === 'egg' ? 'Day 1' : st.id === 'hatchling' ? `${st.min} checks` : `${st.min} check days`}</small></span>
+                  {!reached && <Lock size={13} className="muted pet-rung-lock" aria-label="Locked" />}
                 </div>
               )
             })}
