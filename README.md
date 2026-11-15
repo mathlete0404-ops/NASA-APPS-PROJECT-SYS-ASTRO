@@ -49,7 +49,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | **Daily check reminders**: morning reminder at a chosen time plus an optional 20:00 nudge if the check isn't done, planned 7 days ahead and re-planned after each check; a quiet "You haven't done today's check yet" line on Today. iOS: local notifications that arrive when the app is closed; web: shown only while the app is open | ✅ | `web/src/engine/reminders.ts`, `web/src/data/notify.ts`, `web/src/screens/Settings.tsx` |
 | **Space weather at a glance**: one-line pill at the top of Today ("Space weather: Quiet", "Radiation storm S3: shelter rules apply", "Last known: Quiet" offline), using the storm card's saved reading; tap to jump to the card | ✅ | `web/src/components/SpaceWeatherPill.tsx` |
 | **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
-| 30-second ad (v2): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, food, 3D body, space weather, calendar, pain check, reminders, pet hatch), rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
+| 30-second ad (v3): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, package scan, 3D body, space weather, calendar, pain check, reminders, pet hatch), with an original synthesised soundtrack, rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
 
 ## Run locally
 

@@ -1,6 +1,6 @@
 # Crew Mirror: 30-second ad plan (v2)
 
-**The ad is built and rendered.** Open `ad/index.html` in Chrome to play it live (it works straight from disk), or use the finished video `ad/crew-mirror-ad.mp4` (1920×1080, 30 fps, 30 s, no sound).
+**The ad is built and rendered.** Open `ad/index.html` in Chrome to play it live (it works straight from disk), or use the finished video `ad/crew-mirror-ad.mp4` (1920×1080, 30 fps, 30 s, with an original soundtrack).
 
 **Concept:** it opens like real footage from orbit, then cuts to one phone that shows the real app. The camera moves the phone left and right between features, and a Mac-style cursor taps through it. There are **no people** anywhere: the face scan is MediaPipe's generic canonical face mesh, drawn exactly like the app draws it (478 teal 2 px dots on `#050816`).
 
@@ -20,7 +20,7 @@ Retimed so every feature gets the same unrushed share: a 3.5 s opening, then **1
 | 0:07.3–0:09.2 | 3. Result | Whip right. "How you're doing": **WATCH · You slept less than usual**. The cursor taps **How we know** and the reason opens. | **Compared with you.** Not an average. |
 | 0:09.2–0:11.1 | 4. Today scroll | Whip left. Today scrolls slowly from the top to the face scan trends. | **Your day, at a glance.** |
 | 0:11.1–0:13.0 | 5. Plan | Whip right. Plan › Exercise: "Resistive session on ARED" gets its tick. | **Exercise, ticked off.** |
-| 0:13.0–0:14.9 | 6. Food | Whip left. Food today: three foods added, nutrient bars grow. | **Food that fills the gaps.** |
+| 0:13.0–0:14.9 | 6. Scan a package | Whip left. A photo of a beef brisket pouch is read on the phone: "Found on the menu: Beef brisket · thermostabilized". The cursor taps **Add to today** and protein goes from 0 to 22 g. | **Snap the pouch. Count the protein.** Read on the device. |
 | 0:14.9–0:16.8 | 7. 3D body | Whip right. 3D body, Muscles layer; the cursor drags it round slowly. | **Your body, in 3D.** |
 | 0:16.8–0:18.7 | 8. Space weather | Whip left. Tap the **Space weather: Quiet** pill; Today scrolls to the solar radiation storm card. | **Radiation storms, watched.** |
 | 0:18.7–0:20.6 | 9. Calendar | Whip right. Calendar: tap the 18th; the EVA shows below. | **Every day of the mission.** |
@@ -46,7 +46,7 @@ Optional voice-over (about 60 words): "On the way to Mars, help is far away. The
 
 - **Text or timing:** edit `ad/index.html`. The 13 feature slots, their phone side and captions are the `F` list (`OPEN`, `D` set the opening length and slot length); phone poses per feature are `POSE`, built into the `RK` keyframes; the space camera is `CAMK`.
 - **Re-capture a clip:** `python ad/capture/capture.py m_plan` (or `today`, `check`, `pet`, `m_food`, …) with the app running on port 5173.
-- **Add sound:** put the MP4 into iMovie, CapCut or DaVinci Resolve and add a royalty-free track; credit it in the README References.
+- **Sound:** `ad/capture/make_sound.py` synthesises an original soundtrack from scratch (no samples): a 126 bpm synth bed whose bars line up with each 1.9 s feature, plus whooshes on transitions, clicks on cursor taps, a notification ping, a hatch chime and an end-card bell. Cue times come from `window.__SFX` in `ad/index.html`. Output: `ad/audio/soundtrack.m4a` (played by the **Sound on** button on the live page) and muxed into the MP4.
 
 ## Rules check
 - [x] No NASA logo, and nothing suggests NASA made or approved the app. NASA/USGS imagery is credited in the README as image sources only.
@@ -54,6 +54,6 @@ Optional voice-over (about 60 words): "On the way to Mars, help is far away. The
 - [x] No on-screen text says demo, sample, test or made up.
 - [x] "Prototype, not a medical device" on the end card.
 - [x] "Pattern", never "diagnosis" (the pain result screen says "This is a pattern, not a diagnosis").
-- [ ] If you add music, credit it in the README References.
+- [x] Music and sound effects are original (synthesised in `ad/capture/make_sound.py`), so there is nothing to license.
 - [x] AI use is recorded in `docs/AI_USE.md`.
 - [x] Visible AI label on every frame: "Made with AI assistance (Claude Code)", bottom right.

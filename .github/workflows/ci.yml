@@ -51,7 +51,7 @@ jobs:
         run: |
           mkdir -p web/dist/ad
           cp ad/index.html ad/crew-mirror-ad.mp4 web/dist/ad/
-          for d in vendor textures clips shots img data; do cp -R "ad/$d" web/dist/ad/; done
+          for d in vendor textures clips shots img data audio; do cp -R "ad/$d" web/dist/ad/; done
       - name: Check the site has no Xcode project in it
         run: |
           if find web/dist \( -name '*.xcodeproj' -o -name '*.xcworkspace' -o -name 'Package.swift' -o -path 'web/dist/ios' -o -path 'web/dist/ad/capture' \) | grep .; then

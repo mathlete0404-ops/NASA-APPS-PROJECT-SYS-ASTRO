@@ -1,6 +1,7 @@
 // "Scan a package": photo → on-device text reading → menu match or nutrition panel →
 // the astronaut confirms how much they ate. The photo stays on this device.
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Camera, Check, Loader2, X } from 'lucide-react'
 import { PANTRY, PORTIONS, portionLabel, type Nutrients } from '../content/nutrition'
 import { readLabel, type LabelRead } from '../content/label'
@@ -13,7 +14,7 @@ const FIELDS: [keyof Nutrients, string, string][] = [
 ]
 
 export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: ScannedFood) => void; onClose: () => void }) {
-  const [url] = useState(() => URL.createObjectURL(file))
+  const [url, setUrl] = useState('')
   const [progress, setProgress] = useState(0)
   const [err, setErr] = useState('')
   const [read, setRead] = useState<LabelRead | null>(null)
@@ -22,6 +23,12 @@ export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: Scan
   const [vals, setVals] = useState<Partial<Record<keyof Nutrients, string>>>({})
   const [portion, setPortion] = useState(1)
   const alive = useRef(true)
+
+  useEffect(() => {
+    const u = URL.createObjectURL(file)
+    setUrl(u)
+    return () => URL.revokeObjectURL(u)
+  }, [file])
 
   useEffect(() => {
     alive.current = true
@@ -34,8 +41,8 @@ export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: Scan
       setName(r.item?.name ?? r.title)
       setVals(Object.fromEntries(Object.entries(r.facts).map(([k, v]) => [k, String(v)])))
     }).catch((e) => alive.current && setErr(String((e as Error).message ?? e)))
-    return () => { alive.current = false; URL.revokeObjectURL(url) }
-  }, [file, url])
+    return () => { alive.current = false }
+  }, [file])
 
   const menuItem = PANTRY.find((x) => x.id === choice)
   const canAdd = choice !== 'label' ? !!menuItem : name.trim().length > 0 && Number(vals.kcal) > 0
@@ -45,12 +52,13 @@ export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: Scan
     onAdd({ itemId: 'label', servings: portion, custom: { name: name.trim().slice(0, 40), kcal: n('kcal'), protein: n('protein'), calcium: n('calcium'), sodium: n('sodium'), potassium: n('potassium'), fluid: 0, vitD: n('vitD') } })
   }
 
-  return (
+  // Portal to <body>: the page's slide-in transform would otherwise move a fixed overlay.
+  return createPortal(
     <div className="modal" role="dialog" aria-modal="true" aria-label="Scan a food package" onClick={onClose}>
       <div className="card modal-card scan-card" onClick={(e) => e.stopPropagation()}>
         <div className="row between"><h2 style={{ margin: 0 }}>Scan a food package</h2><button className="btn ghost icon" onClick={onClose} title="Close"><X /></button></div>
         <div className="scan-body">
-          <img className="scan-photo" src={url} alt="Your package photo" />
+          {url ? <img className="scan-photo" src={url} alt="Your package photo" /> : <div className="scan-photo" />}
           <div className="stack" style={{ gap: 10, minWidth: 0 }}>
             {!read && !err && (
               <div className="scan-reading"><Loader2 className="spin" /> Reading the label on this device… {Math.round(progress * 100)}%</div>
@@ -91,6 +99,7 @@ export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: Scan
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
