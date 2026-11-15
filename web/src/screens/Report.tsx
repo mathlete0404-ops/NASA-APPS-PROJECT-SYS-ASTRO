@@ -1,5 +1,5 @@
 import { lazy, Suspense, useMemo, useState } from 'react'
-import { Box, Camera, Map as MapIcon } from 'lucide-react'
+import { Box, Camera, Map as MapIcon, ShieldAlert } from 'lucide-react'
 import { activeProfile, addSymptom, microgravityDays, takeReportDraft, uid, useStore } from '../data/store'
 import {
   DANGER_LABELS, PATTERN_LABEL, referIntensity, triage, WEIGHT_BEARING,
@@ -32,8 +32,8 @@ function YesNo({ value, onChange }: { value: YN; onChange: (v: boolean) => void 
 const CONTEXT = ['sleep', 'exercise', 'after EVA', 'after landing', 'workstation', 'handrail translation']
 const LEVEL_TITLE: Record<TriageResult['level'], string> = {
   act_now: 'Act now: contact the crew medical officer',
-  cmo: 'Contact the crew medical officer — no exercises for now',
-  self_care: 'Self-care is reasonable — follow the plan below',
+  cmo: 'Contact the crew medical officer. No exercises for now',
+  self_care: 'You can look after this yourself. Follow the plan below',
 }
 const STEP_LABEL: Record<Step, string> = { danger: 'Danger signs', where: 'Where & what', tests: 'Press & move', source: 'Find the source', result: 'Result' }
 
@@ -126,19 +126,19 @@ export function Report({ go }: { go: (t: string) => void }) {
         <div className="grid g2">
           <div className="card">
             <h2>First: any danger signs right now?</h2>
-            <p className="muted">Always asked first. Any “yes” goes straight to the crew medical officer — no exercises.</p>
+            <p className="muted">Always asked first. Any “yes” sends you straight to the crew medical officer, with no exercises.</p>
             {draft && <p className="notice" style={{ marginTop: 8 }}>Reporting from the 3D body: <b>{draft.structure ?? REGION_LABEL[draft.region]}</b>{draft.side !== 'middle' ? ` (${draft.side})` : ''}</p>}
             {dangerKeys.map((k) => (
               <div className="q" key={k}><span>{DANGER_LABELS[k]}</span><YesNo value={danger[k]} onChange={(v) => setDanger((d) => ({ ...d, [k]: v }))} /></div>
             ))}
             <div className="row" style={{ marginTop: 12 }}>
               {anyDanger ? <button className="btn danger" onClick={() => finish(true)}>Continue → Act now</button>
-                : <button className="btn primary" disabled={!allAnswered} onClick={() => setStep('where')}>All “no” — continue</button>}
+                : <button className="btn primary" disabled={!allAnswered} onClick={() => setStep('where')}>All “no”: continue</button>}
             </div>
           </div>
-          <div className="card">
-            <h3>Why these five?</h3>
-            <p className="muted">They can signal a heart problem, stroke, bleeding in the head, spinal cord or nerve-root compression, or a fracture. None can be safely handled by an app, so fixed rules — not AI — send them to the crew medical officer and the reason is always shown.</p>
+          <div className="card" style={{ alignSelf: 'start' }}>
+            <div className="card-h"><span className="ic" style={{ color: 'var(--act)' }}><ShieldAlert /></span><h3>Why these come first</h3></div>
+            <p className="muted" style={{ marginTop: 0, fontSize: '.92rem' }}>They can mean a heart problem, a stroke, bleeding in the head, a squeezed spinal nerve or a broken bone. An app should never handle these, so any “yes” goes straight to the crew medical officer.</p>
           </div>
         </div>
       )}
@@ -167,7 +167,7 @@ export function Report({ go }: { go: (t: string) => void }) {
               <input id="int" type="range" min={0} max={10} value={intensity} onChange={(e) => setIntensity(+e.target.value)} />
               <output>{intensity}/10</output>
             </div>
-            {region && WEIGHT_BEARING.has(region) && limit < 8 && <small className="muted">Day {mg} in microgravity: pain ≥ {limit}/10 here goes to the crew medical officer (bone-loss weighting).</small>}
+            {region && WEIGHT_BEARING.has(region) && limit < 8 && <small className="muted">Bones weaken while weightless, so pain of {limit}/10 or more here goes to the crew medical officer.</small>}
             <div className="row">Onset {(['gradual', 'sudden'] as const).map((o) => <button key={o} className={`btn small${onset === o ? ' sel' : ''}`} onClick={() => setOnset(o)}>{o}</button>)}</div>
             <div className="row">Side {(['left', 'right', 'both', 'middle'] as const).map((o) => <button key={o} className={`btn small${side === o ? ' sel' : ''}`} onClick={() => setSide(o)}>{o}</button>)}</div>
             <div>
@@ -190,10 +190,10 @@ export function Report({ go }: { go: (t: string) => void }) {
             <h2>Press & move test · {REGION_LABEL[region]}</h2>
             <p className="muted">Do each gently. The answers give a <b>pattern</b>, not a diagnosis.</p>
             {([
-              ['bony_tender', `${tt.bone} — sharp pain on one bony spot?`],
-              ['muscle_tender', `${tt.muscle} — does it hurt?`],
-              ['resisted_pain', `${tt.resisted} — does it hurt?`],
-              ['stretch_pain', `${tt.stretch} — does it hurt?`],
+              ['bony_tender', `${tt.bone}. Sharp pain on one bony spot?`],
+              ['muscle_tender', `${tt.muscle}. Does it hurt?`],
+              ['resisted_pain', `${tt.resisted}. Does it hurt?`],
+              ['stretch_pain', `${tt.stretch}. Does it hurt?`],
               ...(WEIGHT_BEARING.has(region) && !floating ? [['cannot_bear_weight', 'Can you NOT put weight on it?'] as [keyof TestAnswers, string]] : []),
               ['swelling', 'Is there visible swelling?'],
               ['spreading_tingling', 'Tingling or numbness spreading down an arm or leg?'],
@@ -201,7 +201,7 @@ export function Report({ go }: { go: (t: string) => void }) {
               <div className="q" key={k}><span>{label}</span><YesNo value={tests[k] as YN} onChange={(v) => setTests((t) => ({ ...t, [k]: v }))} /></div>
             ))}
             <div className="q">
-              <span>{tt.rom} — does it start to hurt at some angle?</span>
+              <span>{tt.rom}. Does it start to hurt at some point?</span>
               <YesNo value={romOn ? true : tests.rom_pain_angle === null ? false : undefined} onChange={(v) => { setRomOn(v); setTests((t) => ({ ...t, rom_pain_angle: v ? undefined : null })) }} />
             </div>
             {romOn && <div className="slider"><label htmlFor="rom">Painful angle</label><input id="rom" type="range" min={0} max={180} step={5} value={rom} onChange={(e) => setRom(+e.target.value)} /><output>{rom}°</output></div>}
@@ -228,7 +228,7 @@ export function Report({ go }: { go: (t: string) => void }) {
           <div className="card stack">
             <div>
               <p className="kicker">Where does it come from?</p>
-              <p className="muted" style={{ fontSize: '.92rem' }}>Pain is often felt away from its source — a nerve root in the back can hurt in the leg, the neck in the shoulder, the hip in the knee. Answer a few questions; the candidates light up on the body.</p>
+              <p className="muted" style={{ fontSize: '.92rem' }}>Pain is often felt away from where it starts. A nerve in the lower back can hurt in the leg, the neck in the shoulder, the hip in the knee. Answer a few questions; the candidates light up on the body.</p>
             </div>
             {ranked.map((r, i) => (
               <div key={r.source.id} className={`src${i === 0 && r.score > 0 ? ' top' : ''}`}>
@@ -271,7 +271,7 @@ function ResultView({ r, region, side, top, floating, go, restart, structure }: 
     <div className="stack">
       <div className={`banner ${r.level}`}>
         <h2>{LEVEL_TITLE[r.level]}</h2>
-        <p><b>{PATTERN_LABEL[r.pattern]}</b> — a pattern, not a diagnosis.{structure ? ` Location: ${structure}${side !== 'middle' ? ` (${side})` : ''}.` : ''}</p>
+        <p><b>{PATTERN_LABEL[r.pattern]}</b>. This is a pattern, not a diagnosis.{structure ? ` Location: ${structure}${side !== 'middle' ? ` (${side})` : ''}.` : ''}</p>
         <ul className="reasons">{r.reasons.map((x) => <li key={x}>{x}</li>)}</ul>
         {r.level !== 'self_care' && (
           <div className="row" style={{ marginTop: 10 }}>
@@ -315,7 +315,7 @@ function ResultView({ r, region, side, top, floating, go, restart, structure }: 
       {r.exercises_allowed && card && card.exercises.length > 0 && (
         <div className="card">
           <h2>Relief exercises</h2>
-          <p className="muted">Rate pain before and after. Recheck in 48 h; if not better in 7 days, or worse, contact the crew medical officer.{floating ? ' You are floating — follow the “In flight” line for each.' : ''}</p>
+          <p className="muted">Rate pain before and after. Recheck in 48 h; if not better in 7 days, or worse, contact the crew medical officer.{floating ? ' You are weightless, so follow the “In flight” line for each.' : ''}</p>
           <div className="grid g3">
             {card.exercises.map((id) => EXERCISES[id]).filter((e) => e && !(floating && e.needsGravity)).map((e) => (
               <div className="ex" key={e.id}>

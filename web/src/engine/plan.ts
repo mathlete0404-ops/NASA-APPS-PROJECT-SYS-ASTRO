@@ -1,7 +1,7 @@
 // Today's plan: fixed rules that turn statuses, symptoms and phase into actions.
 // Every recommendation carries "because" — the data that triggered it.
 import type { State } from '../data/store'
-import { crewStatus, dayKey, history, microgravityDays } from '../data/store'
+import { crewStatus, dayKey, history } from '../data/store'
 import type { CrewProfile } from '../data/types'
 import { METRICS } from './status'
 import { PHASES, type Phase } from '../content/mission'
@@ -41,9 +41,9 @@ export function recommendations(s: State, p: CrewProfile): Rec[] {
   const fatigue = ['sleep_hours', 'sleep_quality', 'energy', 'perclos', 'blink_rate'].filter(bad)
   if (fatigue.length) out.push({ id: 'sleep', area: 'sleep', priority: 3, title: 'Protect sleep tonight', detail: 'Plan an 8.5 h sleep window, dim the sleep-station light an hour before, no caffeine late in the work day, and avoid safety-critical tasks while tired.', because: fatigue.map((id) => why(id, st[id])) })
 
-  if (bad('face_width')) out.push({ id: 'fluid', area: 'fluid', priority: 4, title: 'Facial fullness is up — check fluids and CO₂', detail: 'Check the module CO₂ reading, keep sodium under your limit, stay on your fluid target. Any vision change is a danger sign.', because: [why('face_width', st.face_width)] })
+  if (bad('face_width')) out.push({ id: 'fluid', area: 'fluid', priority: 4, title: 'Your face is fuller: check fluids and CO₂', detail: 'Check the module CO₂ reading, keep sodium under your limit, stay on your fluid target. Any vision change is a danger sign.', because: [why('face_width', st.face_width)] })
   if (bad('hr_rest') || bad('resp_rate')) out.push({ id: 'cardio', area: 'recovery', priority: 3, title: 'Resting heart or breathing rate is off your usual', detail: 'Keep exercise light today and re-measure tomorrow. Chest pain or breathlessness → act now.', because: ['hr_rest', 'resp_rate'].filter(bad).map((id) => why(id, st[id])) })
-  if (bad('body_mass')) out.push({ id: 'mass', area: 'nutrition', priority: 3, title: 'Body mass is below your usual — eat more', detail: 'Add about 300 kcal a day and hit your protein target; keep your resistive sessions.', because: [why('body_mass', st.body_mass)], action: { tab: 'plan', label: 'Food plan' } })
+  if (bad('body_mass')) out.push({ id: 'mass', area: 'nutrition', priority: 3, title: 'Body mass is below your usual: eat more', detail: 'Add about 300 kcal a day and hit your protein target; keep your resistive sessions.', because: [why('body_mass', st.body_mass)], action: { tab: 'plan', label: 'Food plan' } })
 
   const gravity = !PHASES[p.phase].microgravity
   const balanceToday = s.sessions.some((x) => x.crewId === p.id && x.kind === 'balance' && dayKey(x.ts) === today)
@@ -72,18 +72,17 @@ export function exercisePlan(s: State, p: CrewProfile): { headline: string; item
   const notes: string[] = []
   if (tired) notes.push('Act-level fatigue today: reduce intensity by about a third and skip maximal lifts.')
   if (blockedRegions.size) notes.push(`No loading for: ${[...blockedRegions].map((r) => REGION_LABEL[r].toLowerCase()).join(', ')} (medical officer review pending).`)
-  const skip = (yes: boolean) => (yes ? 'Skip — area under medical review' : undefined)
+  const skip = (yes: boolean) => (yes ? 'Skip: the medical officer is reviewing this area' : undefined)
   const ph: Phase = p.phase
-  const mg = microgravityDays(p)
   const items: Record<Phase, PlanItem[]> = {
     transit: [
-      { id: 'ared', label: 'Resistive session on ARED', detail: 'Squat, deadlift, heel raise, bench press — 3 × 8–12 at planned load', minutes: 60, coach: 'squat', skip: skip(legsBlocked) },
+      { id: 'ared', label: 'Resistive session on ARED', detail: 'Squat, deadlift, heel raise, bench press, 3 × 8–12 at planned load', minutes: 60, coach: 'squat', skip: skip(legsBlocked) },
       { id: 'aero', label: 'Aerobic: treadmill (harness) or cycle', detail: 'Intervals 4 × 4 min hard / 3 min easy, or 30 min steady', minutes: 40, skip: skip(legsBlocked) },
       { id: 'mob', label: 'Spine & hip mobility', detail: 'Fetal tuck, cat-cow, hip flexor stretch in foot loops', minutes: 10 },
-      { id: 'shoulder', label: 'Shoulder range check', detail: 'Arm raises with the camera coach — tracks range over the mission', minutes: 5, coach: 'arm_raise' },
+      { id: 'shoulder', label: 'Shoulder range check', detail: 'Arm raises with the camera coach, to track your range over the mission', minutes: 5, coach: 'arm_raise' },
     ],
     preflight: [
-      { id: 'strength', label: 'Strength training', detail: 'Squat, lunge, deadlift, calf raise — build reserve before flight', minutes: 50, coach: 'squat' },
+      { id: 'strength', label: 'Strength training', detail: 'Squat, lunge, deadlift, calf raise. Build strength before flight', minutes: 50, coach: 'squat' },
       { id: 'aero', label: 'Aerobic base', detail: '30–40 min run, row or cycle', minutes: 35 },
       { id: 'balance', label: 'Balance practice + baseline test', detail: 'Feet together, eyes closed, tandem stance', minutes: 10 },
     ],
@@ -93,7 +92,7 @@ export function exercisePlan(s: State, p: CrewProfile): { headline: string; item
       { id: 'sts', label: 'Sit-to-stand practice', detail: '3 × 5 slow reps from a chair, with the coach', minutes: 10, coach: 'sit_to_stand', skip: skip(legsBlocked) },
     ],
     surface: [
-      { id: 'walk', label: 'Walking / EVA-prep conditioning', detail: 'Partial gravity loads bones a little — use it daily', minutes: 30 },
+      { id: 'walk', label: 'Walking / EVA-prep conditioning', detail: 'Partial gravity loads your bones a little. Use it every day', minutes: 30 },
       { id: 'strength', label: 'Resistive training', detail: 'Squats and lunges with the coach, 3 × 10', minutes: 40, coach: 'lunge', skip: skip(legsBlocked) },
       { id: 'balance', label: 'Balance drills', detail: 'Tandem stance, single-leg holds near a rail', minutes: 10 },
     ],
@@ -105,7 +104,7 @@ export function exercisePlan(s: State, p: CrewProfile): { headline: string; item
   const list = items[ph].map((i) => ({ ...i, done: i.coach ? done(i.coach) : false }))
   const total = list.filter((i) => !i.skip).reduce((a, b) => a + b.minutes, 0)
   const headline = ph === 'transit'
-    ? `Day ${mg} floating: about ${total} min of countermeasure exercise. Long-duration crews exercise ~2 h a day to protect bone and muscle.`
+    ? `About ${total} minutes of exercise today. On long missions crews exercise about 2 hours a day to protect bone and muscle.`
     : `${PHASES[ph].label}: about ${total} min today.`
   return { headline, items: list, notes }
 }

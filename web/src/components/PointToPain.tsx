@@ -82,7 +82,7 @@ export function PointToPain({ onConfirm }: { onConfirm: (region: Region, side: '
         <div className="overlay">
           {phase === 'idle' && 'Stand back so your body is in view. Touch the sore spot with one fingertip and hold still.'}
           {phase === 'loading' && 'Loading on-device pose + hand models…'}
-          {phase === 'live' && (hit ? `Touching: ${REGION_LABEL[hit.region]}${hit.side !== 'middle' ? ` (${hit.side})` : ''} — hold ${Math.round(progress * 100)}%` : 'Touch the spot that hurts with one fingertip.')}
+          {phase === 'live' && (hit ? `Touching: ${REGION_LABEL[hit.region]}${hit.side !== 'middle' ? ` (${hit.side})` : ''}. Hold ${Math.round(progress * 100)}%` : 'Touch the spot that hurts with one fingertip.')}
           {phase === 'done' && confirmed && `Got it: ${REGION_LABEL[confirmed.region]}${confirmed.side !== 'middle' ? ` (${confirmed.side})` : ''}.`}
           {phase === 'error' && `Camera or model failed: ${err}`}
         </div>
@@ -92,7 +92,7 @@ export function PointToPain({ onConfirm }: { onConfirm: (region: Region, side: '
           <button className="btn primary" onClick={start}>{phase === 'done' ? <><RotateCcw /> Point again</> : <><Camera /> Start camera</>}</button>
         )}
         {phase === 'live' && <button className="btn" onClick={() => { session.current?.stop(); session.current = null; setPhase('idle') }}>Stop</button>}
-        <small className="privacy">🔒 On-device. Turn around to point at your back — the trunk switches to back regions.</small>
+        <small className="privacy">🔒 Stays on this device. To point at your back, turn around.</small>
       </div>
     </div>
   )

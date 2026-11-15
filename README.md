@@ -17,7 +17,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 | Area | Status | Where |
 | --- | --- | --- |
-| Landing site (hero with scroll-driven "daily check" build, how-it-works scroll story, mission-phase shelf, NASA-evidence section, crew medical officer (CMO) board, safety section) | ✅ | `web/src/site/` |
+| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. Sample crew only on request, clearly labelled | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
 | App shell: sidebar dashboard, light/dark theme, works on phones (no horizontal scroll at 375 px) | ✅ | `web/src/App.tsx`, `web/src/styles.css` |
 | Daily face scan (MediaPipe Face Landmarker in a Web Worker): rPPG heart-rate **estimate** (POS method), blink rate, PERCLOS, face-width ÷ IPD ratio, light/motion/presence quality gate → "No data" | ✅ | `web/src/vision/`, `web/src/engine/face.ts`, `rppg.ts` |
 | Mood & sleep check-in, optional body mass | ✅ | `web/src/screens/DailyCheck.tsx` |
@@ -42,6 +42,9 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | CMO view: all crew, worst first, reasons; delayed downlink to Earth (light-time) | ✅ | `web/src/screens/Medical.tsx` |
 | Habitat server (FastAPI + SQLite): same rules in Python, sync, crew overview, downlink, NASA search | ✅ | `server/` |
 | Offline PWA (service worker, bundled models) | ✅ (production build) | `web/public/sw.js` |
+| **Crew pet**: a companion that grows from daily care (check, exercise, food, pain reports), never from health results; missing days make it sleepy, nothing is lost | ✅ | `web/src/engine/pet.ts`, `web/src/components/Pet.tsx` |
+| **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
+| 30-second ad: one phone, animated screens, rendered to MP4 | ✅ | `ad/index.html`, `docs/AD_DEMO_PLAN.md` |
 
 ## Run locally
 
@@ -102,7 +105,20 @@ VITE_SUPABASE_URL=https://<project>.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
 
-Static build: `cd web && npm run build` → `web/dist/` (no server needed; the demo crew loads on first open).
+Login and identity: see `docs/IDENTITY_PLAN.md` for the current design and proposed improvements.
+
+Static build: `cd web && npm run build` → `web/dist/` (no server needed; first open shows a short setup, or "Try it with a sample crew").
+
+### iOS app (Xcode)
+Needs Xcode 16+ (tested with Xcode 26.6). The first build needs internet once so Swift Package Manager can fetch Capacitor.
+```bash
+cd web
+npm run ios          # downloads models if missing, builds, syncs, opens ios/App/App.xcodeproj
+```
+In Xcode pick the **App** scheme and an iPhone simulator, then Run. On a real iPhone, set your team under Signing & Capabilities. After changing web code, run `npm run ios:sync`.
+
+### Ad video
+Open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart). The rendered video is `ad/crew-mirror-ad.mp4`.
 
 ## How the rules work
 
@@ -151,6 +167,8 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | three.js, @react-three/fiber, @react-three/drei | 3D viewer | MIT |
 | Draco decoder (three.js examples) | Decompress the GLBs offline | Apache-2.0 |
 | @supabase/supabase-js | Optional accounts & sync | MIT |
+| Capacitor 8 (@capacitor/core, @capacitor/ios, @capacitor/cli) — https://capacitorjs.com | iOS app shell | MIT |
+| Playwright + ffmpeg (imageio-ffmpeg) | Render the ad to MP4 (tools only, not shipped) | Apache-2.0 / LGPL |
 | Wang et al. 2017, "Algorithmic Principles of Remote PPG", IEEE TBME — https://doi.org/10.1109/TBME.2016.2609282 | rPPG POS method | Paper (method only) |
 | Zeitlin et al. 2013 (Science), Hassler et al. 2014 (Science), Zhang et al. 2020 (Science Advances) | Radiation dose-rate context | Papers (values cited) |
 | NASA articles: Astronauts' spines; Walk the line; Field Test (NTRS 20160013636); space nutrition & bone (NTRS 20080026254) | "Why it hurts" cards | Public NASA web pages |

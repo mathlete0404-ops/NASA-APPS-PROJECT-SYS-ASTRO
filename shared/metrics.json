@@ -27,7 +27,7 @@
     },
     {
       "id": "perclos",
-      "label": "Eye closure (PERCLOS)",
+      "label": "Eye closure",
       "unit": "%",
       "floor": 2,
       "group": "face",
@@ -36,7 +36,7 @@
     {
       "id": "face_width",
       "label": "Face-width ratio (fluid shift)",
-      "unit": "×IPD",
+      "unit": "× eye distance",
       "floor": 0.015,
       "group": "face",
       "source": "Face scan · landmarks"
@@ -76,7 +76,7 @@
     {
       "id": "sway_eo",
       "label": "Sway, eyes open",
-      "unit": "% SW",
+      "unit": "% of shoulder width",
       "floor": 0.3,
       "group": "balance",
       "source": "Balance · pose"
@@ -84,7 +84,7 @@
     {
       "id": "sway_ec",
       "label": "Sway, eyes closed",
-      "unit": "% SW",
+      "unit": "% of shoulder width",
       "floor": 0.4,
       "group": "balance",
       "source": "Balance · pose"
@@ -92,7 +92,7 @@
     {
       "id": "sway_tandem",
       "label": "Sway, tandem stance",
-      "unit": "% SW",
+      "unit": "% of shoulder width",
       "floor": 0.5,
       "group": "balance",
       "source": "Balance · pose"

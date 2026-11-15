@@ -12,6 +12,9 @@ createRoot(document.getElementById('root')!).render(
 )
 
 // Offline (PWA): cache the app shell and on-device models after the first visit.
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+// Skipped in the iOS app (capacitor://): service workers don't run there, and the app
+// bundle already holds every file offline.
+if ('serviceWorker' in navigator && import.meta.env.PROD && location.protocol !== 'capacitor:') {
   addEventListener('load', () => void navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js'))
 }
+

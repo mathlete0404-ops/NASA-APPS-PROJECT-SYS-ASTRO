@@ -6,6 +6,7 @@ import type { CalendarEvent, CrewProfile, DownlinkMsg, FoodEntry, Session, Sympt
 import { PHASES } from '../content/mission'
 import { metricStatus, METRICS, type StatusResult } from '../engine/status'
 import { api } from './api'
+import { bootDone } from '../boot'
 import * as cloud from './cloud'
 
 export interface State {
@@ -20,9 +21,14 @@ export interface State {
   food: FoodEntry[]
   online: boolean
   account: { email: string; callSign: string; mission: string; isCmo: boolean } | null
+  /** Finished the first-open setup (who you are). */
+  onboarded: boolean
+  /** Looking at the sample crew instead of your own data. */
+  sample: boolean
 }
 
-let state: State = { loaded: false, crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], online: false, account: null }
+const KEY = 'crew-mirror:v2'
+let state: State = { loaded: false, crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], online: false, account: null, onboarded: false, sample: false }
 const subs = new Set<() => void>()
 const emit = () => subs.forEach((f) => f())
 
@@ -33,9 +39,9 @@ function setState(patch: Partial<State>, persist = true) {
 }
 
 async function save() {
-  const { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food } = state
+  const { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded, sample } = state
   try {
-    await set('crew-mirror:v1', { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food })
+    await set(KEY, { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded, sample })
   } catch {
     /* private mode etc. — the app still works in memory */
   }
@@ -44,16 +50,14 @@ async function save() {
 export async function load() {
   let saved: Partial<State> | undefined
   try {
-    saved = await get('crew-mirror:v1')
+    saved = await get(KEY)
   } catch {
     saved = undefined
   }
-  if (saved?.crew?.length) setState({ events: [], workouts: [], food: [], ...saved, loaded: true }, false)
-  else {
-    const { demoState } = await import('./demo')
-    setState({ ...demoState(), loaded: true })
-    void api.pushAll(state, microgravityDays)
-  }
+  // First open: no data and no fake crew — the welcome setup asks who you are.
+  if (saved?.crew?.length) setState({ events: [], workouts: [], food: [], onboarded: true, sample: false, ...saved, loaded: true }, false)
+  else setState({ loaded: true }, false)
+  bootDone()
   void refreshOnline()
   cloud.onCloudUser((u) => void onAccount(u))
   void cloud.initCloud().catch(() => undefined)
@@ -210,21 +214,29 @@ export function addDownlink(m: DownlinkMsg) {
   void api.pushDownlink(m)
 }
 
-export async function resetDemo() {
+/** First-open setup: create this device's own crew profile. */
+export function createProfile(p: CrewProfile) {
+  setState({ crew: [p], activeCrew: p.id, sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], onboarded: true, sample: false })
+  void api.pushProfile(p, microgravityDays(p))
+}
+
+/** Look around with the sample crew (clearly labelled; your own data is not touched until you exit). */
+export async function loadSample() {
   const { demoState } = await import('./demo')
-  setState({ ...demoState() })
+  setState({ ...demoState(), onboarded: true, sample: true })
   await api.resetDemo()
   await api.pushAll(state, microgravityDays)
 }
+export const resetDemo = loadSample
 
+/** Leave the sample crew / erase this device → back to the welcome setup. */
 export async function resetEmpty() {
   try {
     await clear()
   } catch {
     /* ignore */
   }
-  const { emptyState } = await import('./demo')
-  setState({ ...emptyState() })
+  setState({ crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], onboarded: false, sample: false })
 }
 
 /** Everything on this device as JSON (derived numbers only). */

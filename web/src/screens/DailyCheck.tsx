@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { Camera } from 'lucide-react'
 import { activeProfile, addSession, crewStatus, missionDay, uid, useStore } from '../data/store'
 import type { Measurement } from '../data/types'
 import { analyseFaceScan, type FaceScanResult, type FaceSample } from '../engine/face'
 import { METRICS } from '../engine/status'
 import { drawFace, VisionSession } from '../vision/camera'
-import { EvidenceChips, fmtNum, StatusChip } from '../components/ui'
+import { EvidenceChips, fmtNum, Spark, StatusChip } from '../components/ui'
 
 type Step = 'scan' | 'mood' | 'done'
 
@@ -75,7 +76,7 @@ export function DailyCheck({ go }: { go: (t: string) => void }) {
           </div>
           <div className="card">
             <h3>Face scan</h3>
-            {skipped || !scan ? <p className="muted">Skipped — face measures will show “No data” today.</p> : <ScanSummary r={scan} />}
+            {skipped || !scan ? <p className="muted">Skipped. Face measures will show “No data” today.</p> : <ScanSummary r={scan} />}
           </div>
         </div>
       )}
@@ -116,7 +117,7 @@ function Result({ crewId, go, scan }: { crewId: string; go: (t: string) => void;
     <div className="stack">
       <div className={`banner ${act ? 'act' : ids.some((id) => st[id]?.level === 'watch') ? 'watch' : 'usual'}`}>
         <h2>Check saved</h2>
-        <p>{act ? 'Something is well outside your usual: tell the crew medical officer today.' : 'Compared with your own baseline — not with population averages.'}</p>
+        <p>{act ? 'Something is well outside your usual: tell the crew medical officer today.' : 'Compared with your own normal, not with an average person.'}</p>
       </div>
       <div className="card">
         <table>
@@ -150,6 +151,8 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
   const [dur, setDur] = useState(defaultSeconds)
   const [info, setInfo] = useState('')
   const [live, setLive] = useState({ face: false, blink: 0 })
+  const [wave, setWave] = useState<number[]>([])
+  const waveBuf = useRef<number[]>([])
   const session = useRef<VisionSession | null>(null)
 
   useEffect(() => () => session.current?.stop(), [])
@@ -165,6 +168,11 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
       if (!t0) return
       samples.push({ t: r.ts, f: r.face ?? null })
       setLive({ face: !!r.face, blink: r.face?.blink ?? 0 })
+      if (r.face?.hy != null) {
+        waveBuf.current.push(r.face.hy)
+        if (waveBuf.current.length > 240) waveBuf.current.shift()
+        if (waveBuf.current.length % 4 === 0) setWave([...waveBuf.current])
+      }
       const el = (r.ts - t0) / 1000
       setLeft(Math.max(0, Math.ceil(dur - el)))
       if (el >= dur) {
@@ -191,11 +199,18 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
       <div className="stack">
         <div className="stage">
           <canvas ref={canvas} width={640} height={480} />
+          {(phase === 'idle' || phase === 'loading') && (
+            <div className="stage-idle">
+              <span className="stage-ic"><Camera /></span>
+              <b>{phase === 'loading' ? 'Starting the camera…' : 'Your face mesh appears here'}</b>
+              <small>Only the dots are drawn. Video is never shown, saved or sent.</small>
+            </div>
+          )}
           {phase === 'scanning' && <div className="count">{left}s</div>}
           <div className="overlay">
             {phase === 'idle' && 'Sit still, face the screen, even light on your face.'}
             {phase === 'loading' && 'Loading on-device model…'}
-            {phase === 'scanning' && (live.face ? 'Hold still and breathe normally.' : 'Face not found — look at the screen.')}
+            {phase === 'scanning' && (live.face ? 'Hold still and breathe normally.' : 'Can’t see your face. Look at the screen.')}
             {phase === 'error' && `Camera or model failed: ${err}`}
           </div>
         </div>
@@ -203,14 +218,14 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
       </div>
       <div className="card stack">
         <h2>Daily face scan</h2>
-        <p>Measures, against <b>your own</b> baseline:</p>
+        <p>Measured against <b>your own</b> normal:</p>
         <ul className="reasons">
-          <li><b>Heart rate estimate</b> from tiny skin-colour changes (rPPG, POS method).</li>
+          <li><b>Heart rate estimate</b> from tiny changes in skin colour.</li>
           <li><b>Breathing rate estimate</b> from the slow rise and fall of your head and skin tone (60 s scan).</li>
-          <li><b>Blink rate & eye closure</b> (fatigue) from eye blendshapes.</li>
-          <li><b>Face-width ratio</b> (cheek width ÷ pupil distance) for headward fluid shift.</li>
+          <li><b>Blink rate & eye closure</b> (signs of tiredness) from how your eyelids move.</li>
+          <li><b>Face-width ratio</b> (cheek width ÷ eye distance) to spot fluid moving to the head.</li>
         </ul>
-        <p className="muted">Bad light, movement or a hidden face → “No data”, never “Fine”.</p>
+        <p className="muted">If the light is bad, you move, or your face is hidden, the result is “No data”, never “Fine”.</p>
         <div className="row">
           <label>Length <select value={dur} onChange={(e) => setDur(+e.target.value)} disabled={phase !== 'idle'}>
             <option value={30}>30 s (quick)</option><option value={60}>60 s (best)</option>
@@ -222,7 +237,13 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
           </button>
           <button className="btn ghost" onClick={() => { session.current?.stop(); onSkip() }}>Skip today</button>
         </div>
-        {phase === 'scanning' && <div className="row"><small>Eye closure now: {(live.blink * 100).toFixed(0)}%</small></div>}
+        {phase === 'scanning' && (
+          <div>
+            <small className="muted">Breathing (live). Breathe normally; the line should rise and fall slowly.</small>
+            <Spark values={wave.map((v, i, a) => v - a.slice(Math.max(0, i - 60), i + 1).reduce((x, y) => x + y, 0) / Math.min(i + 1, 61))} width={320} height={44} />
+            <small className="muted">Eye closure now: {(live.blink * 100).toFixed(0)}%</small>
+          </div>
+        )}
       </div>
     </div>
   )

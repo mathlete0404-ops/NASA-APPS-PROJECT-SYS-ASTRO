@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react'
 import { OSDR_EVIDENCE, type OsdrAnalyte } from '../content/evidence'
 import catalog from '../generated/nasa_catalog.json'
 import { api } from '../data/api'
-import { useStore } from '../data/store'
+import { activeProfile, microgravityDays, useStore } from '../data/store'
+import { RADIATION_CONTEXT } from '../content/mission'
+import { boneLossEstimate } from '../engine/triage'
+import { EvidenceChips } from '../components/ui'
 
 const SHOW = ['HEMOGLOBIN', 'RED BLOOD CELL COUNT', 'WHITE BLOOD CELL COUNT', 'PLATELET COUNT', 'GLUCOSE', 'CALCIUM', 'ALBUMIN', 'CREATININE']
 const TPS = ['L-92', 'L-44', 'L-3', 'R+1', 'R+45', 'R+82', 'R+194']
@@ -104,6 +107,26 @@ export function Evidence() {
         </div>
         <p><small>Dataset metadata from data.nasa.gov</small></p>
       </div>
+
+      <RadiationBone />
+    </div>
+  )
+}
+
+function RadiationBone() {
+  const s = useStore()
+  const p = activeProfile(s)
+  const mg = p ? microgravityDays(p) : 0
+  return (
+    <div className="card">
+      <h2>Radiation & bone in space</h2>
+      <p className="muted">Typical radiation dose rates for context — on a mission, the vehicle dosimeter is the real measure.</p>
+      <table>
+        <thead><tr><th>Where</th><th className="num">mSv/day</th><th>Source</th></tr></thead>
+        <tbody>{RADIATION_CONTEXT.map((r) => <tr key={r.place}><td>{r.place}</td><td className="num">{r.mSvDay}</td><td><small>{r.source}</small></td></tr>)}</tbody>
+      </table>
+      <p style={{ marginTop: 10 }}>Weight-bearing bones (hips, spine, legs) lose about <b>1% a month</b> while weightless without full exercise and nutrition.{mg > 0 && <> For your time weightless, that is an estimated <b>{boneLossEstimate(mg)}%</b> — which is why bony pain is treated more carefully the longer you fly.</>}</p>
+      <EvidenceChips ids={['radlab', 'nutrition', 'nlsp']} />
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { METRICS, type Level } from '../engine/status'
 import type { Region } from '../engine/triage'
 import type { Highlight, Tone } from './BodyViewer'
 import { PATTERN_LABEL } from '../engine/triage'
+import { plain } from '../engine/describe'
 
 export interface Problem { id: string; tone: Tone; level: Level | 'act_now' | 'cmo' | 'self_care'; title: string; detail: string; region: Region; side?: 'left' | 'right' | 'middle' | 'both'; highlight: Highlight[] }
 
@@ -12,7 +13,7 @@ const RECENT_DAYS = 14
 
 // Which body part a measurement "lives" in, for the overlay.
 const METRIC_SITE: Record<string, { region: Region; match?: RegExp; why: string }> = {
-  face_width: { region: 'head', why: 'Facial fullness — headward fluid shift' },
+  face_width: { region: 'head', why: 'Fuller face: fluid moving to the head' },
   blink_rate: { region: 'head', why: 'Fatigue signs around the eyes' },
   perclos: { region: 'head', why: 'Fatigue signs around the eyes' },
   sleep_hours: { region: 'head', why: 'Sleep below your usual' },
@@ -24,7 +25,7 @@ const METRIC_SITE: Record<string, { region: Region; match?: RegExp; why: string 
   sway_ec: { region: 'ankle_foot', why: 'Balance with eyes closed above your usual' },
   sway_tandem: { region: 'ankle_foot', why: 'Tandem-stance balance above your usual' },
   sts_time: { region: 'thigh', match: /vastus|rectus femoris|glute/i, why: 'Leg strength (sit-to-stand) below your usual' },
-  body_mass: { region: 'thigh', match: /vastus|rectus femoris|soleus|gastrocnemius|biceps femoris/i, why: 'Body mass below your usual — check muscle & food intake' },
+  body_mass: { region: 'thigh', match: /vastus|rectus femoris|soleus|gastrocnemius|biceps femoris/i, why: 'Body mass below your usual. Check food intake and muscle' },
 }
 
 export function problemsFor(s: State, crewId: string): Problem[] {
@@ -49,7 +50,7 @@ export function problemsFor(s: State, crewId: string): Problem[] {
     const tone: Tone = res.level === 'act' ? 'act' : 'watch'
     out.push({
       id: `m-${id}`, tone, level: res.level, region: site.region, side: 'both',
-      title: METRICS[id].label, detail: `${site.why} (z ${res.z! > 0 ? '+' : ''}${res.z})`,
+      title: METRICS[id].label, detail: plain(id, res),
       highlight: [site.match ? { tone, region: site.region, match: site.match } : { tone, region: site.region, layers: ['skin', 'muscles'] }],
     })
   }

@@ -118,6 +118,8 @@ function onFrame(bm: ImageBitmap, ts: number) {
           nose: [pts[1].x, pts[1].y],
           // head turn: nose offset from the cheek midpoint, as a share of face width
           yaw: (pts[1].x - (pts[234].x + pts[454].x) / 2) / (Math.abs(pts[454].x - pts[234].x) || 1),
+          // breathing: mean height of five stable points, scaled by face height (distance-independent)
+          hy: ([1, 10, 152, 234, 454].reduce((acc, i) => acc + pts[i].y, 0) / 5) / (Math.abs(pts[152].y - pts[10].y) || 1),
         },
       }, { transfer: [xy.buffer] })
     } else if (task === 'point' && pose && hand) {

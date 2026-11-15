@@ -9,6 +9,8 @@ export interface FaceFrame {
   faceFrac: number
   nose: [number, number]
   yaw?: number
+  /** head height signal for breathing (face-height units) */
+  hy?: number
 }
 /** xyv: image-normalised x, y + visibility. world: 3D metres (x right, y down, z toward camera), hip-centred. */
 export interface PoseFrame { xyv: Float32Array; aspect: number; world?: Float32Array | null }

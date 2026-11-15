@@ -75,7 +75,7 @@ export const LEVEL_LABEL: Record<Level, string> = {
   watch: 'Watch',
   act: 'Act',
   nodata: 'No data',
-  baseline: 'Baseline',
+  baseline: 'Learning',
 }
 // Overall = most urgent metric. A baseline still being built never outranks a real result.
 export const LEVEL_RANK: Record<Level, number> = { act: 4, watch: 3, nodata: 2, usual: 1, baseline: 0 }

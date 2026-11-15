@@ -47,7 +47,7 @@ export function Body({ go }: { go: (t: string) => void }) {
     <div className="split-3d">
       <div className="stack">
         <Suspense fallback={<div className="body3d" style={{ height: 620, display: 'grid', placeItems: 'center', color: '#94a3b8' }}>Loading 3D anatomy…</div>}>
-          <BodyViewer height={620} highlights={highlights} selected={picked?.zname} onPick={(pk, st) => { setPicked(pk); setStack(st) }} focus={focus} initialLayers={['muscles', 'skeleton']} />
+          <BodyViewer height={620} highlights={highlights} selected={picked?.zname} onPick={(pk, st) => { setPicked(pk); setStack(st) }} focus={focus} />
         </Suspense>
         <div className="legend">
           <span><i className="legend-dot" style={{ background: '#ef4444' }} />Act / see medical officer</span>
@@ -60,7 +60,7 @@ export function Body({ go }: { go: (t: string) => void }) {
 
       <div className="stack">
         <div className="card">
-          <p className="kicker"><Search size={13} style={{ verticalAlign: -2 }} /> Find a structure</p>
+          <div className="card-h"><span className="ic"><Search /></span><h3>Find a structure</h3></div>
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`Search ${all.length.toLocaleString()} bones, muscles, nerves… e.g. “soleus”, “scaphoid”`} style={{ width: '100%' }} />
           {results.length > 0 && (
             <div className="stack" style={{ marginTop: 8, maxHeight: 240, overflowY: 'auto' }}>
@@ -71,22 +71,27 @@ export function Body({ go }: { go: (t: string) => void }) {
               ))}
             </div>
           )}
-          <small className="muted">Tip: turn on the layer you are looking for (e.g. Nerves) to see it highlighted.</small>
+          <small className="muted">The view switches to show what you pick.</small>
         </div>
 
         <div className="card">
-          <p className="kicker">Problems on the body · last 14 days</p>
+          <div className="card-h"><span className="ic"><HeartPulse /></span><h3>Needs attention</h3><span className="sub">last 14 days</span></div>
           {problems.length === 0 && <p className="muted">Nothing flagged. Your measures are within your usual range and there are no recent pain reports.</p>}
           <div className="stack" style={{ marginTop: 6 }}>
-            {problems.map((x) => (
-              <button key={x.id} className={`problem${active?.id === x.id ? ' on' : ''}`} onClick={() => setActive(active?.id === x.id ? null : x)}>
-                <span className="legend-dot" style={{ background: x.tone === 'act' ? '#ef4444' : '#f59e0b', marginTop: 5 }} />
-                <span style={{ flex: 1 }}>
-                  <b>{REGION_LABEL[x.region]}{x.side && x.side !== 'middle' && x.side !== 'both' ? ` · ${x.side}` : ''}</b> — {x.title}
-                  <br /><small>{x.detail}</small>
-                </span>
-              </button>
-            ))}
+            {Object.entries(problems.reduce<Record<string, Problem[]>>((acc, x) => { const k = `${x.region}|${x.side ?? ''}`; (acc[k] ??= []).push(x); return acc }, {})).map(([k, list]) => {
+              const x = list[0]
+              const on = active && list.some((y) => y.id === active.id)
+              const worstTone = list.some((y) => y.tone === 'act') ? 'act' : 'watch'
+              return (
+                <button key={k} className={`problem${on ? ' on' : ''}`} onClick={() => setActive(on ? null : { ...x, tone: worstTone, highlight: list.flatMap((y) => y.highlight) })}>
+                  <span className="legend-dot" style={{ background: worstTone === 'act' ? '#ef4444' : '#f59e0b', marginTop: 5 }} />
+                  <span style={{ flex: 1 }}>
+                    <b>{REGION_LABEL[x.region]}{x.side && x.side !== 'middle' && x.side !== 'both' ? ` · ${x.side}` : ''}</b>
+                    {list.map((y) => <small key={y.id} style={{ display: 'block', marginTop: 3 }}>{y.detail}</small>)}
+                  </span>
+                </button>
+              )
+            })}
           </div>
           {active && <button className="btn small ghost" style={{ marginTop: 8 }} onClick={() => setActive(null)}>Show all problems</button>}
         </div>
@@ -131,9 +136,8 @@ export function Body({ go }: { go: (t: string) => void }) {
           </div>
         ) : (
           <div className="card">
-            <p className="kicker">Explore</p>
-            <h3><HeartPulse size={16} style={{ verticalAlign: -2 }} /> Tap any muscle, bone, nerve or skin region</h3>
-            <p className="muted" style={{ fontSize: '.92rem' }}>Turn layers on and off, use x-ray to see bones and nerves through the muscles, and spin the body to the back. Tap where it hurts and choose <b>It hurts here</b> to start a report from that exact spot.</p>
+            <div className="card-h"><span className="ic"><MapPin /></span><h3>Tap anywhere on the body</h3></div>
+            <p className="muted" style={{ fontSize: '.92rem', marginTop: 0 }}>Switch between <b>Body</b>, <b>Muscles</b>, <b>Bones</b> and <b>Nerves</b> at the top. Drag to turn, scroll to zoom. Tap a spot and choose <b>It hurts here</b> to report pain from exactly there.</p>
             <small>Anatomy: Z-Anatomy (CC BY-SA 4.0), from BodyParts3D (CC BY-SA 2.1 JP). {all.length.toLocaleString()} structures; sex-specific anatomy is not included.</small>
           </div>
         )}

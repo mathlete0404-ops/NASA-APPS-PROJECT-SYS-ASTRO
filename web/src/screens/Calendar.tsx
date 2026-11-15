@@ -69,7 +69,7 @@ export function CalendarPage({ go }: { go: (t: string) => void }) {
             <button className="btn icon small" onClick={() => setMonth(new Date(month.getFullYear(), month.getMonth() + 1, 1))} title="Next month"><ChevronRight /></button>
             <button className="btn small" onClick={() => { const d = new Date(); setMonth(new Date(d.getFullYear(), d.getMonth(), 1)); setSel(today) }}>Today</button>
           </div>
-          <span className="pill"><Flame size={14} style={{ color: 'var(--watch)' }} /> {streak}-day check streak</span>
+          <span className="pill"><Flame size={14} style={{ color: 'var(--watch)' }} /> {streak > 0 ? `${streak}-day check streak` : 'Check in today to start a streak'}</span>
         </div>
         <div className="cal">
           {DOW.map((d) => <div key={d} className="dow">{d}</div>)}
@@ -98,7 +98,7 @@ export function CalendarPage({ go }: { go: (t: string) => void }) {
 
       <div className="stack">
         <div className="card">
-          <p className="kicker">{selDate.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })} · mission day {missionDay(p, selDate)}</p>
+          <p className="kicker">{selDate.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })} · flight day {missionDay(p, selDate)}</p>
           {lvl ? <p>Daily check: <StatusChip level={lvl} /></p> : <p className="muted">No daily check this day.{sel === today && <> <button className="btn small" onClick={() => go('check')}>Do it now</button></>}</p>}
           {dSym.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>🩹 <b>{REGION_LABEL[x.region]}</b> {x.kind} {x.intensity}/10 — {PATTERN_LABEL[x.result.pattern]}{x.source ? ` · source: ${x.source.label}` : ''}</p>)}
           {dBal.map((x) => <p key={x.id} style={{ fontSize: '.9rem' }}>⚖️ Balance: {x.measurements.map((m) => `${METRICS[m.metric]?.label ?? m.metric} ${m.ok ? m.value : 'No data'}`).join(', ')}</p>)}
