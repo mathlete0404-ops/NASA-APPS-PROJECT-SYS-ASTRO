@@ -1,7 +1,7 @@
 // "Body": the 3D anatomy with the crew member's current problems lit up. Tap anything to
 // learn what it is, see its history, or report pain right there.
 import { lazy, Suspense, useMemo, useState } from 'react'
-import { HeartPulse, Info, Layers, MapPin, Search } from 'lucide-react'
+import { HeartPulse, Info, Layers, MapPin, ScanFace, Search } from 'lucide-react'
 import manifest from '../generated/anatomy_manifest.json'
 import { activeProfile, setReportDraft, useStore } from '../data/store'
 import { problemsFor, type Problem } from '../body3d/problems'
@@ -30,6 +30,7 @@ export function Body({ go }: { go: (t: string) => void }) {
   const [active, setActive] = useState<Problem | null>(null)
   const problems = useMemo(() => (p ? problemsFor(s, p.id) : []), [s, p])
   if (!p) return null
+  const hasData = s.sessions.some((x) => x.crewId === p.id) || s.symptoms.some((x) => x.crewId === p.id)
 
   const highlights: Highlight[] = active ? active.highlight : problems.flatMap((x) => x.highlight)
   const focus = active ? { region: active.region, side: active.side } : null
@@ -76,7 +77,12 @@ export function Body({ go }: { go: (t: string) => void }) {
 
         <div className="card">
           <div className="card-h"><span className="ic"><HeartPulse /></span><h3>Needs attention</h3><span className="sub">last 14 days</span></div>
-          {problems.length === 0 && <p className="muted">Nothing flagged. Your measures are within your usual range and there are no recent pain reports.</p>}
+          {problems.length === 0 && (hasData
+            ? <p className="muted">Nothing flagged right now: no measurement outside your normal and no recent pain reports.</p>
+            : <>
+              <p className="muted" style={{ marginTop: 0 }}>No checks or pain reports yet. After your daily checks, anything outside your normal, and any pain you report, lights up on the body here.</p>
+              <button className="btn primary small" onClick={() => go('check')}><ScanFace /> Start today’s check</button>
+            </>)}
           <div className="stack" style={{ marginTop: 6 }}>
             {Object.entries(problems.reduce<Record<string, Problem[]>>((acc, x) => { const k = `${x.region}|${x.side ?? ''}`; (acc[k] ??= []).push(x); return acc }, {})).map(([k, list]) => {
               const x = list[0]

@@ -5,7 +5,9 @@ Challenge: *Create Health Monitoring Software for Astronauts on Space Missions*.
 
 > **Prototype, not a medical device.** Results are patterns, never diagnoses. Camera video never leaves the browser.
 
-**Live demo:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
+**Live app:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
+
+**30-second ad:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/ (video: [`ad/crew-mirror-ad.mp4`](https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/crew-mirror-ad.mp4)) · **iOS app:** simulator build on the [Releases page](https://github.com/mathlete0404-ops/NASA-APPS-PROJECT-SYS-ASTRO/releases) (see [iOS app](#ios-app-xcode))
 
 A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
@@ -17,7 +19,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 | Area | Status | Where |
 | --- | --- | --- |
-| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. Sample crew only on request, clearly labelled | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
+| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. No pre-filled data: every page says what will appear and how to start | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
 | App shell: sidebar dashboard, light/dark theme, works on phones (no horizontal scroll at 375 px) | ✅ | `web/src/App.tsx`, `web/src/styles.css` |
 | Daily face scan (MediaPipe Face Landmarker in a Web Worker): rPPG heart-rate **estimate** (POS method), blink rate, PERCLOS, face-width ÷ IPD ratio, light/motion/presence quality gate → "No data" | ✅ | `web/src/vision/`, `web/src/engine/face.ts`, `rppg.ts` |
 | Mood & sleep check-in, optional body mass | ✅ | `web/src/screens/DailyCheck.tsx` |
@@ -43,8 +45,10 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | Habitat server (FastAPI + SQLite): same rules in Python, sync, crew overview, downlink, NASA search | ✅ | `server/` |
 | Offline PWA (service worker, bundled models) | ✅ (production build) | `web/public/sw.js` |
 | **Crew pet**: a companion that grows from daily care (check, exercise, food, pain reports), never from health results; missing days make it sleepy, nothing is lost | ✅ | `web/src/engine/pet.ts`, `web/src/components/Pet.tsx` |
+| **Daily check reminders**: morning reminder at a chosen time plus an optional 20:00 nudge if the check isn't done, planned 7 days ahead and re-planned after each check; a quiet "You haven't done today's check yet" line on Today. iOS: local notifications that arrive when the app is closed; web: shown only while the app is open | ✅ | `web/src/engine/reminders.ts`, `web/src/data/notify.ts`, `web/src/screens/Settings.tsx` |
+| **Space weather at a glance**: one-line pill at the top of Today ("Space weather: Quiet", "Radiation storm S3: shelter rules apply", "Last known: Quiet" offline), using the storm card's saved reading; tap to jump to the card | ✅ | `web/src/components/SpaceWeatherPill.tsx` |
 | **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
-| 30-second ad: one phone, animated screens, rendered to MP4 | ✅ | `ad/index.html`, `docs/AD_DEMO_PLAN.md` |
+| 30-second ad (v2): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, food, 3D body, space weather, calendar, pain check, reminders, pet hatch), rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
 
 ## Run locally
 
@@ -96,7 +100,7 @@ Cloud accounts: the team project is **`crew-mirror`** (Supabase, Seoul `ap-north
 update public.profiles set is_cmo = true where call_sign = 'MS2' and mission_code = 'ARES-1';
 ```
 
-In the Supabase dashboard, set **Auth → URL Configuration → Site URL** to the app's address (e.g. `http://localhost:5173` or the live site). For a live demo, you can turn off **Confirm email** so new accounts can sign in immediately.
+In the Supabase dashboard, set **Auth → URL Configuration → Site URL** to the app's address (e.g. `http://localhost:5173` or the live site). You can turn off **Confirm email** so new accounts can sign in immediately.
 
 For a different project, set:
 
@@ -107,7 +111,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 
 Login and identity: see `docs/IDENTITY_PLAN.md` for the current design and proposed improvements.
 
-Static build: `cd web && npm run build` → `web/dist/` (no server needed; first open shows a short setup, or "Try it with a sample crew").
+Static build: `cd web && npm run build` → `web/dist/` (no server needed; first open shows a short setup that creates your own profile).
 
 ### iOS app (Xcode)
 Needs Xcode 16+ (tested with Xcode 26.6). The first build needs internet once so Swift Package Manager can fetch Capacitor.
@@ -117,8 +121,17 @@ npm run ios          # downloads models if missing, builds, syncs, opens ios/App
 ```
 In Xcode pick the **App** scheme and an iPhone simulator, then Run. On a real iPhone, set your team under Signing & Capabilities. After changing web code, run `npm run ios:sync`.
 
+**Download instead of building:** each [GitHub Release](https://github.com/mathlete0404-ops/NASA-APPS-PROJECT-SYS-ASTRO/releases) tagged `ios-v*` has `CrewMirror-iOS-Simulator.zip`. It is an unsigned **iOS Simulator build** (Mac only, not for a real iPhone). Unzip it, boot a simulator (Xcode → Open Developer Tool → Simulator), then:
+```bash
+xcrun simctl install booted App.app && xcrun simctl launch booted org.sysastro.crewmirror
+```
+A real iPhone needs Xcode signing: `cd web && npm run ios`, then set your team under Signing & Capabilities.
+
+CI: `.github/workflows/ios.yml` builds the app on a macOS runner (Xcode 26.6) for pushes to `main` that touch `web/`, and publishes a Release when a tag `ios-v*` is pushed (`git tag ios-v0.1.1 && git push origin ios-v0.1.1`). The website workflow (`ci.yml`) ignores changes that only touch `web/ios/`, `ad/` or `docs/`, and the Pages site never contains the Xcode project.
+
 ### Ad video
-Open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart). The rendered video is `ad/crew-mirror-ad.mp4`.
+The ad is live at https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ad/ (published with the site by `ci.yml`; after an ad-only change, run that workflow by hand from the Actions tab). Locally, open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart); it works straight from disk, no server needed. The rendered video is `ad/crew-mirror-ad.mp4`.
+To re-capture the app clips, run the web app (`npm run dev` in `web/`) and `python ad/capture/capture.py` (Playwright). The capture writes a 21-day history for one astronaut into the capture browser's IndexedDB only (`ad/capture/fixture.js`); nothing is added to the app.
 
 ## How the rules work
 
@@ -135,15 +148,16 @@ The UI uses a "layered surfaces" style shared with the team's NullBase project: 
 
 - **3D body**: one adult body model, and sex-specific anatomy is removed on purpose. Region tags come from names plus body height, so a few edge structures may sit in a neighbouring region. The 2D map stays as a low-power fallback.
 - **Cloud accounts**: connected to the `crew-mirror` project. RLS was tested with throwaway users: own-rows only, medical officer reads only their mission, no self-promotion, no writing as another user. A real email sign-up was not tested end to end, because confirmation emails go to real inboxes.
-- **Balance tests** are disabled while floating (there is no "up"); they run pre-flight and after landing.
+- **Balance tests** are disabled while weightless (there is no "up"); they run pre-flight and after landing.
 - **Camera measures are not clinically validated.** The rPPG heart rate is labelled "estimate". Thresholds (light 50–230, motion, peak quality ≥ 0.3) are engineering choices tested on synthetic signals, not on astronauts.
 - **Range of motion** is measured for the shoulder in the coach (arm raise + "It hurts here"). Other joints still use the slider.
 - **Ghost coach** (replaying a recorded correct rep) and the finger-tap test are not built.
-- **Food values** are approximate demo numbers, and the targets are defaults for a crew nutritionist to set.
+- **Food values** are approximate reference values, and the targets are defaults for a crew nutritionist to set.
 - **RadLab** and the Environmental Data App are linked as evidence. Their data are not ingested; dose rates are published averages with citations.
 - **Solar storm card** reads Earth-orbit GOES data from NOAA (not NASA). Far from Earth the real flux differs, so it is context only and defers to vehicle dosimetry and mission storm rules. Without a network it shows the last saved reading, labelled "Last known".
+- **Reminders on the web** appear only while Crew Mirror is open (no push server). The iPhone app schedules real local notifications 7 days ahead; if the app is not opened for a week, they stop until it is opened again.
 - The data.nasa.gov API sometimes timed out during ingest, so the offline catalog is a partial snapshot (76 datasets).
-- Demo crew history is **synthetic** and labelled as such in the app.
+- The app ships with **no data**. Each astronaut builds their own baseline over their first 7 daily checks; until then pages show what will appear and how to start. Saved data from older builds that contained a sample crew is dropped on load, and setup opens again.
 
 ## Use of AI tools
 
@@ -168,7 +182,14 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | Draco decoder (three.js examples) | Decompress the GLBs offline | Apache-2.0 |
 | @supabase/supabase-js | Optional accounts & sync | MIT |
 | Capacitor 8 (@capacitor/core, @capacitor/ios, @capacitor/cli) — https://capacitorjs.com | iOS app shell | MIT |
+| @capacitor/local-notifications 8.3 — https://capacitorjs.com/docs/apis/local-notifications | Daily check reminders in the iOS app (`web/src/data/notify.ts`) | MIT |
 | Playwright + ffmpeg (imageio-ffmpeg) | Render the ad to MP4 (tools only, not shipped) | Apache-2.0 / LGPL |
+| NASA Blue Marble Next Generation, December 2004 (Reto Stöckli, NASA Earth Observatory), via NASA SVS 12564 — https://svs.gsfc.nasa.gov/12564 | Ad: Earth day map (`ad/textures/earth_day.jpg`) | Public domain (NASA) |
+| NASA SVS 3615 "Equirectangular Projected Earth" (Greg Shirah; Blue Marble NG + cloud composite) — https://svs.gsfc.nasa.gov/3615 | Ad: Earth cloud layer, extracted as the difference of the with/without-clouds stills (`ad/textures/earth_clouds.jpg`) | Public domain (NASA) |
+| NASA SVS 4720 "CGI Moon Kit" (LRO LROC color map, Ernie Wright) — https://svs.gsfc.nasa.gov/4720 | Ad: Moon color map (`ad/textures/moon.jpg`) | Public domain (NASA) |
+| USGS Astrogeology / NASA Viking MDIM2.1 global color mosaic (via Wikimedia Commons, `Mars_Viking_MDIM21_ClrMosaic_1km.jpg`) — https://astrogeology.usgs.gov/search/map/mars_viking_global_color_mosaic_925m | Ad: Mars color map (`ad/textures/mars.jpg`) | Public domain (USGS/NASA) |
+| MediaPipe canonical face model (`canonical_face_model.obj`, generic mesh, not a real person) — https://github.com/google-ai-edge/mediapipe/tree/master/mediapipe/modules/face_geometry/data | Ad: 478-point face mesh on the Daily check screen (`ad/data/face_mesh.js`) | Apache-2.0 |
+| three.js r187 (bundled to `ad/vendor/three.min.js`) — https://threejs.org | Ad: space opening (WebGL) | MIT |
 | Wang et al. 2017, "Algorithmic Principles of Remote PPG", IEEE TBME — https://doi.org/10.1109/TBME.2016.2609282 | rPPG POS method | Paper (method only) |
 | Zeitlin et al. 2013 (Science), Hassler et al. 2014 (Science), Zhang et al. 2020 (Science Advances) | Radiation dose-rate context | Papers (values cited) |
 | NASA articles: Astronauts' spines; Walk the line; Field Test (NTRS 20160013636); space nutrition & bone (NTRS 20080026254) | "Why it hurts" cards | Public NASA web pages |

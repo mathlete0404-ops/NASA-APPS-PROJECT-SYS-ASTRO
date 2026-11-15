@@ -23,12 +23,10 @@ export interface State {
   account: { email: string; callSign: string; mission: string; isCmo: boolean } | null
   /** Finished the first-open setup (who you are). */
   onboarded: boolean
-  /** Looking at the sample crew instead of your own data. */
-  sample: boolean
 }
 
 const KEY = 'crew-mirror:v2'
-let state: State = { loaded: false, crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], online: false, account: null, onboarded: false, sample: false }
+let state: State = { loaded: false, crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], online: false, account: null, onboarded: false }
 const subs = new Set<() => void>()
 const emit = () => subs.forEach((f) => f())
 
@@ -39,23 +37,46 @@ function setState(patch: Partial<State>, persist = true) {
 }
 
 async function save() {
-  const { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded, sample } = state
+  const { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded } = state
   try {
-    await set(KEY, { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded, sample })
+    await set(KEY, { crew, activeCrew, sessions, symptoms, downlink, events, workouts, food, onboarded })
   } catch {
     /* private mode etc. — the app still works in memory */
   }
 }
 
+type Saved = Partial<State> & { sample?: boolean }
+
+// Builds before 2026-11-15 could load a made-up crew (saved with `sample: true` and
+// `synthetic` records). None of it belongs to this astronaut: drop it, keep anything
+// they recorded themselves, and send them back to the first-open setup.
+const OLD_SAMPLE_IDS = /^(ev-(launch|eva1|eva2|med|land)|MS2-sym-1|(CDR|PLT|MS1|MS2)-wo-\d+)$/
+export function dropOldSample(saved: Saved): Partial<State> {
+  const own = <T extends { id: string }>(xs: T[] | undefined) =>
+    (xs ?? []).filter((x) => !(x as { synthetic?: boolean }).synthetic && !OLD_SAMPLE_IDS.test(x.id))
+  return {
+    crew: [], activeCrew: '', onboarded: false,
+    sessions: own(saved.sessions), symptoms: own(saved.symptoms), events: own(saved.events),
+    workouts: own(saved.workouts), food: own(saved.food), downlink: own(saved.downlink),
+  }
+}
+
 export async function load() {
-  let saved: Partial<State> | undefined
+  let saved: Saved | undefined
   try {
     saved = await get(KEY)
   } catch {
     saved = undefined
   }
-  // First open: no data and no fake crew — the welcome setup asks who you are.
-  if (saved?.crew?.length) setState({ events: [], workouts: [], food: [], onboarded: true, sample: false, ...saved, loaded: true }, false)
+  if (saved?.sample) {
+    const kept = dropOldSample(saved)
+    setState({ ...kept, loaded: true })
+  } else if (saved?.crew?.length) {
+    const rest: Saved = { ...saved }
+    delete rest.sample
+    setState({ events: [], workouts: [], food: [], onboarded: true, ...rest, loaded: true }, false)
+  }
+  // First open: no data yet — the welcome setup asks who you are.
   else setState({ loaded: true }, false)
   bootDone()
   void refreshOnline()
@@ -214,29 +235,25 @@ export function addDownlink(m: DownlinkMsg) {
   void api.pushDownlink(m)
 }
 
-/** First-open setup: create this device's own crew profile. */
+/** First-open setup: create this device's own crew profile. Anything already recorded
+ *  on this device under the same call sign is kept. */
 export function createProfile(p: CrewProfile) {
-  setState({ crew: [p], activeCrew: p.id, sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], onboarded: true, sample: false })
+  const keep = <T extends { crewId: string }>(xs: T[]) => xs.filter((x) => x.crewId === p.id)
+  setState({
+    crew: [p], activeCrew: p.id, sessions: keep(state.sessions), symptoms: keep(state.symptoms), downlink: keep(state.downlink),
+    events: state.events.filter((e) => e.crewId === p.id || e.crewId === 'ALL'), workouts: keep(state.workouts), food: keep(state.food), onboarded: true,
+  })
   void api.pushProfile(p, microgravityDays(p))
 }
 
-/** Look around with the sample crew (clearly labelled; your own data is not touched until you exit). */
-export async function loadSample() {
-  const { demoState } = await import('./demo')
-  setState({ ...demoState(), onboarded: true, sample: true })
-  await api.resetDemo()
-  await api.pushAll(state, microgravityDays)
-}
-export const resetDemo = loadSample
-
-/** Leave the sample crew / erase this device → back to the welcome setup. */
+/** Erase this device → back to the welcome setup. */
 export async function resetEmpty() {
   try {
     await clear()
   } catch {
     /* ignore */
   }
-  setState({ crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], onboarded: false, sample: false })
+  setState({ crew: [], activeCrew: '', sessions: [], symptoms: [], downlink: [], events: [], workouts: [], food: [], onboarded: false })
 }
 
 /** Everything on this device as JSON (derived numbers only). */

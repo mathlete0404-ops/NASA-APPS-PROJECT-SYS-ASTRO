@@ -1,9 +1,10 @@
 import { activeProfile, crewStatus, history, useStore } from '../data/store'
 import { METRICS } from '../engine/status'
 import { plain } from '../engine/describe'
-import { Spark, StatusChip } from '../components/ui'
+import { TrendingUp } from 'lucide-react'
+import { EmptyState, Spark, StatusChip } from '../components/ui'
 
-export function Trends() {
+export function Trends({ go }: { go: (t: string) => void }) {
   const s = useStore()
   const p = activeProfile(s)
   if (!p) return null
@@ -11,12 +12,16 @@ export function Trends() {
   const ids = Object.keys(METRICS).filter((id) => history(s.sessions, p.id, id).length)
   return (
     <div className="stack">
-      <div className="card">
+      {ids.length > 0 && <div className="card">
         <h2>Trends · {p.id}</h2>
         <p className="muted">Each line is you compared with yourself. The shaded band is your normal range, learned from your first 7 days. Grey dots were measurements that weren’t good enough to use.</p>
         <div className="legend"><span><i style={{ background: '#34d39933' }} />usual range</span><span><i style={{ background: '#93c5fd' }} />your values</span><span><i style={{ background: '#94a3b8' }} />No data</span></div>
-      </div>
-      {ids.length === 0 && <div className="card">No measurements yet.</div>}
+      </div>}
+      {ids.length === 0 && (
+        <EmptyState icon={TrendingUp} title="No trends yet" action="Start today’s check" onAction={() => go('check')}>
+          Each daily check adds a point to every line here: heart rate, breathing, tiredness, puffiness, mood and sleep. After 7 days you will see your own normal range.
+        </EmptyState>
+      )}
       <div className="grid g2">
         {ids.map((id) => {
           const h = history(s.sessions, p.id, id)

@@ -152,7 +152,7 @@ def add_symptom(s: Symptom) -> dict:
 
 @app.post("/api/triage")
 def triage_only(s: Symptom) -> dict:
-    """Same rules, nothing stored — used by tests and the 'what if' demo."""
+    """Same rules, nothing stored — for checking a report before saving it."""
     return triage(s.model_dump())
 
 
@@ -194,15 +194,6 @@ def nasa_search(q: str = "", live: bool = True) -> dict:
     hits = [d for d in CATALOG["datasets"]
             if all(t in (d["title"] + " " + d["description"] + " " + " ".join(d.get("keywords", []))).lower() for t in terms)]
     return {"source": "offline", "credit": "Dataset metadata from data.nasa.gov", "datasets": hits[:25]}
-
-
-@app.post("/api/demo/reset")
-def demo_reset() -> dict:
-    """Clears the habitat database before the app re-uploads the synthetic demo crew."""
-    with db.connect() as con:
-        for t in ("measurement", "session", "symptom_report", "downlink", "crew"):
-            con.execute(f"DELETE FROM {t}")
-    return {"ok": True}
 
 
 @app.get("/api/reference/{analyte}")

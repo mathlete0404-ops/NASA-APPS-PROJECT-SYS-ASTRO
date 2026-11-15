@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ArrowRight, Check, CheckCircle2, Circle, Dumbbell, HeartPulse, ListChecks, ScanFace, Sparkles, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, Bell, Check, CheckCircle2, Circle, Dumbbell, HeartPulse, ListChecks, ScanFace, Sparkles, X } from 'lucide-react'
 import { activeProfile, crewStatus, dayKey, history, useStore } from '../data/store'
 import { recommendations } from '../engine/plan'
 import { LEVEL_RANK, METRICS, worst, type Level } from '../engine/status'
@@ -10,6 +10,9 @@ import { REGION_LABEL } from '../content/cards'
 import { fmtNum, Spark, StatusChip } from '../components/ui'
 import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
 import { PetCard } from '../components/Pet'
+import { SpaceWeatherPill } from '../components/SpaceWeatherPill'
+import { useReminderSettings } from '../data/notify'
+import { checkOverdue } from '../engine/reminders'
 
 const GROUPS: { id: string; label: string }[] = [
   { id: 'face', label: 'Face scan' },
@@ -24,6 +27,9 @@ export function Today({ go }: { go: (tab: string) => void }) {
   const s = useStore()
   const p = activeProfile(s)
   const [hideStart, setHideStart] = useState(() => { try { return localStorage.getItem('crew-mirror:gs-hidden') === '1' } catch { return false } })
+  const reminders = useReminderSettings()
+  const [, setTick] = useState(0) // re-check "past the reminder time" each minute
+  useEffect(() => { const id = window.setInterval(() => setTick((t) => t + 1), 60_000); return () => window.clearInterval(id) }, [])
   if (!p) return null
   const st = crewStatus(s, p.id)
   const recs = recommendations(s, p)
@@ -31,6 +37,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
   const today = dayKey(new Date())
   const checkDays = new Set(s.sessions.filter((x) => x.crewId === p.id && x.kind === 'daily').map((x) => dayKey(x.ts)))
   const todayDone = checkDays.has(today)
+  const overdue = checkOverdue(reminders, new Date(), todayDone)
   const hasData = Object.keys(st).length > 0
   const attention = Object.entries(st).filter(([, r]) => r.level === 'act' || r.level === 'watch' || r.level === 'nodata')
     .sort((a, b) => LEVEL_RANK[b[1].level] - LEVEL_RANK[a[1].level])
@@ -46,7 +53,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
     ...(p.phase === 'preflight' ? [{ done: s.sessions.some((x) => x.crewId === p.id && x.kind === 'balance'), label: 'Record a balance test before flight', tab: 'balance' }] : []),
     { done: checkDays.size >= 7, label: `Check in 7 days so the app learns your normal (${learning}/7)`, tab: 'check' },
   ]
-  const showStart = !hideStart && !s.sample && steps.some((x) => !x.done)
+  const showStart = !hideStart && steps.some((x) => !x.done)
 
   return (
     <div className="stack">
@@ -55,6 +62,8 @@ export function Today({ go }: { go: (tab: string) => void }) {
           <p className="kicker">{new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}</p>
           <h2 style={{ fontSize: '1.6rem', marginBottom: 2 }}>{greeting()}, {p.id}</h2>
           <p className="muted row" style={{ marginTop: 0, gap: 8 }}><span>{p.role}</span><span className="pill" style={{ padding: '1px 8px' }}>{phase.label}</span></p>
+          <SpaceWeatherPill phase={p.phase} target="space-weather" />
+          {overdue && <p className="remind-line"><Bell /> You haven’t done today’s check yet.</p>}
           {todayDone ? (
             <div className="notice ok" style={{ marginTop: 12 }}><Check size={15} style={{ verticalAlign: -3 }} /> Today’s check is done. See you tomorrow morning.</div>
           ) : (
@@ -71,7 +80,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
           <div className="row between"><h2>How you’re doing</h2>{hasData && <StatusChip level={overall} />}</div>
           {(!hasData || overall === 'baseline') && (
             <>
-              <p>{hasData ? <>Learning your normal: <b>day {learning} of 7</b>. Check in each morning.</> : 'No measurements yet. After 7 daily checks, the app can tell when something changes.'}</p>
+              <p>{hasData ? <>Learning your normal: <b>day {learning} of 7</b>. Check in each morning.</> : <>No checks yet. Your first daily check takes 2 minutes. After 7 days of checks the app knows your normal and can tell when something changes.</>}</p>
               <div className="days7">
                 {Array.from({ length: 7 }, (_, i) => <span key={i} className={i < learning ? 'on' : ''}><i>{i + 1}</i></span>)}
               </div>
@@ -146,7 +155,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
         )
       })}
 
-      <SpaceWeatherCard phase={p.phase} />
+      <div id="space-weather" style={{ scrollMarginTop: 72 }}><SpaceWeatherCard phase={p.phase} /></div>
     </div>
   )
 }

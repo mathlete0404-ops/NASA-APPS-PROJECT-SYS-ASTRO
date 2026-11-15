@@ -1,6 +1,6 @@
 // Nutrition targets and an on-board pantry. Targets are DEFAULTS meant to be set by the
 // crew nutritionist (editable in Settings). Food values are approximate per serving, for
-// demonstration — a flight menu would use the mission food database.
+// general reference only — a flight menu would use the mission food database.
 //
 // Why these nutrients (NASA space-nutrition research, see evidence links):
 //  - Energy: crews often eat less than they need in flight → mass and muscle loss.
