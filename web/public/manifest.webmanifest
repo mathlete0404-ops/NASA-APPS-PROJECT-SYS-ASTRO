@@ -2,7 +2,7 @@
   "name": "Crew Mirror",
   "short_name": "Crew Mirror",
   "description": "Offline, camera-based daily health check for astronauts. Prototype, not a medical device.",
-  "start_url": "./",
+  "start_url": "./#/app/today",
   "display": "standalone",
   "background_color": "#050816",
   "theme_color": "#050816",
