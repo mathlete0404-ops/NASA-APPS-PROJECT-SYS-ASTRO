@@ -12,6 +12,8 @@ import { PATTERN_LABEL } from '../engine/triage'
 import { EvidenceChips } from '../components/ui'
 
 const BodyViewer = lazy(() => import('../body3d/BodyViewer'))
+// On a phone the 3D view must leave room to scroll: dragging on it turns the body, not the page.
+const BODY_H = typeof window !== 'undefined' && window.innerWidth < 900 ? 'min(620px, 58svh)' : 'min(620px, calc(100svh - 160px))'
 const LAYER_NAME: Record<string, string> = { skin: 'Skin region', muscles: 'Muscle', skeleton: 'Bone', nerves: 'Nerve', joints: 'Disc / ligament' }
 
 export function Body({ go }: { go: (t: string) => void }) {
@@ -47,8 +49,8 @@ export function Body({ go }: { go: (t: string) => void }) {
   return (
     <div className="split-3d">
       <div className="stack">
-        <Suspense fallback={<div className="body3d" style={{ height: 620, display: 'grid', placeItems: 'center', color: '#94a3b8' }}>Loading 3D anatomy…</div>}>
-          <BodyViewer height={620} highlights={highlights} selected={picked?.zname} onPick={(pk, st) => { setPicked(pk); setStack(st) }} focus={focus} />
+        <Suspense fallback={<div className="body3d" style={{ height: BODY_H, display: 'grid', placeItems: 'center', color: '#94a3b8' }}>Loading 3D anatomy…</div>}>
+          <BodyViewer height={BODY_H} highlights={highlights} selected={picked?.zname} selectedLayer={picked?.layer} onPick={(pk, st) => { setPicked(pk); setStack(st) }} focus={focus} />
         </Suspense>
         <div className="legend">
           <span><i className="legend-dot" style={{ background: '#ef4444' }} />Act / see medical officer</span>

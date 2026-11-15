@@ -165,11 +165,37 @@ export function history(sessions: Session[], crewId: string, metric: string): { 
   return [...byDay.values()]
 }
 
-export function crewStatus(s: State, crewId: string): Record<string, StatusResult> {
+/** Measured by the face scan, which a daily check can skip. */
+export const FACE_METRICS = ['hr_rest', 'resp_rate', 'blink_rate', 'perclos', 'face_width']
+/** Answered in every daily check. */
+export const CHECKIN_METRICS = ['mood', 'energy', 'sleep_hours', 'sleep_quality']
+/** A daily-check value older than this is not "today's" status any more. */
+export const STALE_DAYS = 2
+
+/**
+ * Status of every metric for one crew member. A status describes NOW, so an old value is never
+ * shown as current: a face measure skipped in the latest daily check, or any daily-check measure
+ * older than STALE_DAYS, is "No data" (with the last good value in the reason), never "Fine".
+ */
+export function crewStatus(s: State, crewId: string, now: Date = new Date()): Record<string, StatusResult> {
   const out: Record<string, StatusResult> = {}
+  const daily = s.sessions.filter((x) => x.crewId === crewId && x.kind === 'daily')
+  const lastCheckDay = daily.reduce((m, x) => (dayKey(x.ts) > m ? dayKey(x.ts) : m), '')
+  const today = dayKey(now)
   for (const id of Object.keys(METRICS)) {
     const h = history(s.sessions, crewId, id)
-    if (h.length) out[id] = metricStatus(id, h.map((x) => [x.value, x.ok]))
+    if (!h.length) continue
+    const st = metricStatus(id, h.map((x) => [x.value, x.ok]))
+    const last = h[h.length - 1]
+    const lastDay = dayKey(last.ts)
+    const ageDays = Math.round((new Date(today + 'T12:00:00').getTime() - new Date(lastDay + 'T12:00:00').getTime()) / 864e5)
+    const lastGood = [...h].reverse().find((x) => x.ok && x.value != null)
+    const was = lastGood ? ` Last good value ${lastGood.value} ${METRICS[id].unit} on ${new Date(lastGood.ts).toLocaleDateString()}.` : ''
+    const skipped = FACE_METRICS.includes(id) && lastCheckDay && lastDay < lastCheckDay
+    const stale = (FACE_METRICS.includes(id) || CHECKIN_METRICS.includes(id)) && ageDays > STALE_DAYS
+    if (skipped) out[id] = { ...st, level: 'nodata', why: 'skipped', value: undefined, z: undefined, reasons: [`Not measured in your latest check (${new Date(lastCheckDay + 'T12:00:00').toLocaleDateString()}): the face scan was skipped or did not finish.${was}`] }
+    else if (stale) out[id] = { ...st, level: 'nodata', why: 'stale', ageDays, value: undefined, z: undefined, reasons: [`Last measured ${ageDays} days ago, so there is no current reading. Do a daily check to update it.${was}`] }
+    else out[id] = st.level === 'nodata' ? { ...st, why: 'quality' } : st
   }
   return out
 }

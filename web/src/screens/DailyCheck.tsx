@@ -18,6 +18,7 @@ export function DailyCheck({ go }: { go: (t: string) => void }) {
   const [mood, setMood] = useState({ mood: 7, energy: 7, sleep_hours: 7, sleep_quality: 7 })
   const [mass, setMass] = useState('')
   const [savedId, setSavedId] = useState<string | null>(null)
+  const [measured, setMeasured] = useState<Set<string>>(new Set())
   if (!p) return null
 
   const save = () => {
@@ -37,6 +38,7 @@ export function DailyCheck({ go }: { go: (t: string) => void }) {
     if (mass && +mass > 20 && +mass < 250)
       addSession({ id: uid(), crewId: p.id, ts: new Date().toISOString(), missionDay: missionDay(p), kind: 'mass',
         measurements: [{ metric: 'body_mass', value: +mass, ok: true, quality: 1, unit: 'kg', source: 'Scale / SLAMMD' }] })
+    setMeasured(new Set(meas.filter((m) => m.ok && m.value != null).map((m) => m.metric)))
     setSavedId(id)
     setStep('done')
   }
@@ -80,7 +82,7 @@ export function DailyCheck({ go }: { go: (t: string) => void }) {
           </div>
         </div>
       )}
-      {step === 'done' && savedId && <Result crewId={p.id} go={go} scan={scan} />}
+      {step === 'done' && savedId && <Result crewId={p.id} go={go} scan={scan} measured={measured} />}
     </div>
   )
 }
@@ -108,9 +110,13 @@ function ScanSummary({ r }: { r: FaceScanResult }) {
   )
 }
 
-function Result({ crewId, go, scan }: { crewId: string; go: (t: string) => void; scan: FaceScanResult | null }) {
+function Result({ crewId, go, scan, measured }: { crewId: string; go: (t: string) => void; scan: FaceScanResult | null; measured: Set<string> }) {
   const s = useStore()
-  const st = crewStatus(s, crewId)
+  const all = crewStatus(s, crewId)
+  // Only what was measured in THIS check counts. A skipped or failed measure is "No data" today,
+  // never an older value shown as if it were today's.
+  const st: typeof all = Object.fromEntries(Object.entries(all).map(([id, r]) => [id, measured.has(id) ? r
+    : { ...r, value: undefined, z: undefined, level: 'nodata' as const, reasons: [scan ? 'Not measured well enough today (light, movement or face not seen).' : 'Face scan skipped today.'] }]))
   const ids = ['hr_rest', 'resp_rate', 'blink_rate', 'perclos', 'face_width', 'mood', 'energy', 'sleep_hours', 'sleep_quality']
   const act = ids.some((id) => st[id]?.level === 'act')
   return (

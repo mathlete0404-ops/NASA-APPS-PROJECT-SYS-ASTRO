@@ -44,7 +44,7 @@ def metric_status(metric: str, history: list[tuple[float | None, bool]]) -> dict
     base = [v for _, v in good[:BASELINE_N]]
     if len(base) < BASELINE_N or good[BASELINE_N - 1][0] >= len(history) - 1:
         n = min(len(base), BASELINE_N)
-        return {"level": "baseline", "n": n, "reasons": [f"Building your personal baseline ({n}/{BASELINE_N} good sessions)."]}
+        return {"level": "baseline", "n": n, "value": value, "reasons": [f"Building your personal baseline ({n}/{BASELINE_N} good sessions)."]}
 
     med = statistics.median(base)
     mad = statistics.median([abs(v - med) for v in base])
@@ -69,6 +69,24 @@ def metric_status(metric: str, history: list[tuple[float | None, bool]]) -> dict
     else:
         level = "usual"
     return {"level": level, "z": round(z, 2), "median": med, "scale": scale, "value": value, "reasons": reasons}
+
+
+# A status describes NOW (same rule as the web app's crewStatus): a face measure skipped in the
+# latest daily check, or a daily-check measure older than STALE_DAYS, is No data, never Fine.
+FACE_METRICS = {"hr_rest", "resp_rate", "blink_rate", "perclos", "face_width"}
+CHECKIN_METRICS = {"mood", "energy", "sleep_hours", "sleep_quality"}
+STALE_DAYS = 2
+
+
+def freshen(metric: str, status: dict[str, Any], last_day: str, last_check_day: str | None, today: str) -> dict[str, Any]:
+    """Days are ISO dates (YYYY-MM-DD)."""
+    from datetime import date
+    age = (date.fromisoformat(today) - date.fromisoformat(last_day)).days
+    if metric in FACE_METRICS and last_check_day and last_day < last_check_day:
+        return {"level": "nodata", "why": "skipped", "reasons": [f"Not measured in your latest check ({last_check_day}): the face scan was skipped or did not finish."]}
+    if metric in FACE_METRICS | CHECKIN_METRICS and age > STALE_DAYS:
+        return {"level": "nodata", "why": "stale", "ageDays": age, "reasons": [f"Last measured {age} days ago, so there is no current reading. Do a daily check to update it."]}
+    return status
 
 
 def per_day(rows: list[tuple[str, float | None, bool]]) -> list[tuple[float | None, bool]]:

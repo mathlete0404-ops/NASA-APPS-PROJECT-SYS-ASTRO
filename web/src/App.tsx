@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
-  CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PersonStanding,
+  CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
   ScanFace, Settings as SettingsIcon, Stethoscope, TrendingUp,
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
 import { useReminderSync } from './data/notify'
-import { Footer, Logo, ThemeToggle } from './components/ui'
+import { Footer, Logo, ThemeToggle, useEscape } from './components/ui'
 import { Auth } from './site/Auth'
 import { Today } from './screens/Today'
 import { DailyCheck } from './screens/DailyCheck'
@@ -18,17 +18,19 @@ import { Medical } from './screens/Medical'
 import { Body } from './screens/Body'
 import { Coach } from './screens/Coach'
 import { Plan } from './screens/Plan'
+import { PetPage } from './screens/PetPage'
 import { CalendarPage } from './screens/Calendar'
 import { Settings } from './screens/Settings'
 import { GuideBody, Welcome } from './screens/Welcome'
 import { X } from 'lucide-react'
 
-// Five places cover the daily job (check in, see the plan, say where it hurts). Everything else
+// Six places cover the daily job (check in, see the plan, look after the pet, say where it hurts). Everything else
 // sits under More, so the sidebar and the phone tab bar stay short.
 const TABS = [
   { id: 'today', label: 'Today', short: 'Today', icon: House, title: 'Today', group: 'main' },
   { id: 'check', label: 'Daily check', short: 'Check', icon: ScanFace, title: 'Daily check', group: 'main' },
   { id: 'plan', label: 'Plan', short: 'Plan', icon: ListChecks, title: 'Today’s plan', group: 'main' },
+  { id: 'pet', label: 'Crew pet', short: 'Pet', icon: PawPrint, title: 'Crew pet', group: 'main' },
   { id: 'body', label: '3D body', short: 'Body', icon: PersonStanding, title: '3D body', group: 'main' },
   { id: 'report', label: 'Something hurts', short: 'Pain', icon: HeartPulse, title: 'Something hurts', group: 'main' },
   { id: 'calendar', label: 'Calendar', short: 'Calendar', icon: CalendarDays, title: 'Calendar', group: 'More' },
@@ -39,7 +41,7 @@ const TABS = [
   { id: 'medical', label: 'Medical officer', short: 'Medical', icon: Stethoscope, title: 'Crew medical officer', group: 'More' },
   { id: 'settings', label: 'Settings', short: 'Settings', icon: SettingsIcon, title: 'Settings', group: 'footer' },
 ] as const
-/** Phone tab bar: four main places plus More (Report pain lives in More and on Today/Body). */
+/** Phone tab bar: four main places plus More (Pet and Report pain live in More and on Today/Body). */
 const PHONE_TABS = ['today', 'check', 'plan', 'body'] as const
 type Tab = (typeof TABS)[number]['id']
 
@@ -78,6 +80,8 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
   const [moreOpen, setMoreOpen] = useState(false)
   const [sheet, setSheet] = useState(false)
   useReminderSync()
+  const closeAll = useCallback(() => { setSheet(false); setGuide(false) }, [])
+  useEscape(closeAll, sheet || guide)
   useEffect(() => { setSheet(false) }, [tab])
   useEffect(() => {
     const open = () => setGuide(true)
@@ -135,7 +139,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
             </label>
           )}
           <span className={`pill net${s.online ? ' on' : ''}`} title={s.online ? 'Connected to the habitat computer. Numbers sync.' : 'Not connected. Everything still works and is saved on this device.'}>
-            {s.online ? <Wifi size={13} /> : <WifiOff size={13} />}<span className="hide-xs">{s.online ? 'Synced' : 'Offline'}</span>
+            {s.online ? <Wifi size={13} /> : <WifiOff size={13} />}<span className="hide-xs">{s.online ? 'Synced' : 'On device'}</span>
           </span>
           <span className="hide-phone"><ThemeToggle /></span>
         </header>
@@ -151,6 +155,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
               {tab === 'today' && <Today go={go} />}
               {tab === 'check' && <DailyCheck key={p?.id} go={go} />}
               {tab === 'plan' && <Plan go={go} />}
+              {tab === 'pet' && <PetPage go={go} />}
               {tab === 'calendar' && <CalendarPage go={go} />}
               {tab === 'body' && <Body key={p?.id} go={go} />}
               {tab === 'report' && <Report key={p?.id} go={go} />}

@@ -24,7 +24,9 @@ const range = (n: number, from = 0) => Array.from({ length: n }, (_, i) => from 
 describe('pet stages', () => {
   const cases: [number, string, string | null][] = [
     [0, 'egg', 'hatchling'],
-    [1, 'hatchling', 'cadet'],
+    [1, 'egg', 'hatchling'],
+    [2, 'egg', 'hatchling'],
+    [3, 'hatchling', 'cadet'],
     [6, 'hatchling', 'cadet'],
     [7, 'cadet', 'explorer'],
     [20, 'cadet', 'explorer'],
@@ -44,7 +46,7 @@ describe('pet stages', () => {
 
   it('progress runs 0..1 inside a stage', () => {
     expect(petState(input({}), 'ALPHA', NOW).progress).toBe(0)
-    expect(petState(input({ sessions: checks(range(4)) }), 'ALPHA', NOW).progress).toBeCloseTo(3 / 6)
+    expect(petState(input({ sessions: checks(range(5)) }), 'ALPHA', NOW).progress).toBeCloseTo(2 / 4)
     expect(petState(input({ sessions: checks(range(60)) }), 'ALPHA', NOW).progress).toBe(1)
   })
 
@@ -157,5 +159,35 @@ describe('localDay', () => {
   it('uses the local calendar day', () => {
     expect(localDay(new Date(2026, 0, 5, 23, 59))).toBe('2026-01-05')
     expect(localDay(new Date(2026, 0, 6, 0, 1).toISOString())).toBe('2026-01-06')
+  })
+})
+
+describe('pet incubation and needs (Tamagotchi care)', () => {
+  it('the egg incubates over three daily checks', () => {
+    expect(petState(input({}), 'ALPHA', NOW).incubation).toBe(0)
+    expect(petState(input({ sessions: checks([0]) }), 'ALPHA', NOW).incubation).toBeCloseTo(1 / 3)
+    expect(petState(input({ sessions: checks([0, 1, 2]) }), 'ALPHA', NOW).incubation).toBe(1)
+  })
+  it('needs are full right after care and run down with time', () => {
+    const fresh = petState(input({ sessions: checks([0]), food: [food(0)], workouts: [workout(0)] }), 'ALPHA', new Date(2026, 10, 15, 14))
+    expect(fresh.needs.map((n) => n.level)).toEqual([100, 100, 100])
+    const later = petState(input({ sessions: checks([2]), food: [food(1)], workouts: [workout(4)] }), 'ALPHA', NOW)
+    const lv = Object.fromEntries(later.needs.map((n) => [n.id, n.level]))
+    expect(lv.fed).toBeLessThan(100)
+    expect(lv.fit).toBe(0)
+    expect(lv.cared).toBeLessThan(100)
+  })
+  it('never cared for: all needs empty, but it is only sleepy or waiting, never sick', () => {
+    const p = petState(input({}), 'ALPHA', NOW)
+    expect(p.needs.every((n) => n.level === 0)).toBe(true)
+    expect(['waiting', 'sleepy']).toContain(p.mood)
+  })
+  it('a pain report counts as exercise care', () => {
+    const p = petState(input({ symptoms: [pain(0)] }), 'ALPHA', NOW)
+    expect(p.needs.find((n) => n.id === 'fit')!.level).toBe(100)
+  })
+  it('needs ignore other crew members', () => {
+    const p = petState(input({ food: [food(0, 'BRAVO')] }), 'ALPHA', NOW)
+    expect(p.needs.find((n) => n.id === 'fed')!.level).toBe(0)
   })
 })

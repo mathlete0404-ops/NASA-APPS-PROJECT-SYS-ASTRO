@@ -175,6 +175,72 @@ def cap_food(p):
     b.close()
 
 
+def make_pouch(path):
+    """A generic foil food pouch with a printed label (drawn here; no logos, no people)."""
+    from PIL import ImageDraw, ImageFilter, ImageFont
+    import random
+    random.seed(11)
+    def font(sz, bold=False):
+        try: return ImageFont.truetype('/System/Library/Fonts/Supplemental/Arial Bold.ttf' if bold else '/System/Library/Fonts/Supplemental/Arial.ttf', sz)
+        except Exception: return ImageFont.load_default()
+    im = Image.new('RGB', (900, 1200), (38, 44, 58))
+    d = ImageDraw.Draw(im)
+    for y in range(1200):  # table: soft vertical light falloff
+        v = int(30 + 22 * (1 - abs(y - 500) / 700))
+        d.line([(0, y), (900, y)], fill=(v, v + 5, v + 16))
+    pouch = Image.new('RGB', (680, 980), (176, 180, 184))
+    pd = ImageDraw.Draw(pouch)
+    for x in range(680):  # brushed foil: horizontal sheen
+        t = x / 680
+        v = int(150 + 70 * (1 - abs(t - .38) * 2.2) ** 2) if abs(t - .38) < .45 else 150
+        pd.line([(x, 0), (x, 980)], fill=(v, v + 2, v + 6))
+    for _ in range(26):  # crinkles
+        x0, y0 = random.randint(0, 680), random.randint(0, 980)
+        pd.line([(x0, y0), (x0 + random.randint(-90, 90), y0 + random.randint(20, 140))], fill=(205, 208, 212), width=2)
+    pd.rectangle((0, 0, 680, 60), fill=(160, 164, 168))  # heat seal
+    for x in range(0, 680, 14): pd.line([(x, 0), (x, 60)], fill=(140, 144, 148), width=3)
+    pd.rounded_rectangle((70, 300, 610, 640), 14, fill=(248, 248, 244))
+    pd.text((105, 330), 'BEEF BRISKET', font=font(70, True), fill=(18, 20, 26))
+    pd.text((105, 430), 'Thermostabilized', font=font(44), fill=(40, 44, 52))
+    pd.text((105, 500), 'Net wt 5.4 oz (153 g)', font=font(34), fill=(70, 74, 82))
+    pd.text((105, 560), 'Heat before eating', font=font(30), fill=(90, 94, 100))
+    mask = Image.new('L', pouch.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, 680, 980), 36, fill=255)
+    pouch = pouch.rotate(-4, expand=True, fillcolor=(0, 0, 0))
+    mask = mask.rotate(-4, expand=True, fillcolor=0)
+    im.paste(pouch, (110 - 30, 100), mask)
+    im.filter(ImageFilter.GaussianBlur(.6)).save(path, quality=88)
+
+
+def cap_scan(p):
+    """Food: photograph a pouch, the label is read on the device, add it, protein goes up."""
+    photo = os.path.join(ROOT, 'capture', 'pouch.jpg')
+    if not os.path.exists(photo):
+        make_pouch(photo)
+    b, pg = session(p, tab='plan')
+    # warm the on-device text reader once so the clip shows real speed, not the first download
+    pg.locator('.scan-btn input').set_input_files(photo)
+    pg.wait_for_function("!document.querySelector('.scan-reading')", timeout=120000)
+    pg.locator('.scan-card button', has_text='Cancel').click(); pg.wait_for_timeout(300)
+    y = pg.evaluate("[...document.querySelectorAll('.card h3')].find(h => h.textContent === 'Food today').getBoundingClientRect().top + scrollY")
+    scroll_to(pg, y - 90); pg.wait_for_timeout(300)
+    c = Clip('m_scan')
+    for i in range(N):
+        if i == 6:
+            x, yy = center(pg, pg.locator('.scan-btn'))
+            c.cursor.append({'f': c.n, 'x': x, 'y': yy, 'click': True})
+            pg.locator('.scan-btn input').set_input_files(photo)
+            pg.wait_for_timeout(60)
+        if i == 40:
+            pg.wait_for_function("!document.querySelector('.scan-reading')", timeout=60000)
+            x, yy = center(pg, pg.locator('.scan-card button', has_text='Add to today'))
+            click_at(pg, c, x, yy)
+            pg.wait_for_timeout(80)
+        c.frame(pg, 70 if 6 <= i < 20 else 20)
+    c.close()
+    b.close()
+
+
 def cap_body(p):
     b, pg = session(p, tab='body')
     pg.wait_for_timeout(6000)
@@ -320,7 +386,7 @@ def cap_pet(p):
     meta['pet'] = out
 
 
-ALL = {'today': cap_today, 'm_today': cap_today_scroll, 'm_plan': cap_plan_tick, 'm_food': cap_food, 'm_body': cap_body,
+ALL = {'today': cap_today, 'm_today': cap_today_scroll, 'm_plan': cap_plan_tick, 'm_food': cap_food, 'm_scan': cap_scan, 'm_body': cap_body,
        'm_space': cap_space, 'm_calendar': cap_calendar, 'm_report': cap_report, 'm_reminders': cap_reminders,
        'check': cap_check, 'pet': cap_pet}
 

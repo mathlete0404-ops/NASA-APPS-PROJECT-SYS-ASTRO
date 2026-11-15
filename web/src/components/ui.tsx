@@ -75,7 +75,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <span><strong>Prototype, not a medical device.</strong> Results are patterns, never diagnoses. Camera video never leaves this device.</span>
-      <span className="mono">Crew Mirror · Team SYS-ASTRO · NASA Space Apps Seoul 2026 · MIT</span>
+      <span className="mono">Crew Mirror · Team SYS-ASTRO · NASA Space Apps Seoul 2026</span>
     </footer>
   )
 }
@@ -146,4 +146,14 @@ export function cameraHelp(err: string): string {
   if (/NotFound|DevicesNotFound|no camera/i.test(err)) return 'No camera found. Connect or turn on a camera, or skip today.'
   if (/NotReadable|in use|TrackStart/i.test(err)) return 'Another app is using the camera. Close it, then press Try again.'
   return 'The camera or the face model did not start. The model downloads once on first use, so check your connection, then press Try again.'
+}
+
+/** Close a pop-up with the Escape key. */
+export function useEscape(onClose: () => void, active = true) {
+  useEffect(() => {
+    if (!active) return
+    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    addEventListener('keydown', h)
+    return () => removeEventListener('keydown', h)
+  }, [onClose, active])
 }

@@ -63,7 +63,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
                   <td data-label="Status">{started ? <StatusChip level={lvl} /> : <small className="muted">No checks yet</small>}</td>
                   <td data-label="Alerts">
                     {alerts.length ? alerts.map(([id, r]) => (
-                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> (failed quality check today)</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
+                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> ({r.why === 'skipped' ? 'face scan skipped' : r.why === 'stale' ? `no check for ${r.ageDays ?? 'several'} days` : 'failed quality check'})</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
                     )) : <small className="muted">none</small>}
                   </td>
                   <td data-label="Latest symptom">
@@ -86,7 +86,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
           <p className="muted">Far from Earth there is no live call: messages travel at light speed. Crew Mirror is built to work without waiting for the answer.</p>
           <div className="row">
             <label>Distance <select value={route} onChange={(e) => setRoute(e.target.value)}>
-              {LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label} · {fmtS(d.s)} one-way</option>)}
+              {LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label} · {d.s < 10 ? `${d.s} s` : fmtS(d.s)} one-way</option>)}
             </select></label>
           </div>
           <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Message (derived numbers only — no images or video)" />

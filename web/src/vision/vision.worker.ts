@@ -66,6 +66,11 @@ async function init(t: Task, base: string) {
   postMessage({ type: 'ready', ...info })
 }
 
+// Skin patches are smoothed over time: landmark jitter of a pixel moves a raw patch over
+// differently lit skin, and that brightness change is far larger than the pulse itself.
+let boxPrev: [number, number, number, number][] | null = null
+const BOX_ALPHA = 0.15
+
 function meanRgb(bm: ImageBitmap, pts: { x: number; y: number }[], w: number, h: number) {
   if (!canvas || canvas.width !== w || canvas.height !== h) {
     canvas = new OffscreenCanvas(w, h)
@@ -73,15 +78,19 @@ function meanRgb(bm: ImageBitmap, pts: { x: number; y: number }[], w: number, h:
   }
   if (!ctx) return null
   ctx.drawImage(bm, 0, 0)
-  const boxes: [number, number, number, number][] = []
+  let boxes: [number, number, number, number][] = []
   const fx = FOREHEAD.map((i) => pts[i].x * w)
   const fy = FOREHEAD.map((i) => pts[i].y * h)
   const x0 = Math.min(...fx), x1 = Math.max(...fx), y0 = Math.min(...fy), y1 = Math.max(...fy)
-  const shrink = (x1 - x0) * 0.2
-  boxes.push([x0 + shrink, y0 + (y1 - y0) * 0.25, x1 - x0 - 2 * shrink, (y1 - y0) * 0.55])
+  const shrink = (x1 - x0) * 0.15
+  boxes.push([x0 + shrink, y0 + (y1 - y0) * 0.2, x1 - x0 - 2 * shrink, (y1 - y0) * 0.6])
   const faceW = Math.abs(pts[454].x - pts[234].x) * w
-  const s = faceW * 0.12
+  const s = faceW * 0.16
   for (const i of [CHEEK_L, CHEEK_R]) boxes.push([pts[i].x * w - s / 2, pts[i].y * h - s / 2, s, s])
+  // smooth the patches; restart if the face jumped (more than a quarter of a patch)
+  if (boxPrev && boxes.every((b, k) => Math.hypot(b[0] - boxPrev![k][0], b[1] - boxPrev![k][1]) < 0.25 * Math.max(b[2], b[3])))
+    boxes = boxes.map((b, k) => b.map((v, j) => boxPrev![k][j] + BOX_ALPHA * (v - boxPrev![k][j])) as [number, number, number, number])
+  boxPrev = boxes
   let r = 0, g = 0, b = 0, n = 0
   for (const [bx, by, bw, bh] of boxes) {
     const X = Math.max(0, Math.round(bx)), Y = Math.max(0, Math.round(by))
@@ -101,7 +110,7 @@ function onFrame(bm: ImageBitmap, ts: number) {
     if (task === 'face' && face) {
       const res = face.detectForVideo(bm, ts)
       const pts = res.faceLandmarks[0]
-      if (!pts) return postMessage({ type: 'result', ts, face: null })
+      if (!pts) { boxPrev = null; return postMessage({ type: 'result', ts, face: null }) }
       const bs = res.faceBlendshapes[0]?.categories ?? []
       const score = (n: string) => bs.find((c) => c.categoryName === n)?.score ?? 0
       const dist = (a: number, b: number) => Math.hypot((pts[a].x - pts[b].x) * w, (pts[a].y - pts[b].y) * h)

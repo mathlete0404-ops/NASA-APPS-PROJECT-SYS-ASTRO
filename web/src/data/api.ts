@@ -4,6 +4,8 @@ import { get, set } from 'idb-keyval'
 import type { CrewProfile, DownlinkMsg, Session, SymptomReport } from './types'
 
 const BASE = (import.meta.env.VITE_HABITAT_URL as string | undefined) ?? '/api'
+// Static hosting (GitHub Pages) has no habitat computer behind it: don't poll a URL that can only 404.
+const NO_HABITAT = !import.meta.env.VITE_HABITAT_URL && typeof location !== 'undefined' && location.hostname.endsWith('github.io')
 
 type Job = { method: 'POST' | 'PUT'; path: string; body: unknown }
 
@@ -65,6 +67,7 @@ const profileBody = (p: CrewProfile, mg: number) => ({
 export const api = {
   base: BASE,
   async health(): Promise<boolean> {
+    if (NO_HABITAT) return false
     try {
       return Boolean((await call('GET', '/health', undefined, 1500)).ok)
     } catch {

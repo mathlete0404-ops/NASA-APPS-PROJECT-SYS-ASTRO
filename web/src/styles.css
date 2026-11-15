@@ -699,3 +699,94 @@ button.check-dot { padding: 0; background: var(--card); color: inherit; cursor: 
 button.check-dot:hover:not(:disabled) { border-color: var(--usual); }
 button.check-dot:disabled { cursor: not-allowed; opacity: .5; }
 button.check-dot.on { background: var(--usual); color: #fff; }
+
+/* ---- Crew pet page + hatching (v3) ---- */
+.pet-mini { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 8px 12px; text-decoration: none; color: inherit; box-shadow: none; background: var(--muted); border-color: transparent; }
+.pet-mini:hover, .pet-mini:focus-visible { border-color: var(--violet); }
+.pet-mini-art { flex: none; display: grid; place-items: center; width: 64px; }
+.pet-mini-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.pet-mini-t small { color: var(--muted-fg); }
+.pet-mini-t .kicker { display: inline-flex; align-items: center; gap: 4px; margin: 0; }
+.pet-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.pet-hero .card-h { width: 100%; }
+.pet-stage-big { align-self: center; display: grid; place-items: center; width: min(100%, 300px); aspect-ratio: 300 / 250; border-radius: 16px; background: var(--pet-stage-bg); border: 0; padding: 0; color: inherit; font: inherit; }
+.pet-stage-big svg { width: min(220px, 80%); height: auto; }
+.pet-stage-big.tappable { cursor: pointer; }
+.pet-stage-big.tappable:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.pet-hint { align-self: center; margin: 0; text-align: center; font-size: .92rem; color: var(--muted-fg); }
+.pet-hint.ready { color: var(--violet-text); font-weight: 600; }
+.pet-hero > .btn { align-self: center; }
+.pet-page .pet-task .mono { color: var(--muted-fg); font-size: .75rem; }
+.pet-ladder { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+.pet-rung { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border); }
+.pet-rung.current { border-color: var(--violet); background: var(--pet-stage-bg); }
+.pet-rung.locked .pet-rung-art { filter: grayscale(1) brightness(.35); opacity: .55; }
+.pet-rung-art { flex: none; width: 52px; }
+.pet-rung-art .pet-svg * { animation: none !important; }
+.pet-rung-t { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: .88rem; }
+.pet-rung-t small { color: var(--muted-fg); font-size: .74rem; }
+.pet-svg .pet-crack { fill: none; stroke: var(--pet-ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.pet-egg-wobble.ready { animation: pet-wobble-ready 1.6s ease-in-out infinite; }
+.pet-egg-shake { transform-box: fill-box; transform-origin: 50% 100%; animation: pet-shake .45s ease-out; }
+.pet-pop { transform-box: fill-box; transform-origin: 50% 100%; animation: pet-pop .7s cubic-bezier(.2, 1.6, .4, 1); }
+.pet-burst .pet-flash { fill: #fff; transform-box: fill-box; transform-origin: center; animation: pet-flash .6s ease-out forwards; }
+.pet-burst .pet-ring { fill: none; stroke: var(--pet-gold); stroke-width: 3; transform-box: fill-box; transform-origin: center; animation: pet-ring .9s ease-out forwards; }
+.pet-burst .pet-sparkle { animation: pet-twinkle .9s ease-in-out 1 forwards; }
+@keyframes pet-wobble-ready { 0%, 40%, 100% { transform: rotate(0); } 50% { transform: rotate(-6deg); } 60% { transform: rotate(6deg); } 70% { transform: rotate(-3deg); } 80% { transform: rotate(2deg); } }
+@keyframes pet-shake { 0% { transform: rotate(0) scale(1); } 20% { transform: rotate(-10deg) scale(1.04, .96); } 45% { transform: rotate(9deg); } 70% { transform: rotate(-5deg); } 100% { transform: rotate(0) scale(1); } }
+@keyframes pet-pop { 0% { transform: translateY(20px) scale(.3); opacity: 0; } 60% { transform: translateY(-10px) scale(1.12); opacity: 1; } 100% { transform: none; } }
+@keyframes pet-flash { 0% { opacity: .95; transform: scale(.4); } 100% { opacity: 0; transform: scale(2.2); } }
+@keyframes pet-ring { 0% { opacity: 1; transform: scale(.5); } 100% { opacity: 0; transform: scale(2); } }
+@media (prefers-reduced-motion: reduce) {
+  .pet-egg-wobble.ready, .pet-egg-shake, .pet-pop, .pet-burst .pet-flash, .pet-burst .pet-ring { animation: none; }
+  .pet-burst { display: none; }
+}
+
+/* 3D body on phones: one compact, scrollable control row; don't cover the body */
+@media (max-width: 600px) {
+  .body3d-views button { padding: 5px 9px; font-size: .76rem; }
+  .body3d-controls { left: 6px; right: 6px; bottom: 6px; }
+  .body3d-controls .row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .body3d-controls .row::-webkit-scrollbar { display: none; }
+  .body3d-controls .spacer { display: none; }
+  .body3d-controls .btn.small { padding: 4px 9px; font-size: .74rem; flex: none; }
+  .body3d-controls .xray { flex: none; }
+  .body3d-controls .xray input { width: 64px; }
+}
+
+/* ---- Food v3: menu kinds, portions, package scan ---- */
+.food-add select.portion { flex: none; width: 64px; padding: 9px 6px; }
+.scan-btn { cursor: pointer; }
+.space-food-note { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: var(--muted); font-size: .84rem; line-height: 1.45; color: var(--muted-fg); }
+.space-food-note b { color: var(--foreground); }
+.scan-card { max-width: 640px; }
+.scan-body { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 16px; margin-top: 12px; align-items: start; }
+.scan-photo { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); background: var(--muted); }
+.scan-reading { display: flex; align-items: center; gap: 8px; font-size: .9rem; color: var(--muted-fg); padding: 10px 0; }
+.scan-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.scan-fields label { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.scan-fields .span2 { grid-column: 1 / -1; }
+.scan-fields input { width: 100%; min-width: 0; }
+.scan-card .seg { margin-top: 4px; }
+.spin { animation: cm-spin 1s linear infinite; }
+@keyframes cm-spin { to { transform: rotate(360deg); } }
+@media (max-width: 600px) {
+  .scan-body { grid-template-columns: 1fr; }
+  .scan-photo { max-height: 180px; aspect-ratio: auto; }
+}
+.scan-card select { width: 100%; min-width: 0; }
+
+/* ---- Pet v4: incubation, needs, pats ---- */
+.progress.incubation { width: min(100%, 260px); align-self: center; }
+.pet-needs { display: flex; flex-direction: column; gap: 8px; }
+.pet-need { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--border); background: var(--card); color: inherit; font: inherit; font-size: .88rem; cursor: pointer; text-align: left; }
+.pet-need:hover, .pet-need:focus-visible { border-color: var(--violet); }
+.pet-need-bar { height: 8px; border-radius: 99px; background: var(--muted); overflow: hidden; }
+.pet-need-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--usual); transition: width .4s ease; }
+.pet-need.low .pet-need-bar > span { background: var(--watch); }
+.pet-need-v { text-align: right; font-size: .78rem; color: var(--muted-fg); }
+.pet-hop { transform-box: fill-box; transform-origin: 50% 100%; animation: pet-hop .45s cubic-bezier(.3, 1.6, .5, 1); }
+.pet-svg .pet-heart { fill: hsl(345 85% 62%); transform-box: fill-box; transform-origin: center; animation: pet-heart 1s ease-out forwards; }
+@keyframes pet-hop { 0% { transform: none; } 40% { transform: translateY(-7px) scale(1.04, .97); } 100% { transform: none; } }
+@keyframes pet-heart { 0% { opacity: 0; transform: translateY(6px) scale(.5); } 25% { opacity: 1; transform: translateY(0) scale(1.1); } 100% { opacity: 0; transform: translateY(-18px) scale(.9); } }
+@media (prefers-reduced-motion: reduce) { .pet-hop, .pet-svg .pet-heart { animation: none; } }

@@ -92,4 +92,8 @@ export interface Workout {
   source: 'coach' | 'manual'
 }
 
-export interface FoodEntry { id: string; crewId: string; ts: string; itemId: string; servings: number }
+export interface FoodEntry {
+  id: string; crewId: string; ts: string; itemId: string; servings: number
+  /** A food read from a package photo that is not on the menu (itemId 'label'). Kept on this device. */
+  custom?: { name: string; kcal: number; protein: number; calcium: number; sodium: number; potassium: number; fluid: number; vitD: number }
+}

@@ -33,7 +33,8 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | **Where does it come from?** referred-pain source finder (muscle / joint / disc / nerve / bone), shown on the 3D body | ✅ | `web/src/content/sources.ts` |
 | **Exercise coach** (MediaPipe 3D world landmarks): squat, lunge, arm raise, calf raise, sit-to-stand; reps, joint angles, form cues, pain before/after, 3D JSON/CSV export | ✅ | `web/src/engine/coach.ts`, `web/src/screens/Coach.tsx` |
 | **Breathing rate** estimate in the face scan | ✅ | `web/src/engine/resp.ts` |
-| **Plan**: today's actions with reasons, phase exercise plan, nutrition targets, food log, close-the-gap suggestions | ✅ | `web/src/engine/plan.ts`, `web/src/content/nutrition.ts`, `web/src/screens/Plan.tsx` |
+| **Plan**: today's actions with reasons, phase exercise plan, NASA JSC-67378 nutrition targets, a space-food menu grouped by how it is stored (thermostabilized, rehydratable, irradiated, natural form, fresh on resupply), portions (all, ¾, ½, ¼), close-the-gap suggestions that respect the sodium limit | ✅ | `web/src/engine/plan.ts`, `web/src/content/nutrition.ts`, `web/src/screens/Plan.tsx` |
+| **Scan a package**: photograph a food pouch; on-device text reading (Tesseract) matches the menu name or reads a nutrition panel, then you confirm the portion. The photo is never saved or sent | ✅ | `web/src/components/ScanFood.tsx`, `web/src/content/label.ts`, `web/src/vision/ocr.ts`, `web/public/ocr/` |
 | **Calendar**: checks, pain, balance, workouts, mission events, streak | ✅ | `web/src/screens/Calendar.tsx` |
 | **Accounts & cloud sync** (Supabase auth + RLS; works offline without an account) | ✅ code · needs a project | `web/src/data/cloud.ts`, `supabase/migrations/` |
 | **Settings** (profile, mission, nutrition targets, scan length, theme, account, data export) | ✅ | `web/src/screens/Settings.tsx` |
@@ -44,11 +45,11 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | CMO view: all crew, worst first, reasons; delayed downlink to Earth (light-time) | ✅ | `web/src/screens/Medical.tsx` |
 | Habitat server (FastAPI + SQLite): same rules in Python, sync, crew overview, downlink, NASA search | ✅ | `server/` |
 | Offline PWA (service worker, bundled models) | ✅ (production build) | `web/public/sw.js` |
-| **Crew pet**: a companion that grows from daily care (check, exercise, food, pain reports), never from health results; missing days make it sleepy, nothing is lost | ✅ | `web/src/engine/pet.ts`, `web/src/components/Pet.tsx` |
+| **Crew pet** (own page, Tamagotchi-style): starts as an egg that incubates over the first 3 daily checks, then you tap it open; it has needs (fed, exercised, checked in) that run down over hours and are refilled by care, and it grows with check days. It never reacts to health results; neglect makes it hungry or sleepy, never ill | ✅ | `web/src/engine/pet.ts`, `web/src/components/Pet.tsx`, `web/src/screens/PetPage.tsx` |
 | **Daily check reminders**: morning reminder at a chosen time plus an optional 20:00 nudge if the check isn't done, planned 7 days ahead and re-planned after each check; a quiet "You haven't done today's check yet" line on Today. iOS: local notifications that arrive when the app is closed; web: shown only while the app is open | ✅ | `web/src/engine/reminders.ts`, `web/src/data/notify.ts`, `web/src/screens/Settings.tsx` |
 | **Space weather at a glance**: one-line pill at the top of Today ("Space weather: Quiet", "Radiation storm S3: shelter rules apply", "Last known: Quiet" offline), using the storm card's saved reading; tap to jump to the card | ✅ | `web/src/components/SpaceWeatherPill.tsx` |
 | **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
-| 30-second ad (v2): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, food, 3D body, space weather, calendar, pain check, reminders, pet hatch), rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
+| 30-second ad (v3): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, package scan, 3D body, space weather, calendar, pain check, reminders, pet hatch), with an original synthesised soundtrack, rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
 
 ## Run locally
 
@@ -152,7 +153,8 @@ The UI uses a "layered surfaces" style shared with the team's NullBase project: 
 - **Camera measures are not clinically validated.** The rPPG heart rate is labelled "estimate". Thresholds (light 50–230, motion, peak quality ≥ 0.3) are engineering choices tested on synthetic signals, not on astronauts.
 - **Range of motion** is measured for the shoulder in the coach (arm raise + "It hurts here"). Other joints still use the slider.
 - **Ghost coach** (replaying a recorded correct rep) and the finger-tap test are not built.
-- **Food values** are approximate reference values, and the targets are defaults for a crew nutritionist to set.
+- **Food values** are estimates per serving from comparable foods, kept conservative on protein; NASA does not publish per-item ISS menu nutrition openly. A mission would load its own food database. The targets are defaults for a crew nutritionist to set.
+- **Scan a package** reads printed text (the menu name or a nutrition panel). It does not estimate calories from a photo of a plate, which would not be reliable offline. Foods added from a label that are not on the menu are kept on this device; cloud sync stores only the menu item and portion.
 - **RadLab** and the Environmental Data App are linked as evidence. Their data are not ingested; dose rates are published averages with citations.
 - **Solar storm card** reads Earth-orbit GOES data from NOAA (not NASA). Far from Earth the real flux differs, so it is context only and defers to vehicle dosimetry and mission storm rules. Without a network it shows the last saved reading, labelled "Last known".
 - **Reminders on the web** appear only while Crew Mirror is open (no push server). The iPhone app schedules real local notifications 7 days ahead; if the app is not opened for a week, they stop until it is opened again.
@@ -194,6 +196,11 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | Zeitlin et al. 2013 (Science), Hassler et al. 2014 (Science), Zhang et al. 2020 (Science Advances) | Radiation dose-rate context | Papers (values cited) |
 | NASA articles: Astronauts' spines; Walk the line; Field Test (NTRS 20160013636); space nutrition & bone (NTRS 20080026254) | "Why it hurts" cards | Public NASA web pages |
 | Chang et al., paraspinal muscle in ISS crew — https://pmc.ncbi.nlm.nih.gov/articles/PMC5588025 | Lower-back card | Paper (cited) |
+| Tesseract.js 7.0.0 + tesseract.js-core 6.1.2 — https://github.com/naptha/tesseract.js | On-device package text reading (`web/public/ocr/`) | Apache-2.0 |
+| Tesseract English LSTM model (`eng.traineddata`, best_int, via @tesseract.js-data/eng 1.0.0) — https://github.com/tesseract-ocr/tessdata_best | Same | Apache-2.0 |
+| NASA OCHMO-TB-013 Rev C, Food and Nutrition technical brief — https://www.nasa.gov/wp-content/uploads/2023/03/food-and-nutrition-technical-brief-ochmo.pdf | ISS crew protein and sodium intake shown on the food card | Public NASA document (values cited) |
+| NASA JSC-67378 (2020), Exploration nutrition requirements — https://ntrs.nasa.gov/citations/20205008306 | Default nutrition targets | Public NASA document (values cited) |
+| USDA FoodData Central — https://fdc.nal.usda.gov | Per-serving estimates for comparable foods | Public domain (US government) |
 | React 19, Vite 8, TypeScript, Vitest | Web app | MIT |
 | idb-keyval | IndexedDB storage | Apache-2.0 |
 | lucide-react | Icons | ISC |
