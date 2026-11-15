@@ -46,7 +46,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | **Daily check reminders**: morning reminder at a chosen time plus an optional 20:00 nudge if the check isn't done, planned 7 days ahead and re-planned after each check; a quiet "You haven't done today's check yet" line on Today. iOS: local notifications that arrive when the app is closed; web: shown only while the app is open | ✅ | `web/src/engine/reminders.ts`, `web/src/data/notify.ts`, `web/src/screens/Settings.tsx` |
 | **Space weather at a glance**: one-line pill at the top of Today ("Space weather: Quiet", "Radiation storm S3: shelter rules apply", "Last known: Quiet" offline), using the storm card's saved reading; tap to jump to the card | ✅ | `web/src/components/SpaceWeatherPill.tsx` |
 | **iOS app** (Capacitor 8, Swift Package Manager): same web app in a native shell, camera permission, models bundled for offline use | ✅ simulator · device needs signing | `web/ios/`, `web/capacitor.config.ts` |
-| 30-second ad: one phone, animated screens, rendered to MP4 | ✅ | `ad/index.html`, `docs/AD_DEMO_PLAN.md` |
+| 30-second ad (v2): three.js space opening on real NASA/USGS planet maps, then one phone playing real captured app clips (face mesh, plan, food, 3D body, space weather, calendar, pain check, reminders, pet hatch), rendered frame by frame to MP4 | ✅ | `ad/index.html`, `ad/capture/`, `docs/AD_DEMO_PLAN.md` |
 
 ## Run locally
 
@@ -120,7 +120,8 @@ npm run ios          # downloads models if missing, builds, syncs, opens ios/App
 In Xcode pick the **App** scheme and an iPhone simulator, then Run. On a real iPhone, set your team under Signing & Capabilities. After changing web code, run `npm run ios:sync`.
 
 ### Ad video
-Open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart). The rendered video is `ad/crew-mirror-ad.mp4`.
+Open `ad/index.html` in Chrome to play the 30-second ad (press Replay to restart); it works straight from disk, no server needed. The rendered video is `ad/crew-mirror-ad.mp4`.
+To re-capture the app clips, run the web app (`npm run dev` in `web/`) and `python ad/capture/capture.py` (Playwright). The capture writes a 21-day history for one astronaut into the capture browser's IndexedDB only (`ad/capture/fixture.js`); nothing is added to the app.
 
 ## How the rules work
 
@@ -173,6 +174,12 @@ See `docs/AI_USE.md`. Code generation is acknowledged in this README, in `docs/A
 | Capacitor 8 (@capacitor/core, @capacitor/ios, @capacitor/cli) — https://capacitorjs.com | iOS app shell | MIT |
 | @capacitor/local-notifications 8.3 — https://capacitorjs.com/docs/apis/local-notifications | Daily check reminders in the iOS app (`web/src/data/notify.ts`) | MIT |
 | Playwright + ffmpeg (imageio-ffmpeg) | Render the ad to MP4 (tools only, not shipped) | Apache-2.0 / LGPL |
+| NASA Blue Marble Next Generation, December 2004 (Reto Stöckli, NASA Earth Observatory), via NASA SVS 12564 — https://svs.gsfc.nasa.gov/12564 | Ad: Earth day map (`ad/textures/earth_day.jpg`) | Public domain (NASA) |
+| NASA SVS 3615 "Equirectangular Projected Earth" (Greg Shirah; Blue Marble NG + cloud composite) — https://svs.gsfc.nasa.gov/3615 | Ad: Earth cloud layer, extracted as the difference of the with/without-clouds stills (`ad/textures/earth_clouds.jpg`) | Public domain (NASA) |
+| NASA SVS 4720 "CGI Moon Kit" (LRO LROC color map, Ernie Wright) — https://svs.gsfc.nasa.gov/4720 | Ad: Moon color map (`ad/textures/moon.jpg`) | Public domain (NASA) |
+| USGS Astrogeology / NASA Viking MDIM2.1 global color mosaic (via Wikimedia Commons, `Mars_Viking_MDIM21_ClrMosaic_1km.jpg`) — https://astrogeology.usgs.gov/search/map/mars_viking_global_color_mosaic_925m | Ad: Mars color map (`ad/textures/mars.jpg`) | Public domain (USGS/NASA) |
+| MediaPipe canonical face model (`canonical_face_model.obj`, generic mesh, not a real person) — https://github.com/google-ai-edge/mediapipe/tree/master/mediapipe/modules/face_geometry/data | Ad: 478-point face mesh on the Daily check screen (`ad/data/face_mesh.js`) | Apache-2.0 |
+| three.js r187 (bundled to `ad/vendor/three.min.js`) — https://threejs.org | Ad: space opening (WebGL) | MIT |
 | Wang et al. 2017, "Algorithmic Principles of Remote PPG", IEEE TBME — https://doi.org/10.1109/TBME.2016.2609282 | rPPG POS method | Paper (method only) |
 | Zeitlin et al. 2013 (Science), Hassler et al. 2014 (Science), Zhang et al. 2020 (Science Advances) | Radiation dose-rate context | Papers (values cited) |
 | NASA articles: Astronauts' spines; Walk the line; Field Test (NTRS 20160013636); space nutrition & bone (NTRS 20080026254) | "Why it hurts" cards | Public NASA web pages |
