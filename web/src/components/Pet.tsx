@@ -1,12 +1,15 @@
 // Crew pet: an original little space critter in a glass helmet. It grows from showing
 // up (see engine/pet.ts) and never reacts to health results.
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { ArrowRight, Check, PawPrint, Pencil, X } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
 import { HATCH_DAYS, MOOD_LABEL, petState, STAGES, type Mood, type StageId } from '../engine/pet'
 import { outfit } from '../engine/petshop'
 import { useWardrobe } from '../data/wardrobe'
-import { BackLayer, FrontLayer, SceneLayer, Star, type Worn } from './PetAccessories'
+import { useGame } from '../data/petgame'
+import { tripState } from '../engine/petgame'
+import { useNow } from './useNow'
+import { BackLayer, COLORS, FrontLayer, SceneLayer, Star, type Worn } from './PetAccessories'
 
 const STAGE_ORDER: StageId[] = STAGES.map((s) => s.id)
 const atLeast = (stage: StageId, min: StageId) => STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf(min)
@@ -68,8 +71,11 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
   const stageName = STAGES.find((s) => s.id === stage)?.name ?? stage
   const label = `${name}, your pet. ${stageName} stage, ${MOOD_LABEL[mood].toLowerCase()}`
   const sc = BODY_SCALE[stage]
+  // A bought body colour overrides the pet's palette variables (the egg is never tinted).
+  const col = stage !== 'egg' && wear?.color ? COLORS[wear.color] : undefined
+  const tint = col ? ({ '--pet-body': col.body, '--pet-body-shade': col.shade, '--pet-belly': col.belly } as CSSProperties) : undefined
   return (
-    <svg className={`pet-svg mood-${mood}`} viewBox="0 0 140 130" width={size} height={(size * 130) / 140} role="img" aria-label={label}>
+    <svg className={`pet-svg mood-${mood}`} viewBox="0 0 140 130" width={size} height={(size * 130) / 140} role="img" aria-label={label} style={tint}>
       <title>{label}</title>
       <ellipse className="pet-shadow" cx={70} cy={123} rx={42} ry={4} />
 
@@ -201,6 +207,8 @@ export function PetMini() {
   const s = useStore()
   const p = activeProfile(s)
   const [wardrobe] = useWardrobe(p?.id ?? '')
+  const [game] = useGame(p?.id ?? '')
+  const now = useNow(60_000)
   if (!p) return null
   const pet = petState(s, p.id)
   const hatched = readHatched(p.id)
@@ -212,7 +220,7 @@ export function PetMini() {
       <span className="pet-mini-t">
         <small className="kicker"><PawPrint size={12} /> Crew pet</small>
         <b>{readName(p.id)}</b>
-        <small>{ready ? 'Ready to hatch! Tap to open.' : !hatched ? `An egg · ${Math.min(pet.checkDays, HATCH_DAYS)}/${HATCH_DAYS} daily checks to hatch` : low.level < 50 ? low.hungry : `${pet.stage.name} · ${MOOD_LABEL[pet.mood]}`}</small>
+        <small>{ready ? 'Ready to hatch! Tap to open.' : !hatched ? `An egg · ${Math.min(pet.checkDays, HATCH_DAYS)}/${HATCH_DAYS} daily checks to hatch` : tripState(game, now, pet.stage.id).kind === 'back' ? `${readName(p.id)} is back from a trip. Tap to collect points.` : low.level < 50 ? low.hungry : `${pet.stage.name} · ${MOOD_LABEL[pet.mood]}`}</small>
       </span>
       <ArrowRight size={16} />
     </a>

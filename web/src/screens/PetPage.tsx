@@ -1,13 +1,17 @@
 // Crew pet page: the pet, hatching it, today's care and how it grows.
 // Growth rules live in engine/pet.ts (showing up only, never health results).
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, CheckCircle2, Circle, Heart, Lock, PawPrint, ShoppingBag, Sparkles, Sprout } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Circle, Heart, Lock, PawPrint, Rocket, ShoppingBag, Sparkles, Sprout, TrendingUp } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
 import { useWardrobe } from '../data/wardrobe'
+import { useGame } from '../data/petgame'
 import { HATCH_DAYS, MOOD_LABEL, petState, STAGES, XP } from '../engine/pet'
 import { balance, itemById, outfit } from '../engine/petshop'
 import { MOOD_NOTE, Pet, PetName, readHatched, readName, writeHatched, writeName } from '../components/Pet'
 import { PetShop } from '../components/PetShop'
+import { PetTrips } from '../components/PetTrips'
+import { PetMarket } from '../components/PetMarket'
+import { useNow } from '../components/useNow'
 
 export function PetPage({ go }: { go: (t: string) => void }) {
   const p = activeProfile(useStore())
@@ -16,6 +20,7 @@ export function PetPage({ go }: { go: (t: string) => void }) {
 }
 
 const TAPS_TO_HATCH = 3
+type View = 'care' | 'trips' | 'shop' | 'market'
 
 function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void }) {
   const s = useStore()
@@ -27,9 +32,11 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
   const [pop, setPop] = useState(false)
   const [nudge, setNudge] = useState(0)
   const [hearts, setHearts] = useState(0)
-  const [view, setView] = useState<'care' | 'shop'>('care')
+  const [view, setView] = useState<View>('care')
   const [tryOn, setTryOn] = useState<string | null>(null)
   const [wardrobe, updateWardrobe] = useWardrobe(crewId)
+  const [game, updateGame] = useGame(crewId)
+  const now = useNow(30_000)
   const timers = useRef<number[]>([])
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
 
@@ -59,9 +66,11 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
   const cracks = hatched ? 0 : Math.min(3, Math.min(2, pet.checkDays) + taps)
   const trying = view === 'shop' && tryOn ? itemById(tryOn) : undefined
   const wear = hatched ? outfit(wardrobe, trying?.id) : undefined
-  const points = balance(pet.xp, wardrobe)
+  // Care points: earned by showing up, plus what trips and the exchange added or took, minus what the shop took.
+  const earned = pet.xp + game.credit
+  const points = balance(earned, wardrobe)
   const art = <Pet stage={stageId} mood={pet.mood} name={name} size={220} cracks={cracks} ready={ready} burst={burst} pop={pop} nudge={nudge} hearts={hearts} wear={wear} />
-  const show = (v: 'care' | 'shop') => { setView(v); setTryOn(null) }
+  const show = (v: View) => { setView(v); setTryOn(null) }
 
   return (
     <div className="grid g2 pet-page">
@@ -90,7 +99,9 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
         {hatched && (
           <div className="seg pet-views" role="group" aria-label="Pet page view">
             <button className={view === 'care' ? 'on' : ''} aria-pressed={view === 'care'} onClick={() => show('care')}><PawPrint /> Care</button>
+            <button className={view === 'trips' ? 'on' : ''} aria-pressed={view === 'trips'} onClick={() => show('trips')}><Rocket /> Trips</button>
             <button className={view === 'shop' ? 'on' : ''} aria-pressed={view === 'shop'} onClick={() => show('shop')}><ShoppingBag /> Shop</button>
+            <button className={view === 'market' ? 'on' : ''} aria-pressed={view === 'market'} onClick={() => show('market')}><TrendingUp /> Market</button>
           </div>
         )}
         {hatched && (
@@ -112,7 +123,11 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
 
       <div className="stack">
         {hatched && view === 'shop' ? (
-          <PetShop name={name} stage={stageId} xp={pet.xp} wardrobe={wardrobe} update={updateWardrobe} selected={tryOn} onSelect={setTryOn} />
+          <PetShop name={name} stage={stageId} xp={earned} wardrobe={wardrobe} update={updateWardrobe} selected={tryOn} onSelect={setTryOn} />
+        ) : hatched && view === 'trips' ? (
+          <PetTrips name={name} stage={stageId} game={game} update={updateGame} now={now} />
+        ) : hatched && view === 'market' ? (
+          <PetMarket name={name} stage={stageId} balance={points} game={game} update={updateGame} now={now} />
         ) : (<>
         {hatched && (
           <div className="card">
