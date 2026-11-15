@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import {
   Activity, ArrowRight, BellRing, Check, CloudOff, Code2, Dumbbell, EyeOff, Footprints, HeartPulse, PawPrint, Play,
-  Radiation, ScanFace, ShieldAlert, Smartphone, Stethoscope, UtensilsCrossed,
+  Radiation, ScanFace, ShieldAlert, Siren, Stethoscope, UtensilsCrossed,
 } from 'lucide-react'
 import { Logo, ThemeToggle } from '../components/ui'
 
@@ -102,7 +102,7 @@ export function Home() {
               [ScanFace, 'Scan', 'Sit in front of the screen for a short face scan, then answer four quick questions about mood, energy and sleep.'],
               [Activity, 'Compare', 'Your first seven checks become your normal. Each new reading is marked Usual, Watch or Act, always with the reason.'],
               [Dumbbell, 'Plan', 'Today’s exercise, food and sleep advice adapts to what changed, and to where you are in the mission.'],
-              [ShieldAlert, 'Act', 'Danger signs go straight to the crew medical officer. Radiation storms come with clear shelter and EVA actions.'],
+              [ShieldAlert, 'Act', 'Danger signs raise a crew alert and open a step-by-step emergency guide. Radiation storms come with shelter and EVA actions.'],
             ] as const).map(([Icon, t, d], i) => (
               <li key={t} className="hp-step card hp-reveal" style={{ transitionDelay: `${i * 70}ms` }}>
                 <span className="hp-step-n">0{i + 1}</span><span className="ic"><Icon /></span>
@@ -137,6 +137,7 @@ export function Home() {
           </div>
           <div className="hp-grid">
             {([
+              [Siren, 'Emergency guides', 'A red alert names who needs help. Eight step-by-step guides for the helper: CPR beat, camera heart rate, crew roll call and a timed log sent to Earth.'],
               [ScanFace, 'Camera face scan', 'Heart rate from skin colour (rPPG), breathing, blinking and eye closure, and face width for fluid shifting to the head.'],
               [Radiation, 'Radiation storms', 'Live NOAA proton data on the official S1–S5 scale, with shelter and EVA actions. Keeps the last reading offline.'],
               [Footprints, 'Balance on the ground', 'After landing or on the Moon or Mars: “Is it safe to walk or start an EVA?” Switched off while weightless.'],
@@ -144,7 +145,6 @@ export function Home() {
               [Stethoscope, 'Medical officer view', 'Every crew member, most urgent first, and a message queue that shows the real light-time to Earth.'],
               [BellRing, 'Reminders', 'A gentle morning reminder and evening nudge, as real notifications on the iPhone app.'],
               [CloudOff, 'Works offline', 'Models, 3D anatomy and rules are bundled. A full check needs no connection at all.'],
-              [Smartphone, 'Web and iPhone', 'An installable web app and a native iOS app, from the same code.'],
             ] as const).map(([Icon, t, d]) => (
               <div key={t} className="hp-mini card hp-reveal"><span className="ic"><Icon /></span><h3>{t}</h3><p>{d}</p></div>
             ))}
