@@ -57,6 +57,8 @@ export function Evidence() {
   }, [q])
   const shown = live?.datasets ?? offline
 
+  const [allCharts, setAllCharts] = useState(false)
+  const [nShown, setNShown] = useState(4)
   const searchLive = async () => {
     setBusy(true)
     try { setLive(await api.search(q)) } catch { setLive(null) } finally { setBusy(false) }
@@ -66,7 +68,7 @@ export function Evidence() {
     <div className="stack">
       <div className="card">
         <h2>Why a personal baseline? Evidence from Inspiration4</h2>
-        <div className="grid g4" style={{ margin: '10px 0' }}>
+        <div className="grid" style={{ margin: '10px 0', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))' }}>
           <div><div className="kpi">{h.pairs}</div><small>crew × lab-value pairs ({h.crew} crew, OSD-569 + OSD-575)</small></div>
           <div><div className="kpi">{h.outside_personal_range}</div><small>left the person’s own pre-flight range the day after landing (R+1)</small></div>
           <div><div className="kpi" style={{ color: 'var(--watch)' }}>{h.outside_personal_inside_population}</div><small>of those were still inside the population “normal” range</small></div>
@@ -75,7 +77,7 @@ export function Evidence() {
         <p>The day after landing, a population “normal” range flags only <b>{h.outside_population_range}</b> of {h.pairs} values — yet <b>{h.outside_personal_inside_population}</b> changes that left the astronaut’s own pre-flight range stayed “normal”. Comparing each astronaut with <b>their own</b> values sees them: that is the core design choice of Crew Mirror.</p>
         <p className="muted"><small>{OSDR_EVIDENCE.method} Only 3 pre-flight draws per person, so the personal range is narrow and some exits are normal day-to-day variation — Crew Mirror therefore uses 7 baseline sessions and robust z-scores (median / MAD) with a minimum-change floor. Values are shown as published; this is a design argument, not a clinical finding.</small></p>
         <div className="grid g4">
-          {analytes.map((a) => (
+          {(allCharts ? analytes : analytes.slice(0, 2)).map((a) => (
             <div className="card tight" key={a.analyte}>
               <div className="row between"><b style={{ fontSize: '.85rem' }}>{a.analyte.toLowerCase()}</b><small>{a.unit}</small></div>
               <AnalyteChart a={a} />
@@ -83,6 +85,7 @@ export function Evidence() {
             </div>
           ))}
         </div>
+        {analytes.length > 2 && <button className="btn small" style={{ marginTop: 10 }} onClick={() => setAllCharts((v) => !v)}>{allCharts ? 'Show fewer charts' : `Show all ${analytes.length} blood-test charts`}</button>}
         <p><small>{OSDR_EVIDENCE.credit}. Shaded bars = each crew member’s pre-flight range; big dot = R+1 outside it. Studies: {OSDR_EVIDENCE.studies.map((x) => <a key={x.id} href={x.url} target="_blank" rel="noreferrer" style={{ marginRight: 8 }}>{x.id}</a>)}</small></p>
       </div>
 
@@ -97,14 +100,15 @@ export function Evidence() {
           <button className="btn" onClick={searchLive} disabled={!s.online || busy} title={s.online ? '' : 'Habitat server offline'}>{busy ? 'Searching…' : 'Search live'}</button>
         </div>
         <div className="stack" style={{ marginTop: 10 }}>
-          {shown.slice(0, 12).map((d) => (
+          {shown.slice(0, nShown).map((d) => (
             <div key={d.id} className="ex">
               <a href={d.landing} target="_blank" rel="noreferrer"><b>{d.title}</b></a>
-              <p><small className="muted">{d.description}</small></p>
+              <p><small className="muted clamp3">{d.description}</small></p>
             </div>
           ))}
           {!shown.length && <p className="muted">No matching datasets in the offline copy.</p>}
         </div>
+        {shown.length > nShown && <button className="btn small" style={{ marginTop: 8 }} onClick={() => setNShown((n) => n + 8)}>Show more ({shown.length - nShown} left)</button>}
         <p><small>Dataset metadata from data.nasa.gov</small></p>
       </div>
 

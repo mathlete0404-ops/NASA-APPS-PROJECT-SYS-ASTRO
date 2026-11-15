@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-  CalendarDays, ChevronDown, CircleHelp, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PersonStanding,
+  CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PersonStanding,
   ScanFace, Settings as SettingsIcon, Stethoscope, TrendingUp,
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
@@ -23,20 +23,24 @@ import { Settings } from './screens/Settings'
 import { GuideBody, Welcome } from './screens/Welcome'
 import { X } from 'lucide-react'
 
+// Five places cover the daily job (check in, see the plan, say where it hurts). Everything else
+// sits under More, so the sidebar and the phone tab bar stay short.
 const TABS = [
-  { id: 'today', label: 'Today', icon: House, title: 'Today', group: 'main' },
-  { id: 'check', label: 'Daily check', icon: ScanFace, title: 'Daily check', group: 'main' },
-  { id: 'plan', label: 'Plan', icon: ListChecks, title: 'Today’s plan · exercise & food', group: 'main' },
-  { id: 'calendar', label: 'Calendar', icon: CalendarDays, title: 'Calendar', group: 'main' },
-  { id: 'body', label: '3D body', icon: PersonStanding, title: '3D body', group: 'Body' },
-  { id: 'report', label: 'Report pain', icon: HeartPulse, title: 'Report pain or symptom', group: 'Body' },
-  { id: 'coach', label: 'Exercise coach', icon: Dumbbell, title: 'Exercise coach', group: 'Body' },
-  { id: 'balance', label: 'Balance', icon: Footprints, title: 'Balance · safe to walk?', group: 'Body' },
-  { id: 'trends', label: 'Trends', icon: TrendingUp, title: 'Trends', group: 'More' },
-  { id: 'evidence', label: 'NASA evidence', icon: Database, title: 'NASA evidence', group: 'More' },
-  { id: 'medical', label: 'Medical officer', icon: Stethoscope, title: 'Crew medical officer', group: 'More' },
-  { id: 'settings', label: 'Settings', icon: SettingsIcon, title: 'Settings', group: 'footer' },
+  { id: 'today', label: 'Today', short: 'Today', icon: House, title: 'Today', group: 'main' },
+  { id: 'check', label: 'Daily check', short: 'Check', icon: ScanFace, title: 'Daily check', group: 'main' },
+  { id: 'plan', label: 'Plan', short: 'Plan', icon: ListChecks, title: 'Today’s plan', group: 'main' },
+  { id: 'body', label: '3D body', short: 'Body', icon: PersonStanding, title: '3D body', group: 'main' },
+  { id: 'report', label: 'Something hurts', short: 'Pain', icon: HeartPulse, title: 'Something hurts', group: 'main' },
+  { id: 'calendar', label: 'Calendar', short: 'Calendar', icon: CalendarDays, title: 'Calendar', group: 'More' },
+  { id: 'trends', label: 'Trends', short: 'Trends', icon: TrendingUp, title: 'Trends', group: 'More' },
+  { id: 'coach', label: 'Exercise coach', short: 'Coach', icon: Dumbbell, title: 'Exercise coach', group: 'More' },
+  { id: 'balance', label: 'Balance', short: 'Balance', icon: Footprints, title: 'Balance', group: 'More' },
+  { id: 'evidence', label: 'NASA evidence', short: 'Evidence', icon: Database, title: 'NASA evidence', group: 'More' },
+  { id: 'medical', label: 'Medical officer', short: 'Medical', icon: Stethoscope, title: 'Crew medical officer', group: 'More' },
+  { id: 'settings', label: 'Settings', short: 'Settings', icon: SettingsIcon, title: 'Settings', group: 'footer' },
 ] as const
+/** Phone tab bar: four main places plus More (Report pain lives in More and on Today/Body). */
+const PHONE_TABS = ['today', 'check', 'plan', 'body'] as const
 type Tab = (typeof TABS)[number]['id']
 
 // Routes: "#/login", "#/app/<tab>" ("#/" opens Today). Old "#<tab>" links still work.
@@ -72,7 +76,9 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
   const [guide, setGuide] = useState(false)
   const [collapsed, setCollapsed] = useState(() => { try { return localStorage.getItem('crew-mirror:nav-collapsed') === '1' } catch { return false } })
   const [moreOpen, setMoreOpen] = useState(false)
+  const [sheet, setSheet] = useState(false)
   useReminderSync()
+  useEffect(() => { setSheet(false) }, [tab])
   useEffect(() => {
     const open = () => setGuide(true)
     addEventListener('crew-mirror:guide', open)
@@ -102,8 +108,6 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
         </div>
         <nav className="nav">
           {TABS.filter((t) => t.group === 'main').map((t) => item(t))}
-          <div className="nav-label"><span className="nav-text">Body</span></div>
-          {TABS.filter((t) => t.group === 'Body').map((t) => item(t))}
           <button className={`nav-item nav-more-btn${moreOpen || moreActive ? ' open' : ''}`} onClick={() => setMoreOpen((o) => !o)} title={collapsed ? 'More' : undefined} aria-expanded={moreOpen || moreActive}>
             <ChevronDown className="chev" /><span className="nav-text">More</span>
           </button>
@@ -133,12 +137,13 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           <span className={`pill net${s.online ? ' on' : ''}`} title={s.online ? 'Connected to the habitat computer. Numbers sync.' : 'Not connected. Everything still works and is saved on this device.'}>
             {s.online ? <Wifi size={13} /> : <WifiOff size={13} />}<span className="hide-xs">{s.online ? 'Synced' : 'Offline'}</span>
           </span>
-          <ThemeToggle />
+          <span className="hide-phone"><ThemeToggle /></span>
         </header>
-        <nav className="mobile-nav">
-          <a className="nav-item" href="#/app/today"><Logo size={18} /></a>
-          {TABS.filter((t) => t.group !== 'footer').map((t) => item(t, true))}
-          {item(TABS.find((t) => t.id === 'settings')!, true)}
+        <nav className="tabbar" aria-label="Main">
+          {PHONE_TABS.map((id) => { const t = TABS.find((x) => x.id === id)!; return (
+            <a key={id} href={`#/app/${id}`} aria-current={id === tab ? 'page' : undefined}><t.icon /><span>{t.short}</span></a>
+          ) })}
+          <button type="button" className={PHONE_TABS.some((id) => id === tab) ? '' : 'on'} aria-expanded={sheet} onClick={() => setSheet(true)}><Ellipsis /><span>More</span></button>
         </nav>
         <main className="content page-enter" key={tab}>
           {!s.loaded ? <p>Loading…</p> : (
@@ -160,6 +165,20 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
         </main>
         <Footer />
       </div>
+      {sheet && (
+        <div className="modal sheet-wrap" role="dialog" aria-modal="true" aria-label="More" onClick={() => setSheet(false)}>
+          <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="sheet-grip" />
+            <div className="sheet-grid">
+              {TABS.filter((t) => !PHONE_TABS.some((id) => id === t.id)).map((t) => (
+                <a key={t.id} href={`#/app/${t.id}`} className={`sheet-item${t.id === 'report' ? ' warn' : ''}`} aria-current={t.id === tab ? 'page' : undefined}><t.icon /><span>{t.label}</span></a>
+              ))}
+              <button type="button" className="sheet-item" onClick={() => { setSheet(false); setGuide(true) }}><CircleHelp /><span>How to use</span></button>
+              {cloudConfigured && !s.account && <a className="sheet-item" href="#/login"><LogIn /><span>Sign in to sync</span></a>}
+            </div>
+          </div>
+        </div>
+      )}
       {guide && (
         <div className="modal" role="dialog" aria-modal="true" aria-label="How to use Crew Mirror" onClick={() => setGuide(false)}>
           <div className="card modal-card" onClick={(e) => e.stopPropagation()}>

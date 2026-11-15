@@ -1,5 +1,6 @@
 // Camera mode for "where does it hurt?": touch the painful spot with one finger and hold
 // still for about a second. Only the skeleton and fingertip are drawn; video never leaves.
+import { cameraHelp } from './ui'
 import { useEffect, useRef, useState } from 'react'
 import { Camera, RotateCcw } from 'lucide-react'
 import { VisionSession, drawPose, type PoseFrame, type HandTip } from '../vision/camera'
@@ -84,7 +85,7 @@ export function PointToPain({ onConfirm }: { onConfirm: (region: Region, side: '
           {phase === 'loading' && 'Loading on-device pose + hand models…'}
           {phase === 'live' && (hit ? `Touching: ${REGION_LABEL[hit.region]}${hit.side !== 'middle' ? ` (${hit.side})` : ''}. Hold ${Math.round(progress * 100)}%` : 'Touch the spot that hurts with one fingertip.')}
           {phase === 'done' && confirmed && `Got it: ${REGION_LABEL[confirmed.region]}${confirmed.side !== 'middle' ? ` (${confirmed.side})` : ''}.`}
-          {phase === 'error' && `Camera or model failed: ${err}`}
+          {phase === 'error' && cameraHelp(err)}
         </div>
       </div>
       <div className="row">

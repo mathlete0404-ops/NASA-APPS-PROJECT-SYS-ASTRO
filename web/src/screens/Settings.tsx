@@ -124,10 +124,11 @@ export function Settings({ go }: { go: (t: string) => void }) {
       <Section icon={Salad} title="Nutrition targets">
         {([
           ['kcalPerKg', 'Energy', 'kcal / kg / day', 1], ['proteinPerKg', 'Protein', 'g / kg / day', 0.1], ['calciumMg', 'Calcium', 'mg / day', 50],
-          ['vitDug', 'Vitamin D', 'µg / day', 1], ['sodiumMaxMg', 'Sodium (max)', 'mg / day', 100], ['potassiumMg', 'Potassium', 'mg / day', 100], ['fluidMl', 'Fluid', 'mL / day', 100],
+          ['vitDug', 'Vitamin D', 'µg / day', 1], ['sodiumMaxMg', 'Sodium (max)', 'mg / day', 100], ['potassiumMg', 'Potassium', 'mg / day', 100], ['fluidMlPerKg', 'Fluid', 'mL / kg / day', 1], ['fluidMl', 'Fluid (minimum)', 'mL / day', 100],
         ] as [keyof Targets, string, string, number][]).map(([k, label, unit, step]) => (
           <Row key={k} label={label} hint={unit}><input type="number" step={step} value={t[k]} onChange={(e) => setT(k, +e.target.value)} style={{ width: 100 }} /></Row>
         ))}
+        <p className="muted" style={{ fontSize: '.85rem' }}>Defaults follow NASA's exploration nutrition requirements (JSC-67378): protein 1.2–1.8 g/kg, calcium 1000–1200 mg, vitamin D 25 µg, sodium 1500–2300 mg, fluid 32 mL/kg. Your crew nutritionist can adjust them.</p>
         <button className="btn small" onClick={() => updateProfile({ ...p, targets: undefined })}>Reset to defaults</button>
       </Section>
 

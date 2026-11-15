@@ -5,7 +5,7 @@ import type { Measurement } from '../data/types'
 import { analyseFaceScan, type FaceScanResult, type FaceSample } from '../engine/face'
 import { METRICS } from '../engine/status'
 import { drawFace, VisionSession } from '../vision/camera'
-import { EvidenceChips, fmtNum, Spark, StatusChip } from '../components/ui'
+import { EvidenceChips, fmtNum, Spark, StatusChip, cameraHelp } from '../components/ui'
 
 type Step = 'scan' | 'mood' | 'done'
 
@@ -211,9 +211,25 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
             {phase === 'idle' && 'Sit still, face the screen, even light on your face.'}
             {phase === 'loading' && 'Loading on-device model…'}
             {phase === 'scanning' && (live.face ? 'Hold still and breathe normally.' : 'Can’t see your face. Look at the screen.')}
-            {phase === 'error' && `Camera or model failed: ${err}`}
+            {phase === 'error' && cameraHelp(err)}
           </div>
         </div>
+        <div className="scan-controls">
+          <button className="btn primary" onClick={start} disabled={phase === 'loading' || phase === 'scanning'}>
+            {phase === 'loading' ? 'Starting…' : phase === 'error' ? 'Try again' : 'Start scan'}
+          </button>
+          <label className="scan-len">Length <select value={dur} onChange={(e) => setDur(+e.target.value)} disabled={phase !== 'idle' && phase !== 'error'}>
+            <option value={30}>30 s</option><option value={60}>60 s (best)</option>
+          </select></label>
+          <button className="btn ghost" onClick={() => { session.current?.stop(); onSkip() }}>Skip today</button>
+        </div>
+        {phase === 'scanning' && (
+          <div>
+            <small className="muted">Breathing (live). Breathe normally; the line should rise and fall slowly.</small>
+            <Spark values={wave.map((v, i, a) => v - a.slice(Math.max(0, i - 60), i + 1).reduce((x, y) => x + y, 0) / Math.min(i + 1, 61))} width={320} height={44} />
+            <small className="muted">Eye closure now: {(live.blink * 100).toFixed(0)}%</small>
+          </div>
+        )}
         <p className="privacy">🔒 Video stays in this browser. Only landmark points are drawn, and only numbers are saved. {info}</p>
       </div>
       <div className="card stack">
@@ -226,25 +242,8 @@ export function FaceScan({ onDone, onSkip, defaultSeconds = 30 }: { onDone: (r: 
           <li><b>Face-width ratio</b> (cheek width ÷ eye distance) to spot fluid moving to the head.</li>
         </ul>
         <p className="muted">If the light is bad, you move, or your face is hidden, the result is “No data”, never “Fine”.</p>
-        <div className="row">
-          <label>Length <select value={dur} onChange={(e) => setDur(+e.target.value)} disabled={phase !== 'idle'}>
-            <option value={30}>30 s (quick)</option><option value={60}>60 s (best)</option>
-          </select></label>
-        </div>
-        <div className="row">
-          <button className="btn primary" onClick={start} disabled={phase === 'loading' || phase === 'scanning'}>
-            {phase === 'loading' ? 'Starting…' : 'Start scan'}
-          </button>
-          <button className="btn ghost" onClick={() => { session.current?.stop(); onSkip() }}>Skip today</button>
-        </div>
-        {phase === 'scanning' && (
-          <div>
-            <small className="muted">Breathing (live). Breathe normally; the line should rise and fall slowly.</small>
-            <Spark values={wave.map((v, i, a) => v - a.slice(Math.max(0, i - 60), i + 1).reduce((x, y) => x + y, 0) / Math.min(i + 1, 61))} width={320} height={44} />
-            <small className="muted">Eye closure now: {(live.blink * 100).toFixed(0)}%</small>
-          </div>
-        )}
       </div>
     </div>
   )
 }
+
