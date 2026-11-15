@@ -95,6 +95,8 @@ video.app { object-fit: fill; background: var(--app-bg); }
 #grain { inset: -64px; opacity: .07; mix-blend-mode: overlay; pointer-events: none; }
 #vig { inset: 0; pointer-events: none; background: radial-gradient(1400px 900px at 50% 50%, transparent 55%, #000a 100%); }
 #black { inset: 0; background: #000; pointer-events: none; }
+/* Space Apps rule: AI-generated video carries a visible AI label, on top of everything, for all 30 s */
+#aimark { right: 30px; bottom: 24px; z-index: 100; font: 500 15px/1 Inter, system-ui, sans-serif; letter-spacing: .02em; color: #fff; opacity: .55; pointer-events: none; }
 #replay { position: fixed; right: 18px; bottom: 18px; z-index: 99; font: 600 14px Inter; color: #fff; background: #ffffff1a; border: 1px solid #ffffff33; border-radius: 999px; padding: 10px 16px; cursor: pointer; }
 body.rec #replay { display: none; }
 </style>
@@ -107,17 +109,12 @@ body.rec #replay { display: none; }
 
   <!-- Opening HUD -->
   <div class="abs corner" id="cn1"></div><div class="abs corner" id="cn2"></div><div class="abs corner" id="cn3"></div><div class="abs corner" id="cn4"></div>
-  <div class="abs hud" id="hud"><span class="type" id="hudtype">Signal delay · Earth ⇄ Mars · up to 22 min</span><span class="caret" id="caret"></span>
-    <i class="line" id="hudline"></i><small id="hudsmall">One way. Each message, each answer.</small></div>
+  <div class="abs hud" id="hud"><span class="type" id="hudtype">Mars signal delay · up to 22 min</span><span class="caret" id="caret"></span>
+    <i class="line" id="hudline"></i></div>
   <div class="abs" id="h1"><div class="head">On the way to Mars, help is <em>far away.</em></div></div>
 
   <!-- Captions -->
-  <div class="abs cap left" id="c2" style="top: 380px; width: 780px"><div class="head">No doctor on board.</div><div class="sub">So who notices when your body starts to change?</div></div>
-  <div class="abs cap right" id="c3" style="top: 340px"><div class="kick">Daily check</div><div class="head">Two minutes.<br><em>Just the camera.</em></div><div class="sub">Only the dots are drawn.<br>Video never leaves the device.</div></div>
-  <div class="abs cap left" id="c4" style="top: 350px; width: 780px"><div class="kick">Your own normal</div><div class="head">Compared with <em>you.</em><br>Not an average.</div><div class="sub">Small changes show up early.</div></div>
   <div id="mcaps"></div>
-  <div class="abs cap left" id="c9" style="top: 390px; width: 780px"><div class="kick">Reminders</div><div class="head">A nudge <em>each morning.</em></div><div class="sub">Set on the device. No signal needed.</div></div>
-  <div class="abs cap right" id="c6" style="top: 380px; left: 1050px; width: 800px"><div class="kick">Crew pet</div><div class="head">Show up daily.<br><em>It grows with you.</em></div></div>
   <div class="abs cap left" id="c8" style="top: 330px; width: 760px"><div class="head" style="font-size: 104px; letter-spacing: -3px">Crew Mirror</div><div class="sub" style="font-size: 34px; color: var(--ink); margin-top: 18px">Your health, measured against <em style="font-style: normal; color: var(--teal)">you.</em></div>
     <div class="endline">Team SYS-ASTRO · NASA Space Apps Seoul 2026<br><b>Prototype, not a medical device.</b></div></div>
 
@@ -153,6 +150,7 @@ body.rec #replay { display: none; }
   <div class="abs" id="vig"></div>
   <div class="abs" id="grain"></div>
   <div class="abs" id="black"></div>
+  <div class="abs" id="aimark">Made with AI assistance (Claude Code)</div>
   <div class="abs" id="clock" style="width: 1px; height: 1px; opacity: 0"></div>
 </div></div>
 <button id="replay" type="button">Replay</button>
@@ -185,117 +183,101 @@ const P = (x, y, rx, ry, s, rz = 0) => ({ transform: `translate(${x}px, ${y}px) 
 const master = $('clock').animate([{ opacity: 0 }, { opacity: 1 }], { duration: T, fill: 'both' })
 
 // ------------------------------------------------------------------ timeline
-const S = {
-  open: [0, 5.15], intro: [5.05, 7.75], check: [7.75, 11.6], banner: [11.6, 14.4],
-  notif: [22.4, 24.05], pet: [24.05, 27.7], end: [27.7, 30],
-}
-// Montage of real app clips: [clip, start, end, offset into clip (s), phone side, transition into it, kicker, headline]
-const M = [
-  ['m_today', 14.4, 15.4, .10, -1, 'whip', 'Today', 'Your day,<br><em>at a glance.</em>'],
-  ['m_plan', 15.4, 16.5, .22, 1, 'whip', 'Exercise', 'Exercise,<br><em>ticked off.</em>'],
-  ['m_food', 16.5, 17.6, .10, 1, 'punch', 'Food', 'Food that<br><em>fills the gaps.</em>'],
-  ['m_body', 17.6, 18.7, .05, -1, 'flip', '3D body', 'Your body,<br><em>in 3D.</em>'],
-  ['m_space', 18.7, 19.7, .12, 1, 'whip', 'Space weather', 'Radiation storms,<br><em>watched.</em>'],
-  ['m_calendar', 19.7, 20.6, .20, 1, 'punch', 'Calendar', 'Every day<br><em>of the mission.</em>'],
-  ['m_report', 20.6, 21.6, .12, -1, 'flip', 'Pain check', 'Danger signs<br><em>come first.</em>'],
-  ['m_reminders', 21.6, 22.4, .12, 1, 'whip', 'Reminders', 'Reminders at<br><em>your time.</em>'],
-]
+// 3.5 s opening, then 13 features of exactly 1.9 s each (transitions included), then a 1.8 s end card.
+const OPEN = 3.5, D = 1.9, END = OPEN + 13 * D // 28.2
+// [id, phone side (+1 right, -1 left), headline, subline]
+const F = [
+  ['today', 1, 'No doctor<br><em>on board.</em>', 'So check in every day.'],
+  ['check', -1, 'Two minutes.<br><em>Just the camera.</em>', 'Video never leaves the device.'],
+  ['banner', 1, 'Compared<br>with <em>you.</em>', 'Not an average.'],
+  ['m_today', -1, 'Your day,<br><em>at a glance.</em>', ''],
+  ['m_plan', 1, 'Exercise,<br><em>ticked off.</em>', ''],
+  ['m_food', -1, 'Food that<br><em>fills the gaps.</em>', ''],
+  ['m_body', 1, 'Your body,<br><em>in 3D.</em>', ''],
+  ['m_space', -1, 'Radiation storms,<br><em>watched.</em>', ''],
+  ['m_calendar', 1, 'Every day<br><em>of the mission.</em>', ''],
+  ['m_report', -1, 'Danger signs<br><em>come first.</em>', 'Act now: crew medical officer.'],
+  ['m_reminders', 1, 'Reminders at<br><em>your time.</em>', ''],
+  ['notif', -1, 'A nudge<br><em>each morning.</em>', 'No signal needed.'],
+  ['pet', 1, 'It grows<br><em>with you.</em>', 'Show up daily.'],
+].map(([id, side, head, sub], i) => ({ id, side, head, sub, a: +(OPEN + i * D).toFixed(3), b: +(OPEN + (i + 1) * D).toFixed(3) }))
+const SL = Object.fromEntries(F.map((f) => [f.id, f]))
+const M = F.filter((f) => f.id.startsWith('m_'))
+const OFF = .08 // seconds into each clip when its slot starts
 
 // ------------------------------------------------------------------ opening overlay
-tl('black', [[0, { opacity: 1 }], [.7, { opacity: 0 }], [29.6, { opacity: 0 }], [30, { opacity: .0 }]], 'cubic-bezier(.4,0,.2,1)')
+tl('black', [[0, { opacity: 1 }], [.5, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
 const NCH = $('hudtype').textContent.length
-tl('hudtype', [[.6, { width: '0ch' }], [2.0, { width: NCH + 'ch' }]], `steps(${NCH}, end)`)
-tl('hud', [[.45, { opacity: 0 }], [.6, { opacity: 1 }], [4.6, { opacity: 1 }], [5.0, { opacity: 0 }]], 'linear')
+{ const h = $('hudtype'); h.style.width = 'auto'; var HUDW = Math.ceil(h.getBoundingClientRect().width) + 2; h.style.width = '' } // letter-spacing makes glyphs wider than 1ch
+tl('hudtype', [[.35, { width: '0px' }], [1.15, { width: HUDW + 'px' }]], `steps(${NCH}, end)`)
+tl('hud', [[.25, { opacity: 0 }], [.35, { opacity: 1 }], [3.1, { opacity: 1 }], [3.4, { opacity: 0 }]], 'linear')
 tl('caret', [[0, { opacity: 1 }], [30, { opacity: 1 }]], 'linear')
 $('caret').animate([{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0, offset: .5 }, { opacity: 0 }], { duration: 900, iterations: Infinity })
-tl('hudline', [[2.0, { transform: 'scaleX(0)' }], [2.7, { transform: 'scaleX(1)' }]])
-tl('hudsmall', [[2.3, { opacity: 0, transform: 'translateY(6px)' }], [2.8, { opacity: 1, transform: 'none' }]])
-for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[.3, { opacity: 0 }], [.9, { opacity: 1 }], [4.6, { opacity: 1 }], [5.0, { opacity: 0 }]], 'linear')
-show('h1', 2.95, 5.0, 'translateY(18px)', .6)
-tl('wash', [[4.8, { opacity: 0 }], [6.0, { opacity: 1 }]])
-tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [4.95, { opacity: 1, filter: 'blur(0px)' }], [6.0, { opacity: .5, filter: 'blur(1.5px)' }], [27.4, { opacity: .5, filter: 'blur(1.5px)' }], [28.6, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
+tl('hudline', [[1.15, { transform: 'scaleX(0)' }], [1.6, { transform: 'scaleX(1)' }]])
+for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[.2, { opacity: 0 }], [.6, { opacity: 1 }], [3.1, { opacity: 1 }], [3.4, { opacity: 0 }]], 'linear')
+show('h1', 1.4, 3.4, 'translateY(18px)', .45)
+tl('wash', [[3.3, { opacity: 0 }], [4.3, { opacity: 1 }]])
+tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [3.35, { opacity: 1, filter: 'blur(0px)' }], [4.3, { opacity: .5, filter: 'blur(1.5px)' }], [END - .2, { opacity: .5, filter: 'blur(1.5px)' }], [END + 1, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
 
-// ------------------------------------------------------------------ captions
-show('c2', 5.75, 7.65, 'translateX(-30px)')
-show('c3', 8.35, 11.45, 'translateX(30px)')
-show('c4', 12.0, 14.3, 'translateX(-30px)')
-show('c9', 22.75, 24.0, 'translateX(-30px)', .35)
-show('c6', 24.5, 27.55, 'translateX(30px)')
-tl('c8', [[27.95, { opacity: 0, transform: 'translateX(-40px)' }], [28.7, { opacity: 1, transform: 'none' }]])
-M.forEach(([id, a, b, , side, , kick, head], i) => {
+// ------------------------------------------------------------------ captions: one per feature, opposite the phone
+F.forEach(({ id, side, head, sub, a, b }) => {
   const d = document.createElement('div')
-  d.className = `abs cap m ${side < 0 ? 'right' : 'left'}`; d.id = 'mc-' + id; d.style.top = '400px'
-  d.innerHTML = `<div class="kick">${kick}</div><div class="head">${head}</div>`
+  d.className = `abs cap m ${side < 0 ? 'right' : 'left'}`; d.id = 'cap-' + id
+  d.style.top = (sub ? 392 : 420) + 'px'
+  d.innerHTML = `<div class="head">${head}</div>${sub ? `<div class="sub">${sub}</div>` : ''}`
   $('mcaps').appendChild(d)
-  const f = .14, dx = side < 0 ? 26 : -26
-  tl(d, [[a + .02, { opacity: 0, transform: `translateX(${dx}px)` }], [a + .02 + f, { opacity: 1, transform: 'none' }], [b - .1, { opacity: 1, transform: 'none' }], [b, { opacity: 0, transform: 'none' }]])
+  const dx = side < 0 ? 26 : -26
+  tl(d, [[a + .12, { opacity: 0, transform: `translateX(${dx}px)` }], [a + .42, { opacity: 1, transform: 'none' }], [b - .2, { opacity: 1, transform: 'none' }], [b - .04, { opacity: 0, transform: 'none' }]])
 })
+tl('c8', [[END + .15, { opacity: 0, transform: 'translateX(-40px)' }], [END + .65, { opacity: 1, transform: 'none' }]])
 
 // ------------------------------------------------------------------ screens
-layer('s-today', 5.0, 7.86, .02)
-layer('s-check', 7.86, 11.72, .02)
-layer('s-banner', 11.72, 14.44, .02)
-layer('s-notif', 22.42, 24.2, .02)
-layer('s-pet', 24.2, 27.86, .02)
-layer('s-logo', 27.86, 30, .02)
-tl('banner-open', [[13.08, { opacity: 0 }], [13.22, { opacity: 1 }]], 'linear')
+layer('s-today', 3.2, SL.today.b + .02, .02)
+layer('s-check', SL.check.a + .02, SL.check.b + .02, .02)
+layer('s-banner', SL.banner.a + .02, SL.banner.b + .02, .02)
+layer('s-notif', SL.notif.a + .02, SL.notif.b + .02, .02)
+layer('s-pet', SL.pet.a + .02, END + .02, .02)
+layer('s-logo', END + .02, 30, .02)
 
 // Montage layers: one <video> per clip
 const VIDEOS = []
-M.forEach(([id, a, b, off], i) => {
+M.forEach(({ id, a, b }) => {
   const L = document.createElement('div'); L.className = 'layer'; L.id = 'L-' + id
   const v = document.createElement('video'); v.className = 'app'; v.src = `clips/${id}.mp4`
   v.muted = true; v.playsInline = true; v.preload = 'auto'; v.setAttribute('muted', ''); v.setAttribute('playsinline', '')
   L.appendChild(v); $('mlayers').appendChild(L)
-  layer(L, a + (i ? 0 : .04), b + (i === M.length - 1 ? .02 : 0), .02)
-  VIDEOS.push({ v, a: i ? a : 14.44, b, off, frames: CAP[id].frames })
+  layer(L, a + .02, b + .02, .02)
+  VIDEOS.push({ v, a, b, off: OFF, frames: CAP[id].frames })
 })
 
 // ------------------------------------------------------------------ phone camera moves
-const RK = [
-  [0, P(330, 1250, 36, -22, .92, 5)], [5.05, P(330, 1250, 36, -22, .92, 5)],
-  [6.05, P(330, 16, 8, -18, 1.0, 1.5)], [7.25, P(318, 0, 3, -12, 1.04, 0)], [7.6, P(330, -4, 2, -15, 1.05, -.5)],
-  // whip to the face scan, then a slow push in
-  [7.98, P(-380, 48, 0, 22, 1.2, 1)], [8.5, P(-350, 70, 0, 13, 1.28)], [11.35, P(-330, 84, 0, 6, 1.38)],
-  // swing to the result
-  [11.78, P(360, 10, 2, -24, 1.04, -1.5)], [12.3, P(345, 0, 0, -15, 1.08)], [14.18, P(352, -6, 0, -10, 1.13)],
-]
-// montage transitions
-let prev = { x: 352, ry: -10, s: 1.13 }
-M.forEach(([id, a, b, , side, tr], i) => {
-  const x = side * 360, ry = -side * 19, s = 1.1
-  if (tr === 'whip') {
-    RK.push([a - .1, P(prev.x - side * 40, 0, 0, prev.ry - side * 6, prev.s)])
-    RK.push([a + .14, P(x + side * 30, 8, 0, ry - side * 10, s + .04, side * -1.2)])
-  } else if (tr === 'punch') {
-    RK.push([a - .07, P(prev.x, 0, 0, prev.ry, prev.s - .03)])
-    RK.push([a + .07, P(x, -6, 0, ry + side * 4, s + .1, side * 1.2)])
-  } else {
-    RK.push([a - .15, P(prev.x * .7, 0, 0, -side * 90, prev.s * .96)])
-    RK.push([a - .001, P(prev.x * .7, 0, 0, -side * 90, prev.s * .96)])
-    RK.push([a + .001, P(x * .7, 0, 0, side * 90, s * .96)])
-    RK.push([a + .17, P(x, 0, 0, ry, s)])
+// Each feature: a whip in from the other side, then a slow drift (the still moment) from pose A to pose B.
+const POSE = {
+  today: [[330, 16, 8, -18, 1.0, 1.5], [330, -4, 2, -15, 1.05, -.5]],
+  check: [[-350, 60, 0, 13, 1.26], [-335, 76, 0, 7, 1.33]],
+  banner: [[345, 0, 0, -15, 1.08], [352, -6, 0, -10, 1.13]],
+  notif: [[-300, 30, 2, 16, 1.18], [-300, 40, 2, 10, 1.24]],
+  pet: [[345, 150, 0, -12, 1.34], [332, 162, 0, -6, 1.4]],
+}
+for (const { id, side } of M) POSE[id] = [[side * 360, 0, 0, -side * 19, 1.1], [side * 348, -4, 0, -side * 14, 1.15]]
+const RK = [[0, P(330, 1250, 36, -22, .92, 5)], [3.2, P(330, 1250, 36, -22, .92, 5)], [4.15, P(...POSE.today[0])], [4.75, P(318, 0, 3, -12, 1.04, 0)]]
+F.forEach(({ id, side, a, b }, i) => {
+  const [A, B] = POSE[id]
+  if (i > 0) {
+    const pB = POSE[F[i - 1].id][1]
+    RK.push([a - .1, P(pB[0] - side * 40, pB[1], 0, pB[3] - side * 6, pB[4])])
+    RK.push([a + .14, P(A[0] + side * 30, A[1] + 8, 0, A[3] - side * 10, A[4] + .04, side * -1.2)])
+    RK.push([a + .34, P(...A)])
   }
-  RK.push([a + .32, P(x, 0, 0, ry, s)])
-  RK.push([b - (M[i + 1]?.[5] === 'flip' ? .16 : .11), P(x - side * 12, -4, 0, ry + side * 5, s + .05)])
-  prev = { x: x - side * 12, ry: ry + side * 5, s: s + .05 }
+  RK.push([b - .11, P(...B)])
 })
-// flips need a straight line through 90°: mark those keys linear by splitting into their own animation is overkill;
-// the 0.3 s flip still reads as a turn because the screen swaps when the phone is edge-on.
-RK.push(
-  [22.36, P(prev.x - 30, 0, 0, prev.ry - 4, prev.s)],
-  [22.62, P(280, 30, 4, -16, 1.18, -1)], [24.0, P(300, 40, 2, -10, 1.24)],
-  // push in to the pet card
-  [24.4, P(-360, 190, 0, 18, 1.42, 1)], [25.3, P(-345, 205, 0, 11, 1.5)], [27.45, P(-330, 215, 0, 6, 1.56)],
-  // flip to the logo and settle beside the end card
-  [27.72, P(120, 40, 0, -90, 1.1)], [27.721, P(140, 40, 0, 90, 1.1)], [28.3, P(470, 0, 4, -14, 1.0)], [30, P(480, -6, 4, -18, .98)],
-)
+// flip to the logo and settle beside the end card
+RK.push([END + .12, P(400, 70, 0, -90, 1.16)], [END + .121, P(420, 40, 0, 90, 1.1)], [END + .6, P(470, 0, 4, -14, 1.0)], [30, P(480, -6, 4, -18, .98)])
 tl('rig', RK, 'cubic-bezier(.45,.05,.2,1)')
 
 // whip-pan motion blur (horizontal), driven from the same timeline
-const BLUR = []
-M.forEach(([, a, , , , tr]) => { if (tr === 'whip') BLUR.push([a + .02, 26]); if (tr === 'flip') BLUR.push([a, 10]); if (tr === 'punch') BLUR.push([a, 6]) })
-BLUR.push([7.8, 30], [11.58, 22], [22.5, 18], [24.24, 20], [27.72, 12])
+const BLUR = F.slice(1).map(({ a }) => [a + .02, 26])
+BLUR.push([END + .12, 12])
 const blurAt = (t) => BLUR.reduce((m, [c, k]) => Math.max(m, k * Math.exp(-Math.pow((t - c) / .085, 2))), 0)
 
 // ------------------------------------------------------------------ cursor
@@ -305,36 +287,39 @@ function tap(t, x, y, from = [70, 110], lead = .5) {
   ckey(t - lead, x + from[0], y + from[1]); ckey(t - .06, x, y); ckey(t, x, y, .82); ckey(t + .12, x, y)
   RIP.push([t + .01, x, y])
 }
-// opening tap: Start today's check
+// Today: Start today's check
 const st = CAP.today_top.start
-ckey(6.35, st.x + 150, st.y + 54 + 300); tap(7.15, st.x, st.y + 54, [140, 230], .75); ckey(7.6, st.x + 30, st.y + 54 + 50)
-VIS.push([6.4, 7.6])
-// How we know
-const hw = CAP.today_banner.how
-tap(13.05, hw.x - 30, hw.y + 54, [110, 260], .7); ckey(13.6, hw.x + 10, hw.y + 54 + 120); VIS.push([12.25, 13.75])
-// montage taps (positions recorded during capture)
-M.forEach(([id, a, b, off]) => {
-  if (id === 'm_food') return
+ckey(4.3, st.x + 150, st.y + 54 + 300); tap(4.85, st.x, st.y + 54, [140, 230], .5); ckey(5.2, st.x + 30, st.y + 54 + 50)
+VIS.push([4.35, 5.22])
+// Result: How we know
+const hw = CAP.today_banner.how, HOW = SL.banner.a + .72
+tap(HOW, hw.x - 30, hw.y + 54, [110, 260], .4); ckey(HOW + .5, hw.x + 10, hw.y + 54 + 120); VIS.push([SL.banner.a + .3, HOW + .55])
+tl('banner-open', [[HOW + .03, { opacity: 0 }], [HOW + .17, { opacity: 1 }]], 'linear')
+// montage taps and drags (positions recorded during capture)
+M.forEach(({ id, a, b }) => {
   const cur = CAP[id].cursor
   const clicks = cur.filter((c) => c.click)
   const drags = cur.filter((c) => c.drag)
   for (const c of clicks) {
-    const t = a + c.f / FPS - off
-    if (t < a + .12 || t > b - .05) continue
-    tap(t, c.x, c.y + 54, [60, 90], .3); VIS.push([Math.max(a + .02, t - .32), Math.min(b - .02, t + .3)])
+    const t = a + c.f / FPS - OFF
+    if (t < a + .3 || t > b - .1) continue
+    tap(t, c.x, c.y + 54, [60, 90], .3); VIS.push([Math.max(a + .1, t - .32), Math.min(b - .08, t + .3)])
   }
   if (drags.length) {
-    drags.forEach((c, k) => { if (k % 3 === 0 || k === drags.length - 1) ckey(a + c.f / FPS - off, c.x, c.y + 54, k > 0 ? .9 : 1) })
-    VIS.push([a + drags[0].f / FPS - off - .1, Math.min(b - .03, a + drags[drags.length - 1].f / FPS - off + .15)])
+    const t0 = a + drags[0].f / FPS - OFF
+    ckey(t0 - .3, drags[0].x + 40, drags[0].y + 54 + 70)
+    drags.forEach((c, k) => { if (k % 3 === 0 || k === drags.length - 1) ckey(a + c.f / FPS - OFF, c.x, c.y + 54, k > 0 ? .9 : 1) })
+    VIS.push([t0 - .28, Math.min(b - .08, a + drags[drags.length - 1].f / FPS - OFF + .15)])
   }
 })
-// pet: three taps on the egg
+// pet: three taps on the egg, then the hatch
 const pe = CAP.pet.egg.svg, pcx = pe.x + pe.w / 2, pcy = pe.y + 54 + pe.h * .55
-ckey(24.5, pcx + 130, pcy + 260); tap(24.95, pcx, pcy, [130, 260], .45); tap(25.22, pcx, pcy, [6, 8], .12); tap(25.49, pcx, pcy, [6, 8], .12)
-ckey(26.0, pcx + 70, pcy + 150); VIS.push([24.55, 26.0])
+const PT = SL.pet.a + .42 // first tap
+ckey(PT - .36, pcx + 130, pcy + 260); tap(PT, pcx, pcy, [130, 260], .32); tap(PT + .26, pcx, pcy, [6, 8], .12); tap(PT + .52, pcx, pcy, [6, 8], .12)
+ckey(PT + 1.0, pcx + 70, pcy + 150); VIS.push([PT - .34, PT + 1.0])
 tl('cursor', CK, 'cubic-bezier(.65,0,.25,1)')
 const visKeys = [[0, { opacity: 0 }]]
-for (const [a, b] of VIS) visKeys.push([a - .12, { opacity: 0 }], [a, { opacity: 1 }], [b, { opacity: 1 }], [b + .12, { opacity: 0 }])
+for (const [a, b] of VIS) visKeys.push([a - .1, { opacity: 0 }], [a, { opacity: 1 }], [b, { opacity: 1 }], [b + .1, { opacity: 0 }])
 tl($('cursor').firstElementChild, visKeys, 'linear')
 for (const [t0, x, y] of RIP) {
   const r = document.createElement('div'); r.className = 'ripple'; r.style.left = x + 'px'; r.style.top = y + 'px'; $('ripples').appendChild(r)
@@ -342,8 +327,9 @@ for (const [t0, x, y] of RIP) {
 }
 
 // ------------------------------------------------------------------ notification
-tl('notif', [[22.78, { opacity: 0, transform: 'translateY(-120px) scale(.96)' }], [23.12, { opacity: 1, transform: 'translateY(0) scale(1)' }], [23.9, { opacity: 1, transform: 'translateY(0) scale(1)' }]], 'cubic-bezier(.2,.9,.25,1.08)')
-tl('notif-bg', [[22.7, { filter: 'brightness(1) blur(0px)' }], [23.1, { filter: 'brightness(.62) blur(1.5px)' }]], 'linear')
+const NT = SL.notif.a + .38
+tl('notif', [[NT, { opacity: 0, transform: 'translateY(-120px) scale(.96)' }], [NT + .34, { opacity: 1, transform: 'translateY(0) scale(1)' }], [SL.notif.b, { opacity: 1, transform: 'translateY(0) scale(1)' }]], 'cubic-bezier(.2,.9,.25,1.08)')
+tl('notif-bg', [[NT - .08, { filter: 'brightness(1) blur(0px)' }], [NT + .3, { filter: 'brightness(.62) blur(1.5px)' }]], 'linear')
 
 // ------------------------------------------------------------------ pet hatch
 const STAGES = ['egg', 'hatchling', 'cadet']
@@ -352,25 +338,20 @@ for (const s of STAGES) {
   el.style.left = r.x + 'px'; el.style.top = (r.y + 54) + 'px'; el.style.width = r.w + 'px'; el.style.height = r.h + 'px'
 }
 $('burst').style.left = $('ring2').style.left = pcx + 'px'; $('burst').style.top = $('ring2').style.top = (pe.y + 54 + pe.h * .5) + 'px'
-const PH = 25.62 // hatch moment
+const PH = PT + .66 // hatch moment
 const wob = (t, d) => [[t, { transform: 'scale(1,1) rotate(0deg)' }], [t + .05, { transform: `scale(1.08,.9) rotate(${-d}deg)` }], [t + .13, { transform: `scale(.95,1.07) rotate(${d}deg)` }], [t + .22, { transform: 'scale(1,1) rotate(0deg)' }]]
-tl('pet-egg', [[24.2, { transform: 'scale(1) rotate(0deg)', opacity: 1 }], ...wob(24.96, 6), ...wob(25.23, 9), ...wob(25.5, 12),
+tl('pet-egg', [[SL.pet.a, { transform: 'scale(1) rotate(0deg)', opacity: 1 }], ...wob(PT + .01, 6), ...wob(PT + .27, 9), ...wob(PT + .53, 12).slice(0, 2),
   [PH - .02, { transform: 'scale(1.1,.92)', opacity: 1 }], [PH + .1, { transform: 'scale(1.35)', opacity: 0 }]], 'cubic-bezier(.3,.7,.3,1)')
 tl('pet-hatchling', [[PH, { opacity: 0, transform: 'translateY(26px) scale(.3)' }], [PH + .22, { opacity: 1, transform: 'translateY(-14px) scale(1.12)' }], [PH + .42, { opacity: 1, transform: 'translateY(0) scale(.96,1.04)' }],
-  [PH + .58, { opacity: 1, transform: 'translateY(0) scale(1)' }], [PH + .82, { opacity: 1, transform: 'translateY(-5px) scale(1)' }], [PH + 1.02, { opacity: 1, transform: 'translateY(0) scale(1)' }],
-  [26.72, { opacity: 1, transform: 'translateY(0) scale(1)' }], [26.86, { opacity: 0, transform: 'translateY(-6px) scale(1.12)' }]], 'cubic-bezier(.25,.8,.3,1)')
-tl('pet-cadet', [[26.74, { opacity: 0, transform: 'scale(.8)' }], [26.92, { opacity: 1, transform: 'translateY(-10px) scale(1.12)' }], [27.12, { opacity: 1, transform: 'scale(.97,1.03)' }],
-  [27.3, { opacity: 1, transform: 'scale(1)' }], [27.55, { opacity: 1, transform: 'translateY(-4px) scale(1)' }], [27.75, { opacity: 1, transform: 'scale(1)' }]], 'cubic-bezier(.25,.8,.3,1)')
+  [PH + .58, { opacity: 1, transform: 'translateY(0) scale(1)' }], [PH + .82, { opacity: 1, transform: 'translateY(-5px) scale(1)' }], [PH + 1.02, { opacity: 1, transform: 'translateY(0) scale(1)' }]], 'cubic-bezier(.25,.8,.3,1)')
 tl('pbg-hatchling', [[PH + .02, { opacity: 0 }], [PH + .12, { opacity: 1 }]], 'linear')
-tl('pbg-cadet', [[26.76, { opacity: 0 }], [26.86, { opacity: 1 }]], 'linear')
 tl('burst', [[PH - .04, { opacity: 0, transform: 'scale(.3)' }], [PH + .06, { opacity: .95, transform: 'scale(.9)' }], [PH + .45, { opacity: 0, transform: 'scale(1.5)' }]], 'cubic-bezier(.1,.7,.3,1)')
-tl('ring2', [[PH, { opacity: 0, transform: 'scale(.3)' }], [PH + .06, { opacity: .9, transform: 'scale(.6)' }], [PH + .55, { opacity: 0, transform: 'scale(2.1)' }],
-  [26.74, { opacity: 0, transform: 'scale(.3)' }], [26.8, { opacity: .7, transform: 'scale(.6)' }], [27.25, { opacity: 0, transform: 'scale(1.9)' }]], 'cubic-bezier(.1,.7,.3,1)')
+tl('ring2', [[PH, { opacity: 0, transform: 'scale(.3)' }], [PH + .06, { opacity: .9, transform: 'scale(.6)' }], [PH + .55, { opacity: 0, transform: 'scale(2.1)' }]], 'cubic-bezier(.1,.7,.3,1)')
 for (let i = 0; i < 14; i++) {
   const s = document.createElement('div'); s.className = 'spark'; const a = i / 14 * Math.PI * 2 + .2, big = i % 3 === 0
   s.innerHTML = `<svg viewBox="0 0 10 10" width="14" height="14"><path d="M5 0Q5 5 10 5Q5 5 5 10Q5 5 0 5Q5 5 5 0Z" fill="${['#5eead4', '#c4b5fd', '#fde68a'][i % 3]}"/></svg>`
   s.style.left = pcx + 'px'; s.style.top = (pe.y + 54 + pe.h * .5) + 'px'; $('sparks').appendChild(s)
-  const t0 = i < 9 ? PH : 26.76, R = (big ? 150 : 110) * (i < 9 ? 1 : .8)
+  const t0 = PH + (i % 2) * .05, R = big ? 150 : 110
   tl(s, [[t0, { opacity: 0, transform: 'translate(0,0) scale(.4) rotate(0deg)' }], [t0 + .08, { opacity: 1 }],
     [t0 + .7, { opacity: 0, transform: `translate(${Math.cos(a) * R}px, ${Math.sin(a) * R * .8}px) scale(${big ? 1.8 : 1.2}) rotate(120deg)` }]], 'cubic-bezier(.1,.8,.3,1)')
 }
@@ -392,15 +373,15 @@ const fctx = $('face').getContext('2d')
   Object.assign(ov.style, { left: o.x + 'px', top: (o.y + 54) + 'px', width: o.w + 'px', height: o.h + 'px' })
   Object.assign(c.style, { right: (402 - r.x - r.w + 12) + 'px', top: (r.y + 54 + 10) + 'px' }) }
 function drawFace(t) {
-  const lt = t - 7.86
+  const lt = t - SL.check.a
   const g = fctx
   g.fillStyle = '#050816'
   g.fillRect(0, 0, 640, 480)
-  if (lt < .35 || t > 11.8) return
-  $('count').textContent = `${60 - Math.floor(Math.max(0, lt - .35))}s`
-  const yaw = .16 * Math.sin(lt * .9) + .05 * Math.sin(lt * 2.3), pitch = .06 * Math.sin(lt * .7 + 1) - .03, roll = .03 * Math.sin(lt * .5)
+  if (lt < .3 || t > SL.check.b + .1) return
+  $('count').textContent = `${60 - Math.floor(Math.max(0, lt - .3))}s`
+  const yaw = .16 * Math.sin(lt * 1.3) + .05 * Math.sin(lt * 2.3), pitch = .06 * Math.sin(lt * .7 + 1) - .03, roll = .03 * Math.sin(lt * .5)
   const breathe = Math.sin(lt * 2 * Math.PI * .26)
-  const blink = Math.max(Math.exp(-Math.pow((lt - 1.25) / .07, 2)), Math.exp(-Math.pow((lt - 3.05) / .07, 2)))
+  const blink = Math.exp(-Math.pow((lt - 1.15) / .07, 2))
   const cy = Math.cos(yaw), sy = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch), cr = Math.cos(roll), sr = Math.sin(roll)
   const s = 15.2 * (1 + .006 * breathe), ox = 322 + 3 * Math.sin(lt * .6), oy = 222 - 2.2 * breathe
   const lid = new Map(LIDS)
@@ -568,12 +549,12 @@ const MARS = [25, 10, -47]
 // camera position, look target, fov, roll(deg)
 const CAMK = [
   [0.0, [0.10, 0.62, 1.10, -0.95, 0.66, -0.55, 33, -16]],
-  [1.5, [0.00, 0.68, 1.06, -1.02, 0.80, -0.75, 32.5, -14]],
-  [2.4, [-0.08, 0.72, 1.03, -1.10, 1.22, -1.20, 31, -11]],
-  [3.2, [-0.15, 0.78, 1.00, -0.28, 1.50, -1.98, 27, -6]],
-  [4.1, [-0.22, 0.83, 0.97, MARS[0], MARS[1], MARS[2], 17, -1.5]],
-  [5.2, [-0.30, 0.88, 0.94, MARS[0], MARS[1], MARS[2], 9.2, 0]],
-  [8.0, [-0.40, 0.92, 0.92, MARS[0] - .4, MARS[1] - .5, MARS[2], 9, 0]],
+  [1.0, [0.00, 0.68, 1.06, -1.02, 0.80, -0.75, 32.5, -14]],
+  [1.6, [-0.08, 0.72, 1.03, -1.10, 1.22, -1.20, 31, -11]],
+  [2.15, [-0.15, 0.78, 1.00, -0.28, 1.50, -1.98, 27, -6]],
+  [2.75, [-0.22, 0.83, 0.97, MARS[0], MARS[1], MARS[2], 17, -1.5]],
+  [3.55, [-0.30, 0.88, 0.94, MARS[0], MARS[1], MARS[2], 9.2, 0]],
+  [6.5, [-0.40, 0.92, 0.92, MARS[0] - .4, MARS[1] - .5, MARS[2], 9, 0]],
   [30, [-1.2, 1.2, 0.8, MARS[0] - 4.5, MARS[1] - 3, MARS[2], 9.5, 0]],
 ]
 // look targets become unit directions, so the pan between a near target and far Mars stays smooth
@@ -588,17 +569,17 @@ function renderGL(t) {
   cam.lookAt(k[0] + k[3] * 10, k[1] + k[4] * 10, k[2] + k[5] * 10)
   cam.rotateZ(k[7] * Math.PI / 180)
   // handheld feel: a tiny, smooth, deterministic shake (stronger while the Moon passes)
-  const amp = (.0016 + .0022 * Math.exp(-Math.pow((t - 2.9) / .6, 2))) * (t < 5.6 ? 1 : .35)
+  const amp = (.0016 + .0022 * Math.exp(-Math.pow((t - 1.95) / .42, 2))) * (t < 3.9 ? 1 : .35)
   cam.rotateX(amp * (Math.sin(t * 7.1) * .6 + Math.sin(t * 13.3 + 1) * .4))
   cam.rotateY(amp * (Math.sin(t * 5.3 + 2) * .6 + Math.sin(t * 11.7) * .4))
   cam.fov = k[6]; cam.updateProjectionMatrix()
   earth.rotation.set(-0.5, 3.6 + t * .012, 0, 'XYZ')
   earthMat.uniforms.cloudShift.value = t * .0009
   // the Moon crosses close to the lens, then Mars waits ahead
-  const mp = smooth(1.5, 4.0, t)
+  const mp = smooth(1.0, 2.7, t)
   moon.position.set(0.40 - .1 * mp, 1.62, -2.30)
   moon.rotation.y = 1.2
-  moon.visible = t < 4.6
+  moon.visible = t < 3.1
   mars.position.set(MARS[0], MARS[1], MARS[2])
   mars.rotation.y = 4.4 + t * .02
   GL.marsAtmo.position.copy(mars.position)
@@ -610,7 +591,7 @@ function renderGL(t) {
   const occ = (c, r, soft) => { tmpW.copy(c).sub(cam.position); const tc = tmpW.dot(sun); if (tc < 0) return 1; const h = Math.sqrt(Math.max(0, tmpW.lengthSq() - tc * tc)); return smooth(r, r + soft, h) }
   vis *= occ(earth.position, 1.0, .016) * occ(moon.position, .273, .01)
   post.uniforms.sunUV.value.set(tmpV.x * .5 + .5, tmpV.y * .5 + .5)
-  post.uniforms.sunVis.value = vis * (t < 6 ? 1 : .55)
+  post.uniforms.sunVis.value = vis * (t < 4.2 ? 1 : .55)
   post.uniforms.frame.value = Math.round(t * FPS)
   post.uniforms.exposure.value = 1.05
   R.setRenderTarget(rt); R.render(scene, cam)
