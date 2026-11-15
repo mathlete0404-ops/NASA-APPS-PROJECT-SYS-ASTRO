@@ -66,7 +66,7 @@ export const KO: Record<string, string> = {
   // ---------------------------------------------------------------- navigation
   'Today': '오늘', 'Daily check': '데일리 체크', 'Crew pet': '크루 펫', '3D body': '3D 인체', 'Something hurts': '어딘가 아파요', 'More': '더 보기',
   'Calendar': '캘린더', 'Trends': '추세', 'Balance': '균형', 'NASA evidence': 'NASA 근거', 'Medical officer': '의무관', 'Settings': '설정',
-  'Sign in to sync': '로그인해서 동기화', 'Sign in': '로그인', 'How to use': '사용 방법', 'How to use Crew Mirror': '크루 미러 사용 방법', 'Crew': '승무원',
+  'Sign in to sync': '로그인해서 동기화', 'Sign in': '로그인', 'How to use': '사용 방법', 'Website home': '웹사이트 홈', 'Care': '돌보기', 'Trips': '여행', 'Shop': '상점', 'Market': '거래소', 'Back to the website': '웹사이트로 돌아가기', 'How to use Crew Mirror': '크루 미러 사용 방법', 'Crew': '승무원',
   'Synced': '동기화됨', 'On device': '기기에 저장', 'Check': '체크', 'Body': '인체', 'Pet': '펫', 'Plan ': '계획', 'Emergency': '응급',
   'Collapse sidebar': '사이드바 접기', 'Expand sidebar': '사이드바 펼치기', 'Profile & settings': '프로필 및 설정', 'Main': '메인',
   'Connected to the habitat computer. Numbers sync.': '거주 모듈 컴퓨터에 연결됨. 수치가 동기화됩니다.',
@@ -210,6 +210,7 @@ export const KO_PATTERNS: Pat[] = [
   [/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), (January|February|March|April|May|June|July|August|September|October|November|December) (\d+)$/, (m) => `${MONTHS[m[2]]}월 ${m[3]}일 ${DAYS[m[1]]}`],
   [/^(\d+)-day streak · best (\d+)$/, (m) => `${m[1]}일 연속 · 최고 ${m[2]}일`],
   [/^(\d+) earned in total$/, (m) => `총 ${m[1]} 획득`],
+  [/^(\d+) checks$/, (m) => `체크 ${m[1]}번`],
   [/^(\d+) check days$/, (m) => `체크 ${m[1]}일`],
   [/^Tap to hatch \((\d+) taps? left\)$/, (m) => `탭해서 부화 (${m[1]}번 남음)`],
   [/^Keep it warm: (\d+) more daily checks? and it hatches\.$/, (m) => `따뜻하게 지켜 주세요: 데일리 체크 ${m[1]}번 더 하면 부화해요.`],
