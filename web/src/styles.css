@@ -775,3 +775,18 @@ button.check-dot.on { background: var(--usual); color: #fff; }
   .scan-photo { max-height: 180px; aspect-ratio: auto; }
 }
 .scan-card select { width: 100%; min-width: 0; }
+
+/* ---- Pet v4: incubation, needs, pats ---- */
+.progress.incubation { width: min(100%, 260px); align-self: center; }
+.pet-needs { display: flex; flex-direction: column; gap: 8px; }
+.pet-need { display: grid; grid-template-columns: 92px 1fr 44px; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--border); background: var(--card); color: inherit; font: inherit; font-size: .88rem; cursor: pointer; text-align: left; }
+.pet-need:hover, .pet-need:focus-visible { border-color: var(--violet); }
+.pet-need-bar { height: 8px; border-radius: 99px; background: var(--muted); overflow: hidden; }
+.pet-need-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--usual); transition: width .4s ease; }
+.pet-need.low .pet-need-bar > span { background: var(--watch); }
+.pet-need-v { text-align: right; font-size: .78rem; color: var(--muted-fg); }
+.pet-hop { transform-box: fill-box; transform-origin: 50% 100%; animation: pet-hop .45s cubic-bezier(.3, 1.6, .5, 1); }
+.pet-svg .pet-heart { fill: hsl(345 85% 62%); transform-box: fill-box; transform-origin: center; animation: pet-heart 1s ease-out forwards; }
+@keyframes pet-hop { 0% { transform: none; } 40% { transform: translateY(-7px) scale(1.04, .97); } 100% { transform: none; } }
+@keyframes pet-heart { 0% { opacity: 0; transform: translateY(6px) scale(.5); } 25% { opacity: 1; transform: translateY(0) scale(1.1); } 100% { opacity: 0; transform: translateY(-18px) scale(.9); } }
+@media (prefers-reduced-motion: reduce) { .pet-hop, .pet-svg .pet-heart { animation: none; } }

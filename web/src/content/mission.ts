@@ -37,13 +37,15 @@ export const PHASES: Record<Phase, PhaseInfo> = {
   },
 }
 
-// One-way light time to Earth, used for the delayed downlink (seconds).
+// One-way light time to Earth, used for the delayed downlink (seconds). Mars: ~54.6 million km at
+// the closest approach (~3 min), ~225 million km on average (~12.5 min), ~401 million km at the
+// farthest (~22.3 min).
 export const LIGHT_DELAY: { id: string; label: string; s: number }[] = [
   { id: 'leo', label: 'Low Earth orbit (relay)', s: 1 },
   { id: 'moon', label: 'Moon', s: 1.3 },
-  { id: 'mars-near', label: 'Mars, closest', s: 4 * 60 },
-  { id: 'mars-mid', label: 'Mars, typical', s: 12 * 60 },
-  { id: 'mars-far', label: 'Mars, farthest', s: 24 * 60 },
+  { id: 'mars-near', label: 'Mars, closest', s: 182 },
+  { id: 'mars-mid', label: 'Mars, typical', s: 750 },
+  { id: 'mars-far', label: 'Mars, farthest', s: 1338 },
 ]
 
 // Typical dose rates (mSv/day) for context only. Mission dosimetry comes from the vehicle.

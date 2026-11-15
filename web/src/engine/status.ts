@@ -43,7 +43,7 @@ export function metricStatus(metric: string, history: [number | null, boolean][]
   const base = good.slice(0, BASELINE_N).map(([, v]) => v)
   if (base.length < BASELINE_N || good[BASELINE_N - 1][0] >= history.length - 1) {
     const n = Math.min(base.length, BASELINE_N)
-    return { level: 'baseline', n, reasons: [`Building your personal baseline (${n}/${BASELINE_N} good sessions).`] }
+    return { level: 'baseline', n, value, reasons: [`Building your personal baseline (${n}/${BASELINE_N} good sessions).`] }
   }
   const med = median(base)
   const mad = median(base.map((v) => Math.abs(v - med)))

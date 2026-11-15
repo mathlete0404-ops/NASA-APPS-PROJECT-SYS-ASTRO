@@ -86,7 +86,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
           <p className="muted">Far from Earth there is no live call: messages travel at light speed. Crew Mirror is built to work without waiting for the answer.</p>
           <div className="row">
             <label>Distance <select value={route} onChange={(e) => setRoute(e.target.value)}>
-              {LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label} · {fmtS(d.s)} one-way</option>)}
+              {LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label} · {d.s < 10 ? `${d.s} s` : fmtS(d.s)} one-way</option>)}
             </select></label>
           </div>
           <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Message (derived numbers only — no images or video)" />

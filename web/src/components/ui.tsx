@@ -147,3 +147,13 @@ export function cameraHelp(err: string): string {
   if (/NotReadable|in use|TrackStart/i.test(err)) return 'Another app is using the camera. Close it, then press Try again.'
   return 'The camera or the face model did not start. The model downloads once on first use, so check your connection, then press Try again.'
 }
+
+/** Close a pop-up with the Escape key. */
+export function useEscape(onClose: () => void, active = true) {
+  useEffect(() => {
+    if (!active) return
+    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    addEventListener('keydown', h)
+    return () => removeEventListener('keydown', h)
+  }, [onClose, active])
+}

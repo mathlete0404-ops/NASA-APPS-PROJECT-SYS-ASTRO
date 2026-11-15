@@ -6,6 +6,7 @@ import { Camera, Check, Loader2, X } from 'lucide-react'
 import { PANTRY, PORTIONS, portionLabel, type Nutrients } from '../content/nutrition'
 import { readLabel, type LabelRead } from '../content/label'
 import { readPhotoText } from '../vision/ocr'
+import { useEscape } from './ui'
 
 export interface ScannedFood { itemId: string; servings: number; custom?: { name: string } & Nutrients }
 
@@ -23,6 +24,7 @@ export function ScanFood({ file, onAdd, onClose }: { file: File; onAdd: (f: Scan
   const [vals, setVals] = useState<Partial<Record<keyof Nutrients, string>>>({})
   const [portion, setPortion] = useState(1)
   const alive = useRef(true)
+  useEscape(onClose)
 
   useEffect(() => {
     const u = URL.createObjectURL(file)

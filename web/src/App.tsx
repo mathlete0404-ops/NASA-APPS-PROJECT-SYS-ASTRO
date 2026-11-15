@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
   ScanFace, Settings as SettingsIcon, Stethoscope, TrendingUp,
@@ -6,7 +6,7 @@ import {
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
 import { useReminderSync } from './data/notify'
-import { Footer, Logo, ThemeToggle } from './components/ui'
+import { Footer, Logo, ThemeToggle, useEscape } from './components/ui'
 import { Auth } from './site/Auth'
 import { Today } from './screens/Today'
 import { DailyCheck } from './screens/DailyCheck'
@@ -80,6 +80,8 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
   const [moreOpen, setMoreOpen] = useState(false)
   const [sheet, setSheet] = useState(false)
   useReminderSync()
+  const closeAll = useCallback(() => { setSheet(false); setGuide(false) }, [])
+  useEscape(closeAll, sheet || guide)
   useEffect(() => { setSheet(false) }, [tab])
   useEffect(() => {
     const open = () => setGuide(true)

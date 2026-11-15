@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ArrowRight, Check, PawPrint, Pencil, X } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
-import { MOOD_LABEL, petState, STAGES, type Mood, type StageId } from '../engine/pet'
+import { HATCH_DAYS, MOOD_LABEL, petState, STAGES, type Mood, type StageId } from '../engine/pet'
 
 const STAGE_ORDER: StageId[] = STAGES.map((s) => s.id)
 const atLeast = (stage: StageId, min: StageId) => STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf(min)
@@ -60,12 +60,14 @@ function Face({ mood }: { mood: Mood }) {
 }
 
 /** The creature itself. Purely visual; all state comes from props. */
-export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, ready = false, burst = false, pop = false }: {
+export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, ready = false, burst = false, pop = false, nudge = 0, hearts = 0 }: {
   stage: StageId; mood: Mood; name?: string; size?: number
   /** Egg only: 0..3 taps so far (adds cracks and a shake). */ cracks?: number
   /** Egg only: ready to hatch (wobbles more). */ ready?: boolean
   /** Hatch moment: flash, ring and sparkles. */ burst?: boolean
   /** Just hatched: the creature pops in. */ pop?: boolean
+  /** Increments on each tap: replays the shake (egg) or a hop (creature). */ nudge?: number
+  /** Increments on each pat: a heart floats up. */ hearts?: number
 }) {
   const stageName = STAGES.find((s) => s.id === stage)?.name ?? stage
   const label = `${name}, your pet. ${stageName} stage, ${MOOD_LABEL[mood].toLowerCase()}`
@@ -86,7 +88,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
       <circle className="pet-glass" cx={70} cy={62} r={46} />
 
       {stage === 'egg' ? (
-        <g className={`pet-egg-wobble${ready ? ' ready' : ''}`}><g key={cracks} className={cracks ? 'pet-egg-shake' : undefined}>
+        <g className={`pet-egg-wobble${ready ? ' ready' : ''}`}><g key={nudge} className={nudge ? 'pet-egg-shake' : undefined}>
           <path className="pet-egg" d="M70 52 C86 52 92 76 92 87 C92 99 82 106 70 106 C58 106 48 99 48 87 C48 76 54 52 70 52 Z" />
           <circle className="pet-speck-a" cx={62} cy={70} r={2.6} />
           <circle className="pet-speck-b" cx={77} cy={64} r={2} />
@@ -99,7 +101,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
           {cracks >= 3 && <path className="pet-crack" d="M49 84 L55 80 L61 86 L67 79 L73 86 L79 80 L85 85 L91 82" />}
         </g></g>
       ) : (
-        <g className={pop ? 'pet-pop' : undefined}><g className="pet-bob">
+        <g className={pop ? 'pet-pop' : undefined}><g key={nudge} className={nudge && !pop ? 'pet-hop' : undefined}><g className="pet-bob">
           <g transform={`translate(70 106) scale(${sc}) translate(-70 -106)`}>
             {atLeast(stage, 'explorer') && (
               <g>
@@ -122,8 +124,9 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
             <Face mood={mood} />
             {atLeast(stage, 'cadet') && <Star cx={70} cy={97} r={5.2} className="pet-gold pet-badge" />}
           </g>
-        </g></g>
+        </g></g></g>
       )}
+      {hearts > 0 && <path key={hearts} className="pet-heart" d="M104 40 c-3 -5 -11 -3 -9 3 c1 3 9 8 9 8 s8 -5 9 -8 c2 -6 -6 -8 -9 -3z" />}
       {burst && (
         <g className="pet-burst">
           <circle className="pet-flash" cx={70} cy={80} r={30} />
@@ -200,15 +203,15 @@ export function PetMini() {
   if (!p) return null
   const pet = petState(s, p.id)
   const hatched = readHatched(p.id)
-  const ready = !hatched && pet.checkDays >= 1
-  const done = pet.tasks.filter((t) => t.done).length
+  const ready = !hatched && pet.incubation >= 1
+  const low = [...pet.needs].sort((a, b) => a.level - b.level)[0]
   return (
     <a className="card pet-mini" href="#/app/pet">
-      <span className="pet-mini-art"><Pet stage={hatched ? pet.stage.id : 'egg'} mood={pet.mood} name={readName(p.id)} size={64} ready={ready} /></span>
+      <span className="pet-mini-art"><Pet stage={hatched ? pet.stage.id : 'egg'} mood={pet.mood} name={readName(p.id)} size={64} ready={ready} cracks={hatched ? 0 : Math.min(2, pet.checkDays)} /></span>
       <span className="pet-mini-t">
         <small className="kicker"><PawPrint size={12} /> Crew pet</small>
         <b>{readName(p.id)}</b>
-        <small>{ready ? 'Ready to hatch. Tap to open.' : !hatched ? 'An egg. Do your first check to hatch it.' : `${pet.stage.name} · ${MOOD_LABEL[pet.mood]} · ${done}/3 care today`}</small>
+        <small>{ready ? 'Ready to hatch! Tap to open.' : !hatched ? `An egg · ${Math.min(pet.checkDays, HATCH_DAYS)}/${HATCH_DAYS} daily checks to hatch` : low.level < 50 ? low.hungry : `${pet.stage.name} · ${MOOD_LABEL[pet.mood]}`}</small>
       </span>
       <ArrowRight size={16} />
     </a>
