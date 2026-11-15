@@ -118,12 +118,17 @@ def cap_today(p):
     b.close()
 
 
+# Montage clips: each is about 2.2 s (66 frames) of real interaction at real speed, with a
+# short pause before and after every tap, so each feature reads in its 1.9 s slot of the ad.
+N = 66
+
+
 def cap_today_scroll(p):
     b, pg = session(p)
     c = Clip('m_today')
-    end = 1250
-    for i in range(45):
-        a = min(1, i / 40)
+    end = 1100
+    for i in range(N):
+        a = min(1, max(0, (i - 6) / 54))
         scroll_to(pg, round(end * ease(a)))
         c.frame(pg, 20)
     c.close()
@@ -137,8 +142,8 @@ def cap_plan_tick(p):
     c = Clip('m_plan')
     dot = pg.locator('.check-dot').first
     x, yy = center(pg, dot)
-    for i in range(42):
-        if i == 12:
+    for i in range(N):
+        if i == 15:
             c.cursor.append({'f': c.n, 'x': x, 'y': yy, 'click': True})
             pg.evaluate("""async () => { const url = performance.getEntriesByType('resource').map(e => e.name).find(n => n.includes('/src/data/store.ts')) || '/src/data/store.ts'; const st = await import(url);
               const d = new Date(); d.setHours(9, 5, 0, 0);
@@ -154,8 +159,8 @@ def cap_food(p):
     y = pg.evaluate("[...document.querySelectorAll('.card h3')].find(h => h.textContent === 'Food today').getBoundingClientRect().top + scrollY")
     scroll_to(pg, y - 90); pg.wait_for_timeout(300)
     c = Clip('m_food')
-    for i in range(45):
-        if i in (6, 18, 30):
+    for i in range(N):
+        if i in (12, 30, 48):
             ideas = pg.locator('.idea button')
             add = ideas.first if ideas.count() else pg.get_by_role('button', name='Add').first
             x, yy = center(pg, add)
@@ -179,14 +184,17 @@ def cap_body(p):
     bb = cv.bounding_box()
     cx, cy = bb['x'] + bb['width'] / 2, bb['y'] + bb['height'] * 0.55
     c = Clip('m_body')
-    pg.mouse.move(cx + 60, cy)
-    for i in range(45):
-        if i == 3:
+    x0, d0, d1 = cx + 90, 10, 56  # a slow drag from right to left, with a pause at both ends
+    pg.mouse.move(x0, cy)
+    for i in range(N):
+        if i == d0:
             pg.mouse.down()
-        if 3 <= i <= 36:
-            pg.mouse.move(cx + 60 - (i - 3) * 9, cy + (i - 3) * 0.4, steps=2)
-            c.cursor.append({'f': c.n, 'x': cx + 60 - (i - 3) * 9, 'y': cy + (i - 3) * 0.4, 'drag': True})
-        if i == 37:
+        if d0 <= i <= d1:
+            k = ease((i - d0) / (d1 - d0))
+            x, yy = x0 - 200 * k, cy + 12 * k
+            pg.mouse.move(x, yy, steps=2)
+            c.cursor.append({'f': c.n, 'x': x, 'y': yy, 'drag': True})
+        if i == d1 + 1:
             pg.mouse.up()
         c.frame(pg, 120)
     c.close()
@@ -200,13 +208,13 @@ def cap_space(p):
     pill = pg.locator('.sw-pill')
     x, yy = center(pg, pill)
     target = pg.evaluate("document.getElementById('space-weather').getBoundingClientRect().top + scrollY - 72")
-    for i in range(45):
-        if i == 7:
+    for i in range(N):
+        if i == 12:
             click_at(pg, c, x, yy)
             pg.wait_for_timeout(30)
             scroll_to(pg, 0)
-        if i > 8:
-            a = min(1, (i - 8) / 26)
+        if i > 14:
+            a = min(1, (i - 14) / 34)
             scroll_to(pg, round(target * ease(a)))
         c.frame(pg, 20)
     c.close()
@@ -217,13 +225,13 @@ def cap_calendar(p):
     b, pg = session(p, tab='calendar')
     c = Clip('m_calendar')
     day = pg.locator('.cal button.day:not(.out)').nth(17)
-    for i in range(40):
-        if i == 10:
+    for i in range(N):
+        if i == 13:
             x, yy = center(pg, day)
             click_at(pg, c, x, yy)
             pg.wait_for_timeout(150)
-        if i > 22:
-            scroll_to(pg, round(150 * ease(min(1, (i - 22) / 14))))
+        if i > 30:
+            scroll_to(pg, round(150 * ease(min(1, (i - 30) / 20))))
         c.frame(pg, 20)
     c.close()
     b.close()
@@ -233,17 +241,17 @@ def cap_report(p):
     b, pg = session(p, tab='report')
     c = Clip('m_report')
     down = 0
-    for i in range(50):
-        if i == 6:
+    for i in range(N + 2):
+        if i == 9:
             yes = pg.get_by_role('button', name='Yes').first
             x, yy = center(pg, yes)
             click_at(pg, c, x, yy)
             pg.wait_for_timeout(150)
             btn_y = pg.evaluate("[...document.querySelectorAll('button')].find(b => b.textContent.includes('Act now')).getBoundingClientRect().bottom + scrollY")
             down = max(0, btn_y - 760)
-        if 9 <= i <= 19:
-            scroll_to(pg, round(down * ease((i - 9) / 10)))
-        if i == 22:
+        if 13 <= i <= 25:
+            scroll_to(pg, round(down * ease((i - 13) / 12)))
+        if i == 33:
             btn = pg.get_by_role('button', name='Continue → Act now')
             x, yy = center(pg, btn)
             click_at(pg, c, x, yy)
@@ -260,8 +268,8 @@ def cap_reminders(p):
     scroll_to(pg, y - 100); pg.wait_for_timeout(300)
     c = Clip('m_reminders')
     sw = pg.locator('input.switch').first
-    for i in range(42):
-        if i == 9:
+    for i in range(N):
+        if i == 16:
             x, yy = center(pg, sw)
             click_at(pg, c, x, yy)
             pg.wait_for_timeout(300)
