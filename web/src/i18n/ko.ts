@@ -187,7 +187,7 @@ export const KO: Record<string, string> = {
   'NOAA SWPC · space weather scales and GOES proton flux': 'NOAA SWPC · 우주 날씨 등급과 GOES 양성자 플럭스', 'RadLab Portal · space radiation': 'RadLab 포털 · 우주 방사선',
   'NASA HRP: risk of cardiovascular adaptations': 'NASA HRP: 심혈관 적응 위험', 'NASA NTRS: CPR in microgravity': 'NASA NTRS: 미세중력에서의 CPR', 'American Heart Association CPR guidelines': '미국심장협회 CPR 지침',
   'NASA NTRS: ISS ammonia leak response': 'NASA NTRS: ISS 암모니아 누출 대응', 'NASA HRP: human health risks': 'NASA HRP: 인체 건강 위험', 'NASA HRP: decompression sickness': 'NASA HRP: 감압병', 'NOAA Space Weather Scales': 'NOAA 우주 날씨 등급',
-  'Guide finished.': '가이드를 마쳤습니다.', 'All crew accounted for.': '모든 승무원 확인 완료.', 'Compressions started (110 per minute).': '압박 시작 (분당 110회).', 'Timer finished.': '타이머 종료.',
+  'Sources': '출처', 'Guide finished.': '가이드를 마쳤습니다.', 'All crew accounted for.': '모든 승무원 확인 완료.', 'Compressions started (110 per minute).': '압박 시작 (분당 110회).', 'Timer finished.': '타이머 종료.',
 }
 
 type Pat = [RegExp, (m: RegExpMatchArray) => string]

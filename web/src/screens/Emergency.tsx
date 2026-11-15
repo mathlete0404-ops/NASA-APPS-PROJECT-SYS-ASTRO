@@ -134,7 +134,6 @@ interface LogLine { t: number; text: string }
 const mmss = (sec: number) => `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(Math.floor(sec % 60)).padStart(2, '0')}`
 
 function GuideRunner({ guide, patientId, responderId, onExit, onSwitch, go }: { guide: Guide; patientId: string; responderId: string; onExit: () => void; onSwitch: (g: GuideId) => void; go: (t: string) => void }) {
-  const s = useStore()
   const t0 = useRef(Date.now())
   const [now, setNow] = useState(Date.now())
   const [i, setI] = useState(0)
@@ -183,12 +182,14 @@ function GuideRunner({ guide, patientId, responderId, onExit, onSwitch, go }: { 
         <div className="card sos-log">
           <h3 style={{ marginTop: 0 }}>Event log</h3>
           <ol>{log.map((l, k) => <li key={k}><span className="mono">T+{mmss(l.t)}</span> {l.text}</li>)}</ol>
-          <label className="stack" style={{ gap: 4 }}><small className="muted">Distance to Earth</small>
+          <label className="sos-route"><small className="muted">Distance to Earth</small>
             <select value={route} onChange={(e) => setRoute(e.target.value)}>{LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label}</option>)}</select>
           </label>
-          <button className="btn" onClick={send}><Send /> Send log to Earth</button>
+          <button className="btn sos-send" onClick={send}><Send /> Send log to Earth</button>
           {sent && <small className="muted">Queued: {sent}. See it arrive in the <a href="#/app/medical" onClick={(e) => { e.preventDefault(); go('medical') }}>medical officer view</a>.</small>}
-          <small className="muted">{s.crew.length} crew on board · sources: {guide.sources.map((x, k) => <a key={k} href={x.url} target="_blank" rel="noreferrer">{x.label}{k < guide.sources.length - 1 ? ', ' : ''}</a>)}</small>
+          <div className="sos-sources"><small className="muted">Sources</small>
+            <ul>{guide.sources.map((x, k) => <li key={k}><a href={x.url} target="_blank" rel="noreferrer">{x.label}</a></li>)}</ul>
+          </div>
         </div>
       </div>
     </div>

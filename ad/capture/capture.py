@@ -241,6 +241,28 @@ def cap_scan(p):
     b.close()
 
 
+def cap_sos(p):
+    """Emergency: a crew alert names who needs help, the guide opens, the helper steps through it."""
+    b, pg = session(p, tab='today')
+    pg.evaluate("""async () => { const url = performance.getEntriesByType('resource').map(e => e.name).find(n => n.includes('/src/data/store.ts')) || '/src/data/store.ts'; const st = await import(url);
+      st.addSymptom({ id: 'ms3-chest-now', crewId: 'MS3', ts: new Date(Date.now() - 4 * 60000).toISOString(), region: 'trunk_front', side: 'middle', kind: 'pain', intensity: 7, onset: 'sudden', context: [],
+        danger: { chest_pain: true }, tests: {}, microgravityDays: 120,
+        result: { level: 'act_now', pattern: 'danger_sign', reasons: ['Danger sign: Chest pain.'], exercises_allowed: false, bone_loss_est_pct: 0 } }) }""")
+    pg.wait_for_timeout(600)
+    scroll_to(pg, 0); pg.wait_for_timeout(200)
+    c = Clip('m_sos')
+    for i in range(N):
+        if i == 12:
+            x, yy = center(pg, pg.locator('.sos-open'))
+            click_at(pg, c, x, yy); pg.wait_for_timeout(250)
+        if i in (34, 50):
+            x, yy = center(pg, pg.locator('.sos-next'))
+            click_at(pg, c, x, yy); pg.wait_for_timeout(120)
+        c.frame(pg, 20)
+    c.close()
+    b.close()
+
+
 def cap_body(p):
     b, pg = session(p, tab='body')
     pg.wait_for_timeout(6000)
@@ -386,7 +408,7 @@ def cap_pet(p):
     meta['pet'] = out
 
 
-ALL = {'today': cap_today, 'm_today': cap_today_scroll, 'm_plan': cap_plan_tick, 'm_food': cap_food, 'm_scan': cap_scan, 'm_body': cap_body,
+ALL = {'today': cap_today, 'm_today': cap_today_scroll, 'm_plan': cap_plan_tick, 'm_food': cap_food, 'm_scan': cap_scan, 'm_sos': cap_sos, 'm_body': cap_body,
        'm_space': cap_space, 'm_calendar': cap_calendar, 'm_report': cap_report, 'm_reminders': cap_reminders,
        'check': cap_check, 'pet': cap_pet}
 
