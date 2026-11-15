@@ -13,6 +13,8 @@ SR = 48000
 DUR = 30.0
 _T = next((e for e in json.load(open(sys.argv[1])) if e['k'] == 'timing'), None)
 OPEN, BAR, END = (_T['open'], _T['bar'], _T['end']) if _T else (3.5, 1.9, 3.5 + 13 * 1.9)
+TT = _T.get('title', 4.52) if _T else 4.52      # the title hit
+GLSH = _T.get('glsh', 1.4) if _T else 1.4       # when the space shot starts
 BEAT = BAR / 4
 rng = np.random.default_rng(7)
 n = int(SR * DUR)
@@ -102,14 +104,13 @@ add(fan, 0, 0.025, 0.3)
 hum = sum(np.sin(2 * np.pi * 60 * k * to) / k for k in (1, 2, 3)) * np.clip((to - 1.6) / 0.8, 0, 1) * fade
 add(hum, 0, 0.018)
 # 4) the Moon passing close to the lens: a heavy, slow doppler whoosh
-GLSH = 1.4
 ln = 1.6; x = band_noise(ln, 150, 5000, seed=12); tt = np.arange(len(x)) / SR
 add(x * np.exp(-((tt - 0.85) / 0.33) ** 2), GLSH + 1.95 - 0.85, 0.28, -0.5)
 # 5) riser into the title: rising noise and a gliding tone
-rl = 4.52 - 3.0; tt = np.arange(int(rl * SR)) / SR
+rl = 1.5; tt = np.arange(int(rl * SR)) / SR
 rise = band_noise(rl, 1500, 12000, seed=13) * (tt / rl) ** 3
 glide = np.sin(2 * np.pi * np.cumsum(110 * 2 ** (2.2 * tt / rl)) / SR) * (tt / rl) ** 2
-add(rise, 3.0, 0.12); add(glide, 3.0, 0.05)
+add(rise, TT - rl, 0.12); add(glide, TT - rl, 0.05)
 # 6) the title hit: a sub drop, a dark impact and a long tail
 bl = 3.2; tt = np.arange(int(bl * SR)) / SR
 drop = np.sin(2 * np.pi * np.cumsum(30 + 60 * np.exp(-tt / 0.25)) / SR) * np.exp(-tt / 1.1)
@@ -118,8 +119,8 @@ crack /= np.abs(crack).max() + 1e-9
 boom = reverb(np.concatenate([drop * 0.9 + crack * 0.6, np.zeros(SR)]), 3.0, 0.45)
 # 7) under the title: a wide, open chord that leads into the groove
 for j, m in enumerate([45, 52, 57, 64, 69]):
-    pad = tone(note(m), OPEN - 4.5 + 0.5, 'saw', 0.003 * (j - 2)) * env(OPEN - 4.5 + 0.5, 0.25, 3.0, 0.8, 0.3)
-    add(pad, 4.5, 0.03, (-0.6, -0.3, 0, 0.3, 0.6)[j])
+    pad = tone(note(m), OPEN - TT + 0.5, 'saw', 0.003 * (j - 2)) * env(OPEN - TT + 0.5, 0.25, 3.0, 0.8, 0.3)
+    add(pad, TT - 0.02, 0.03, (-0.6, -0.3, 0, 0.3, 0.6)[j])
 # a few high, slow bells over the planets
 for k, m in enumerate([76, 83, 81, 88]):
     add(tone(note(m), 2.2) * env(2.2, 0.02, 0.9), 2.0 + k * 0.6, 0.035, -0.5 + k * 0.33)
@@ -264,10 +265,10 @@ for e in SFX:
 # ---------------------------------------------------------------- master: fades, soft limit, normalise
 fade_in = np.minimum(1, t_all / 0.4)
 # a breath of near-silence right before the title hit, so the impact lands
-duck = np.ones(n); i0, i1, i2 = int(4.30 * SR), int(4.49 * SR), int(4.52 * SR)
+duck = np.ones(n); i0, i1, i2 = int((TT - .22) * SR), int((TT - .03) * SR), int(TT * SR)
 duck[i0:i1] = np.linspace(1, 0.12, i1 - i0); duck[i1:i2] = 0.12
 L *= duck; R *= duck
-add(boom, 4.52, 0.62)  # the hit itself is not ducked
+add(boom, TT, 0.62)  # the hit itself is not ducked
 fade_out = np.clip((DUR - t_all) / 1.2, 0, 1)
 mix = np.stack([L, R], 1) * (fade_in * fade_out)[:, None]
 mix = np.tanh(mix * 1.6) / np.tanh(1.6)

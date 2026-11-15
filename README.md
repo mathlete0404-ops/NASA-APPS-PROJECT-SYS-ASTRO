@@ -19,7 +19,8 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 | Area | Status | Where |
 | --- | --- | --- |
-| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. No pre-filled data: every page says what will appear and how to start | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
+| **Homepage** at the site root (`#/`): what Crew Mirror is, why it matters, how it works, features with real app screenshots, the camera test results and the safety principles, with links to the app, the film and the code. The iPhone app and the installed web app open straight into the app (`#/app`) | ✅ | `web/src/site/Home.tsx`, `web/public/home/` |
+| The app (`#/app`) opens with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. No pre-filled data: every page says what will appear and how to start | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
 | App shell: sidebar dashboard, light/dark theme, works on phones (no horizontal scroll at 375 px) | ✅ | `web/src/App.tsx`, `web/src/styles.css` |
 | Daily face scan (MediaPipe Face Landmarker in a Web Worker): rPPG heart-rate **estimate** (POS method), blink rate, PERCLOS, face-width ÷ IPD ratio, light/motion/presence quality gate → "No data" | ✅ | `web/src/vision/`, `web/src/engine/face.ts`, `rppg.ts` |
 | Mood & sleep check-in, optional body mass | ✅ | `web/src/screens/DailyCheck.tsx` |

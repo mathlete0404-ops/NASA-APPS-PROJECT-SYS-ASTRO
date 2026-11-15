@@ -52,9 +52,6 @@ body { font-family: Inter, system-ui, sans-serif; color: var(--ink); }
 #h1 .h1l { font: 300 58px/1.1 'Space Grotesk'; letter-spacing: -1px; color: #eef3fb; text-shadow: 0 2px 34px #000d; }
 #h1 .h1l b { font-weight: 500; color: #fff; }
 #h1 .rule { width: 72px; height: 1px; background: #ffffff55; margin: 26px auto 0; }
-#presents { inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
-#presents .pk { font: 500 22px 'JetBrains Mono'; letter-spacing: .62em; text-transform: uppercase; color: #e7edf7; padding-left: .62em; }
-#presents .pp { font: 400 14px 'JetBrains Mono'; letter-spacing: .5em; text-transform: uppercase; color: #7f8ba0; margin-top: 18px; padding-left: .5em; }
 #hud .hrow { display: flex; gap: 22px; font-size: 15px; letter-spacing: .16em; margin-bottom: 11px; font-variant-numeric: tabular-nums; }
 #hud .hk { width: 270px; color: #7f8ba0; }
 #hud .hv { color: #e7edf7; }
@@ -62,9 +59,9 @@ body { font-family: Inter, system-ui, sans-serif; color: var(--ink); }
 #title::before { content: ''; position: absolute; inset: 0; background: radial-gradient(900px 520px at 50% 50%, #000000d9, #00000080 55%, transparent 80%); z-index: -1; }
 #title { z-index: 1; }
 #title img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 0 80px hsl(168 76% 55% / .35), 0 20px 50px #000a; }
-#title .tt { font: 600 128px/1 'Space Grotesk'; letter-spacing: -4px; color: #fff; margin-top: 34px; text-shadow: 0 4px 60px #000c; }
+#title .tt { font: 600 128px/1 'Space Grotesk'; letter-spacing: -4px; color: #fff; margin-top: 30px; text-shadow: 0 4px 60px #000c; }
 #title .ts { font: 400 27px/1.4 Inter; color: #b7c1d3; margin-top: 22px; }
-#title .tb { font: 500 15px 'JetBrains Mono'; letter-spacing: .42em; text-transform: uppercase; color: var(--teal); margin-top: 30px; padding-left: .42em; }
+#title .tb { font: 500 17px 'JetBrains Mono'; letter-spacing: .5em; text-transform: uppercase; color: #dfe7f3; margin-bottom: 40px; padding-left: .5em; }
 
 /* The phone */
 #persp { inset: 0; perspective: 2400px; }
@@ -134,8 +131,7 @@ body.rec #replay, body.rec #sound { display: none; }
     <div class="hrow"><span class="hk">Range to Earth</span><span class="hv" id="t-rng">380 214 000 km</span></div>
     <div class="hrow"><span class="hk">Signal delay, one way</span><span class="hv" id="t-dly">21 min 08 s</span></div>
     <i class="line" id="hudline"></i><small>Crew health · on board · no live ground link</small></div>
-  <div class="abs" id="h1"><div class="kick" id="log-k">Crew log · Day 143</div><div class="logl"><span id="log-l">A message home takes 22 minutes.</span><span class="tcaret" id="log-c"></span></div></div>
-  <div class="abs" id="title"><img src="img/app-icon.png" alt="" /><div class="tt">Crew Mirror</div><div class="ts">A two-minute daily health check for astronauts.</div><div class="tb" id="title-tb">Team SYS-ASTRO</div></div>
+  <div class="abs" id="title"><div class="tb" id="title-pre">Team SYS-ASTRO presents</div><img id="title-ic" src="img/app-icon.png" alt="" /><div class="tt" id="title-tt">Crew Mirror</div><div class="ts" id="title-ts">A two-minute daily health check for astronauts.</div></div>
 
   <!-- Captions -->
   <div id="mcaps"></div>
@@ -174,7 +170,6 @@ body.rec #replay, body.rec #sound { display: none; }
   <div class="abs" id="vig"></div>
   <div class="abs" id="grain"></div>
   <div class="abs" id="black"></div>
-  <div class="abs" id="presents"><div class="pk">Team SYS-ASTRO</div><div class="pp">presents</div></div>
   <div class="abs" id="aimark">Made with AI assistance (Claude Code)</div>
   <div class="abs" id="clock" style="width: 1px; height: 1px; opacity: 0"></div>
 </div></div>
@@ -209,11 +204,12 @@ const P = (x, y, rx, ry, s, rz = 0) => ({ transform: `translate(${x}px, ${y}px) 
 const master = $('clock').animate([{ opacity: 0 }, { opacity: 1 }], { duration: T, fill: 'both' })
 
 // ------------------------------------------------------------------ timeline
-// 5.8 s opening (team card, orbit with mission telemetry, title card), then 13 features of equal
-// length (~1.74 s each, transitions included), then a 1.6 s end card.
-const OPEN = 5.8, END = 28.4, D = (END - OPEN) / 13
+// 6.2 s opening (orbit with mission telemetry, then one title card: Team SYS-ASTRO presents
+// Crew Mirror), then 13 features of equal length (~1.71 s each), then a 1.6 s end card.
+const OPEN = 6.2, END = 28.4, D = (END - OPEN) / 13
+const TITLE = 4.05 // the title hit: Crew Mirror lands here
 const SH = OPEN - 3.5 // the phone choreography below was written for a 3.5 s opening
-const GLSH = 1.4      // the space shot starts after the team card
+const GLSH = 0        // the space shot starts at once
 // [id, phone side (+1 right, -1 left), headline, subline]
 const F = [
   ['today', 1, 'No doctor<br><em>on board.</em>', 'So check in every day.'],
@@ -268,23 +264,17 @@ function caret(el, a, b, typedUntil) {
 }
 
 // ------------------------------------------------------------------ opening overlay
-tl('black', [[0, { opacity: 1 }], [1.45, { opacity: 1 }], [2.05, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
-tl('presents', [[.18, { opacity: 0 }], [.2, { opacity: 1 }], [1.32, { opacity: 1 }], [1.5, { opacity: 0 }]], 'linear')
-{ const e = typeIn(document.querySelector('#presents .pk'), .22, 17, 1, 1); typeIn(document.querySelector('#presents .pp'), e + .06, 30, 2, .6) }
-tl('hud', [[1.9, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
-tl('hudline', [[2.1, { transform: 'scaleX(0)' }], [2.6, { transform: 'scaleX(1)' }]])
-for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[1.8, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
-tl('h1', [[2.2, { opacity: 0, transform: 'translateX(-14px)' }], [2.4, { opacity: 1, transform: 'none' }], [4.3, { opacity: 1, transform: 'none' }], [4.48, { opacity: 0, transform: 'none' }]])
-// crew log: drawn per frame (see frameUpdate) so the caret follows the last typed letter
-const LOG = [{ id: 'log-k', t0: 2.42, cps: 26, vol: .8 }]
-LOG.forEach((L) => { L.text = $(L.id).textContent; $(L.id).textContent = '' })
-LOG.push({ id: 'log-l', t0: LOG[0].t0 + LOG[0].text.length / LOG[0].cps + .18, cps: 27, vol: 1, text: $('log-l').textContent })
-$('log-l').textContent = ''
-for (const L of LOG) [...L.text].forEach((ch, i) => { if (ch.trim()) KEYS.push({ t: L.t0 + i / L.cps, vol: L.vol }) })
-caret('log-c', 2.42, 4.48, LOG[1].t0 + LOG[1].text.length / LOG[1].cps)
-document.querySelectorAll('#hud .hk').forEach((h, i) => typeIn(h, 1.95 + i * .2, 48, 3, .45))
-typeIn('title-tb', 4.95, 24, 1, .8)
-tl('title', [[4.5, { opacity: 0, transform: 'scale(1.06)' }], [4.75, { opacity: 1, transform: 'scale(1.0)' }], [5.45, { opacity: 1, transform: 'scale(.985)' }], [5.75, { opacity: 0, transform: 'scale(.97)' }]], 'cubic-bezier(.2,.8,.2,1)')
+tl('black', [[0, { opacity: 1 }], [.15, { opacity: 1 }], [1.0, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
+tl('hud', [[.9, { opacity: 0 }], [1.15, { opacity: 1 }], [3.3, { opacity: 1 }], [3.55, { opacity: 0 }]], 'linear')
+tl('hudline', [[1.1, { transform: 'scaleX(0)' }], [1.6, { transform: 'scaleX(1)' }]])
+for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[.8, { opacity: 0 }], [1.15, { opacity: 1 }], [3.3, { opacity: 1 }], [3.55, { opacity: 0 }]], 'linear')
+const LOG = [] // (the crew-log subtitle was removed)
+document.querySelectorAll('#hud .hk').forEach((h, i) => typeIn(h, 1.0 + i * .22, 40, 2, .45))
+// one title card: the team "presents" types in, then Crew Mirror lands on the hit
+typeIn('title-pre', 3.5, 46, 2, .7)
+for (const id of ['title-ic', 'title-tt']) tl(id, [[TITLE - .01, { opacity: 0, transform: 'scale(1.14)' }], [TITLE + .22, { opacity: 1, transform: 'scale(1)' }]], 'cubic-bezier(.2,.8,.2,1)')
+tl('title-ts', [[TITLE + .45, { opacity: 0, transform: 'translateY(8px)' }], [TITLE + .8, { opacity: 1, transform: 'none' }]])
+tl('title', [[3.42, { opacity: 0 }], [3.5, { opacity: 1, transform: 'scale(1)' }], [OPEN - .55, { opacity: 1, transform: 'scale(.985)' }], [OPEN - .2, { opacity: 0, transform: 'scale(.97)' }]], 'cubic-bezier(.2,.8,.2,1)')
 tl('wash', [[3.3 + SH, { opacity: 0 }], [4.3 + SH, { opacity: 1 }]])
 tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [3.35 + SH, { opacity: 1, filter: 'blur(0px)' }], [4.3 + SH, { opacity: .5, filter: 'blur(1.5px)' }], [END - .2, { opacity: .5, filter: 'blur(1.5px)' }], [END + 1, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
 
@@ -414,9 +404,9 @@ $('burst').style.left = $('ring2').style.left = pcx + 'px'; $('burst').style.top
 const PH = PT + .66 // hatch moment
 // Sound cues for the soundtrack (read by the renderer; also used to play audio live).
 window.__SFX = [
-  { t: 0, k: 'timing', open: OPEN, bar: D, end: END },
+  { t: 0, k: 'timing', open: OPEN, bar: D, end: END, title: TITLE, glsh: GLSH },
   ...KEYS.map(({ t, vol }) => ({ t, k: 'key', vol })),
-  { t: 4.52, k: 'boom' },
+  { t: TITLE, k: 'boom' },
   { t: 3.25 + SH, k: 'rise' },
   ...F.slice(1).map(({ a }) => ({ t: a - .04, k: 'whip' })),
   ...RIP.map(([t]) => ({ t, k: 'tap' })),
@@ -702,7 +692,7 @@ function frameUpdate(t) {
     const met = 143 * 86400 + 6 * 3600 + 12 * 60 + 9 + Math.floor(t)
     const two = (n) => String(n).padStart(2, '0')
     $('t-met').textContent = `${Math.floor(met / 86400)}:${two(Math.floor(met / 3600) % 24)}:${two(Math.floor(met / 60) % 60)}:${two(met % 60)}`
-    const u = smooth(2.0, 4.3, t), km = 380214000 + u * 20890000, dly = Math.round(km / 299792.458)
+    const u = smooth(1.0, 3.4, t), km = 380214000 + u * 20890000, dly = Math.round(km / 299792.458)
     $('t-rng').textContent = Math.round(km / 1000).toLocaleString('en-US').replace(/,/g, ' ') + ' 000 km'
     $('t-dly').textContent = `${Math.floor(dly / 60)} min ${two(dly % 60)} s`
   }

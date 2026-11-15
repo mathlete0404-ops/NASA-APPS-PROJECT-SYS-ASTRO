@@ -22,6 +22,7 @@ import { PetPage } from './screens/PetPage'
 import { CalendarPage } from './screens/Calendar'
 import { Settings } from './screens/Settings'
 import { GuideBody, Welcome } from './screens/Welcome'
+import { Home } from './site/Home'
 import { X } from 'lucide-react'
 
 // Six places cover the daily job (check in, see the plan, look after the pet, say where it hurts). Everything else
@@ -45,10 +46,13 @@ const TABS = [
 const PHONE_TABS = ['today', 'check', 'plan', 'body'] as const
 type Tab = (typeof TABS)[number]['id']
 
-// Routes: "#/login", "#/app/<tab>" ("#/" opens Today). Old "#<tab>" links still work.
-function parse(): { page: 'login' | 'app'; tab: Tab } {
+// Routes: "#/" homepage, "#/login", "#/app/<tab>". Old "#<tab>" links still work.
+// The iPhone app (capacitor://) has no homepage: it opens straight into the app.
+const NATIVE = typeof location !== 'undefined' && location.protocol === 'capacitor:'
+function parse(): { page: 'home' | 'login' | 'app'; tab: Tab } {
   const h = location.hash.replace(/^#\/?/, '')
   const isTab = (t: string): t is Tab => TABS.some((x) => x.id === t)
+  if (h === '' && !NATIVE) return { page: 'home', tab: 'today' }
   if (h.startsWith('login')) return { page: 'login', tab: 'today' }
   if (h.startsWith('app')) {
     const t = h.split('/')[1] ?? 'today'
@@ -68,6 +72,7 @@ export default function App() {
     return () => { removeEventListener('hashchange', onHash); clearInterval(t) }
   }, [])
   const go = (t: string) => { location.hash = `/app/${t}` }
+  if (route.page === 'home') return <Home />
   if (route.page === 'login') return <Auth done={() => go('today')} />
   return <Shell tab={route.tab} go={go} />
 }
