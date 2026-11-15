@@ -96,7 +96,7 @@ export function Evidence() {
         </div>
         <p className="muted">Works with no Earth link: an offline copy of data.nasa.gov catalog entries. With the habitat server online it searches the live catalog.</p>
         <div className="row">
-          <input type="search" value={q} onChange={(e) => { setQ(e.target.value); setLive(null) }} placeholder="Search e.g. bone, muscle, sleep" style={{ flex: 1, minWidth: 200 }} />
+          <input type="search" aria-label="Search NASA datasets" value={q} onChange={(e) => { setQ(e.target.value); setLive(null) }} placeholder="Search e.g. bone, muscle, sleep" style={{ flex: 1, minWidth: 200 }} />
           <button className="btn" onClick={searchLive} disabled={!s.online || busy} title={s.online ? '' : 'Habitat server offline'}>{busy ? 'Searching…' : 'Search live'}</button>
         </div>
         <div className="stack" style={{ marginTop: 10 }}>

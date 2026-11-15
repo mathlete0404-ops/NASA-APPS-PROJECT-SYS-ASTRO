@@ -1,10 +1,13 @@
 // Crew pet page: the pet, hatching it, today's care and how it grows.
 // Growth rules live in engine/pet.ts (showing up only, never health results).
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, CheckCircle2, Circle, Heart, Lock, PawPrint, Sparkles, Sprout } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Circle, Heart, Lock, PawPrint, ShoppingBag, Sparkles, Sprout } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
+import { useWardrobe } from '../data/wardrobe'
 import { HATCH_DAYS, MOOD_LABEL, petState, STAGES, XP } from '../engine/pet'
+import { balance, itemById, outfit } from '../engine/petshop'
 import { MOOD_NOTE, Pet, PetName, readHatched, readName, writeHatched, writeName } from '../components/Pet'
+import { PetShop } from '../components/PetShop'
 
 export function PetPage({ go }: { go: (t: string) => void }) {
   const p = activeProfile(useStore())
@@ -24,6 +27,9 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
   const [pop, setPop] = useState(false)
   const [nudge, setNudge] = useState(0)
   const [hearts, setHearts] = useState(0)
+  const [view, setView] = useState<'care' | 'shop'>('care')
+  const [tryOn, setTryOn] = useState<string | null>(null)
+  const [wardrobe, updateWardrobe] = useWardrobe(crewId)
   const timers = useRef<number[]>([])
   useEffect(() => () => timers.current.forEach(clearTimeout), [])
 
@@ -51,12 +57,16 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
       : low.level < 50 ? `${low.hungry}.` : 'Tap to give it a pat.'
   const pat = () => { setNudge((k) => k + 1); setHearts((k) => k + 1) }
   const cracks = hatched ? 0 : Math.min(3, Math.min(2, pet.checkDays) + taps)
-  const art = <Pet stage={stageId} mood={pet.mood} name={name} size={220} cracks={cracks} ready={ready} burst={burst} pop={pop} nudge={nudge} hearts={hearts} />
+  const trying = view === 'shop' && tryOn ? itemById(tryOn) : undefined
+  const wear = hatched ? outfit(wardrobe, trying?.id) : undefined
+  const points = balance(pet.xp, wardrobe)
+  const art = <Pet stage={stageId} mood={pet.mood} name={name} size={220} cracks={cracks} ready={ready} burst={burst} pop={pop} nudge={nudge} hearts={hearts} wear={wear} />
+  const show = (v: 'care' | 'shop') => { setView(v); setTryOn(null) }
 
   return (
     <div className="grid g2 pet-page">
       <div className="card pet-hero">
-        <div className="card-h"><span className="ic"><PawPrint /></span><h3>Your crew pet</h3><span className="sub">{pet.xp} care points</span></div>
+        <div className="card-h"><span className="ic"><PawPrint /></span><h3>Your crew pet</h3><span className="sub" title={`${pet.xp} earned in total`}>{points} care points</span></div>
         {ready
           ? <button type="button" className="pet-stage-big tappable" onClick={tapEgg} aria-label={`Tap to hatch (${TAPS_TO_HATCH - taps} taps left)`}>{art}</button>
           : hatched
@@ -75,7 +85,14 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
         <div className="pet-tags">
           <span className="pill">{stage.name}</span>
           {hatched && <span className={`pet-mood m-${pet.mood}`}>{MOOD_LABEL[pet.mood]}</span>}
+          {trying && <span className="pill shop-trying">Trying on: {trying.name}</span>}
         </div>
+        {hatched && (
+          <div className="seg pet-views" role="group" aria-label="Pet page view">
+            <button className={view === 'care' ? 'on' : ''} aria-pressed={view === 'care'} onClick={() => show('care')}><PawPrint /> Care</button>
+            <button className={view === 'shop' ? 'on' : ''} aria-pressed={view === 'shop'} onClick={() => show('shop')}><ShoppingBag /> Shop</button>
+          </div>
+        )}
         {hatched && (
           <>
             <p className="pet-note">{stage.note}</p>
@@ -94,6 +111,9 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
       </div>
 
       <div className="stack">
+        {hatched && view === 'shop' ? (
+          <PetShop name={name} stage={stageId} xp={pet.xp} wardrobe={wardrobe} update={updateWardrobe} selected={tryOn} onSelect={setTryOn} />
+        ) : (<>
         {hatched && (
           <div className="card">
             <div className="card-h"><span className="ic"><Heart /></span><h3>How {name} is doing</h3></div>
@@ -146,6 +166,7 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
           </div>
           <p className="pet-foot-note"><small>It grows when you show up: daily check +{XP.check}, exercise +{XP.move}, log food +{XP.eat}, pain report +{XP.pain}. Your results never change it, and missed days only make it sleepy.</small></p>
         </div>
+        </>)}
       </div>
     </div>
   )

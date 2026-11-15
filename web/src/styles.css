@@ -928,3 +928,69 @@ html.dark .hp-stat b { color: var(--teal); }
   .hp-term pre { font-size: .76rem; padding: 14px; }
   .hp-term-row { grid-template-columns: minmax(0, 1fr) auto 50px; gap: 8px; }
 }
+
+/* ── Pet shop: accessories drawn on the pet, and the shop panel ─────────── */
+:root { --pet-gold-ink: hsl(36 85% 32%); }
+html.dark { --pet-gold-ink: hsl(44 96% 62%); }
+.pet-svg .pet-ac-wool { fill: hsl(8 82% 62%); stroke: hsl(8 60% 38%); stroke-width: .9; stroke-linejoin: round; }
+.pet-svg .pet-ac-stripe { fill: hsl(42 70% 95%); opacity: .92; }
+.pet-svg .pet-ac-cuff { fill: var(--pet-accent); stroke: hsl(262 60% 36%); stroke-width: .8; stroke-linejoin: round; }
+.pet-svg .pet-ac-band { fill: none; stroke: var(--pet-ink); stroke-width: 3.4; stroke-linecap: round; }
+.pet-svg .pet-ac-cup { fill: var(--pet-accent); stroke: var(--pet-ink); stroke-width: 1.2; }
+.pet-svg .pet-ac-cup-in { fill: hsl(262 60% 30%); }
+.pet-svg .pet-ac-navy { fill: hsl(224 55% 28%); stroke: hsl(224 55% 14%); stroke-width: .9; stroke-linejoin: round; }
+.pet-svg .pet-ac-trim { fill: var(--pet-gold); }
+.pet-svg .pet-ac-brim { fill: hsl(224 50% 14%); }
+.pet-svg .pet-ac-crown { stroke: hsl(36 80% 34%); stroke-width: .9; stroke-linejoin: round; }
+.pet-svg .pet-ac-trim-line { fill: none; stroke: hsl(36 80% 34%); stroke-width: 1.4; stroke-linecap: round; }
+.pet-svg .pet-ac-gem { fill: hsl(340 85% 58%); stroke: hsl(340 60% 34%); stroke-width: .5; }
+.pet-svg .pet-ac-lens { fill: hsl(195 90% 90% / .25); stroke: var(--pet-ink); stroke-width: 2; }
+.pet-svg .pet-ac-frame { fill: none; stroke: var(--pet-ink); stroke-width: 2; stroke-linecap: round; }
+.pet-svg .pet-ac-heart { fill: hsl(345 90% 62% / .6); stroke: hsl(345 70% 40%); stroke-width: 1.6; stroke-linejoin: round; }
+.pet-svg .pet-ac-visor { stroke: var(--pet-ink); stroke-width: 1.5; }
+.pet-svg .pet-ac-glint { fill: none; stroke: #fff; stroke-opacity: .75; stroke-width: 1.4; stroke-linecap: round; }
+.pet-svg .pet-ac-cape { fill: hsl(350 78% 52%); stroke: hsl(350 60% 30%); stroke-width: 1; stroke-linejoin: round; }
+.pet-svg .pet-ac-wing { fill: hsl(280 75% 82% / .85); stroke: hsl(270 50% 55%); stroke-width: 1; }
+.pet-svg .pet-ac-wing.b { fill: hsl(190 75% 80% / .85); }
+.pet-svg .pet-ac-wings .wing { transform-box: fill-box; animation: pet-flap 2.8s ease-in-out infinite; }
+.pet-svg .pet-ac-wings .wing.l { transform-origin: 100% 60%; }
+.pet-svg .pet-ac-wings .wing.r { transform-origin: 0% 60%; animation-direction: reverse; }
+.pet-svg .pet-star { fill: #fff; opacity: .9; }
+.pet-svg .pet-star.tw { transform-box: fill-box; transform-origin: center; animation: pet-twinkle 2.4s ease-in-out infinite; }
+@keyframes pet-flap { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(7deg); } }
+
+.pet-views { align-self: flex-start; margin-top: 6px; }
+.shop-trying { color: var(--violet-text); border-color: var(--violet); }
+.pet-shop .shop-balance { display: inline-flex; align-items: center; gap: 4px; color: var(--pet-gold-ink); font-weight: 700; }
+.pet-shop .shop-balance svg, .shop-pts svg { fill: var(--pet-gold); stroke: var(--pet-gold-ink); }
+.shop-intro { margin: 0 0 12px; font-size: .88rem; line-height: 1.4; }
+.shop-tabs { display: flex; width: 100%; }
+.shop-tabs button { flex: 1; justify-content: center; flex-wrap: wrap; }
+.shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; margin-top: 12px; }
+.shop-item { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 6px 10px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--card); color: inherit; font: inherit; cursor: pointer; transition: border-color .15s, background-color .15s; }
+.shop-item:hover, .shop-item:focus-visible { border-color: var(--violet); }
+.shop-item.sel { border-color: var(--violet); background: var(--violet-soft); box-shadow: -3px 3px 0 0 var(--violet); }
+.shop-item.worn { border-color: var(--teal-text); }
+.shop-item.locked .shop-thumb { opacity: .55; filter: grayscale(.45); }
+.shop-thumb { display: grid; place-items: center; width: 100%; border-radius: 9px; background: var(--pet-stage-bg); }
+.shop-thumb .pet-bob, .shop-thumb .pet-ac-wings .wing, .shop-thumb .pet-star.tw, .shop-thumb .pet-sparkle { animation: none; }
+.shop-name { font-weight: 600; font-size: .88rem; text-align: center; line-height: 1.2; }
+.shop-state { display: inline-flex; align-items: center; min-height: 20px; }
+.shop-pts { display: inline-flex; align-items: center; gap: 3px; font-size: .8rem; font-weight: 700; color: var(--pet-gold-ink); }
+.shop-own, .shop-lock { display: inline-flex; align-items: center; gap: 3px; font-size: .76rem; font-weight: 600; color: var(--muted-fg); }
+.shop-own.on { color: var(--teal-text); }
+.shop-detail { margin-top: 14px; padding: 12px; border-radius: 12px; background: var(--muted); display: flex; flex-direction: column; gap: 8px; min-height: 64px; }
+.shop-detail-t { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.shop-detail-t small { flex-basis: 100%; }
+.shop-try { color: var(--violet-text); }
+.shop-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.shop-hint { margin: 0; font-size: .9rem; }
+.shop-earn { line-height: 1.35; }
+.shop-clear { margin-top: 10px; }
+@media (max-width: 480px) { .shop-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) {
+  .pet-svg .pet-ac-wings .wing, .pet-svg .pet-star.tw { animation: none; }
+}
+
+/* A pill with a long sentence may wrap instead of pushing the page sideways on phones. */
+.pill.wrap { white-space: normal; max-width: 100%; }

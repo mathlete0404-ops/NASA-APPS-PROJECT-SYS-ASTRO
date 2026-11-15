@@ -122,7 +122,7 @@ export function CalendarPage({ go }: { go: (t: string) => void }) {
             <div className="field">
               <label htmlFor="evt">Add to this day</label>
               <div className="row">
-                <select value={kind} onChange={(e) => setKind(e.target.value as CalendarEvent['kind'])}>{(Object.keys(KIND_LABEL) as CalendarEvent['kind'][]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}</select>
+                <select aria-label="Event type" value={kind} onChange={(e) => setKind(e.target.value as CalendarEvent['kind'])}>{(Object.keys(KIND_LABEL) as CalendarEvent['kind'][]).map((k) => <option key={k} value={k}>{KIND_LABEL[k]}</option>)}</select>
                 <input id="evt" type="text" value={title} placeholder="e.g. EVA 3, rest day, video call" onChange={(e) => setTitle(e.target.value)} style={{ flex: 1, minWidth: 140 }} />
                 <button className="btn primary small" disabled={!title.trim()} onClick={() => { addEvent({ id: uid(), crewId: p.id, date: sel, kind, title: title.trim() }); setTitle('') }}><Plus /> Add</button>
               </div>

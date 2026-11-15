@@ -64,7 +64,7 @@ export function Body({ go }: { go: (t: string) => void }) {
       <div className="stack">
         <div className="card">
           <div className="card-h"><span className="ic"><Search /></span><h3>Find a structure</h3></div>
-          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`Search ${all.length.toLocaleString()} bones, muscles, nerves… e.g. “soleus”, “scaphoid”`} style={{ width: '100%' }} />
+          <input type="search" aria-label="Search the 3D body" value={q} onChange={(e) => setQ(e.target.value)} placeholder={`Search ${all.length.toLocaleString()} bones, muscles, nerves… e.g. “soleus”, “scaphoid”`} style={{ width: '100%' }} />
           {results.length > 0 && (
             <div className="stack" style={{ marginTop: 8, maxHeight: 240, overflowY: 'auto' }}>
               {results.map((r) => (

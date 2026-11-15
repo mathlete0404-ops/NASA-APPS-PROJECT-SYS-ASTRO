@@ -50,7 +50,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
       <div className="card">
         <div className="row between">
           <h2>Crew medical officer view</h2>
-          <span className="pill"><span className={`dot${s.online ? ' on' : ''}`} />{s.online ? 'Habitat server online' : 'Habitat server offline — showing this device'}</span>
+          <span className="pill wrap"><span className={`dot${s.online ? ' on' : ''}`} />{s.online ? 'Habitat server online' : 'Habitat server offline — showing this device'}</span>
         </div>
         <p className="muted">All crew, worst status first. Every alert shows the rule that fired.</p>
         <div className="scroll-x">
@@ -89,7 +89,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
               {LIGHT_DELAY.map((d) => <option key={d.id} value={d.id}>{d.label} · {d.s < 10 ? `${d.s} s` : fmtS(d.s)} one-way</option>)}
             </select></label>
           </div>
-          <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Message (derived numbers only — no images or video)" />
+          <textarea aria-label="Message to Earth" value={body} onChange={(e) => setBody(e.target.value)} placeholder="Message (derived numbers only — no images or video)" />
           <div className="row">
             <button className="btn" onClick={() => setBody(summary())}>Insert crew status summary</button>
             <button className="btn primary" disabled={!body.trim()} onClick={send}>Queue for downlink</button>

@@ -4,19 +4,14 @@ import { useState } from 'react'
 import { ArrowRight, Check, PawPrint, Pencil, X } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
 import { HATCH_DAYS, MOOD_LABEL, petState, STAGES, type Mood, type StageId } from '../engine/pet'
+import { outfit } from '../engine/petshop'
+import { useWardrobe } from '../data/wardrobe'
+import { BackLayer, FrontLayer, SceneLayer, Star, type Worn } from './PetAccessories'
 
 const STAGE_ORDER: StageId[] = STAGES.map((s) => s.id)
 const atLeast = (stage: StageId, min: StageId) => STAGE_ORDER.indexOf(stage) >= STAGE_ORDER.indexOf(min)
 const BODY_SCALE: Record<StageId, number> = { egg: 1, hatchling: 0.8, cadet: 0.9, explorer: 1, veteran: 1 }
 
-const Star = ({ cx, cy, r, className }: { cx: number; cy: number; r: number; className: string }) => {
-  const pts = Array.from({ length: 10 }, (_, i) => {
-    const a = (Math.PI / 5) * i - Math.PI / 2
-    const rr = i % 2 ? r * 0.45 : r
-    return `${(cx + rr * Math.cos(a)).toFixed(2)},${(cy + rr * Math.sin(a)).toFixed(2)}`
-  })
-  return <polygon className={className} points={pts.join(' ')} />
-}
 const Sparkle = ({ x, y, s, delay }: { x: number; y: number; s: number; delay: string }) => (
   <path className="pet-sparkle" style={{ animationDelay: delay }}
     d={`M${x} ${y - s} Q${x} ${y} ${x + s} ${y} Q${x} ${y} ${x} ${y + s} Q${x} ${y} ${x - s} ${y} Q${x} ${y} ${x} ${y - s} Z`} />
@@ -60,7 +55,7 @@ function Face({ mood }: { mood: Mood }) {
 }
 
 /** The creature itself. Purely visual; all state comes from props. */
-export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, ready = false, burst = false, pop = false, nudge = 0, hearts = 0 }: {
+export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, ready = false, burst = false, pop = false, nudge = 0, hearts = 0, wear }: {
   stage: StageId; mood: Mood; name?: string; size?: number
   /** Egg only: 0..3 taps so far (adds cracks and a shake). */ cracks?: number
   /** Egg only: ready to hatch (wobbles more). */ ready?: boolean
@@ -68,6 +63,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
   /** Just hatched: the creature pops in. */ pop?: boolean
   /** Increments on each tap: replays the shake (egg) or a hop (creature). */ nudge?: number
   /** Increments on each pat: a heart floats up. */ hearts?: number
+  /** Shop accessories to draw (hatched pets only). */ wear?: Worn
 }) {
   const stageName = STAGES.find((s) => s.id === stage)?.name ?? stage
   const label = `${name}, your pet. ${stageName} stage, ${MOOD_LABEL[mood].toLowerCase()}`
@@ -86,6 +82,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
       )}
 
       <circle className="pet-glass" cx={70} cy={62} r={46} />
+      {stage !== 'egg' && <SceneLayer id={wear?.scene} />}
 
       {stage === 'egg' ? (
         <g className={`pet-egg-wobble${ready ? ' ready' : ''}`}><g key={nudge} className={nudge ? 'pet-egg-shake' : undefined}>
@@ -103,6 +100,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
       ) : (
         <g className={pop ? 'pet-pop' : undefined}><g key={nudge} className={nudge && !pop ? 'pet-hop' : undefined}><g className="pet-bob">
           <g transform={`translate(70 106) scale(${sc}) translate(-70 -106)`}>
+            <BackLayer id={wear?.back} />
             {atLeast(stage, 'explorer') && (
               <g>
                 <rect className="pet-pack" x={33} y={68} width={11} height={25} rx={5.5} />
@@ -122,6 +120,8 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, re
             <ellipse className="pet-foot" cx={59} cy={105} rx={7.5} ry={3.6} />
             <ellipse className="pet-foot" cx={81} cy={105} rx={7.5} ry={3.6} />
             <Face mood={mood} />
+
+            <FrontLayer head={wear?.head} face={wear?.face} />
             {atLeast(stage, 'cadet') && <Star cx={70} cy={97} r={5.2} className="pet-gold pet-badge" />}
           </g>
         </g></g></g>
@@ -200,6 +200,7 @@ export function PetName({ name, onSave }: { name: string; onSave: (n: string) =>
 export function PetMini() {
   const s = useStore()
   const p = activeProfile(s)
+  const [wardrobe] = useWardrobe(p?.id ?? '')
   if (!p) return null
   const pet = petState(s, p.id)
   const hatched = readHatched(p.id)
@@ -207,7 +208,7 @@ export function PetMini() {
   const low = [...pet.needs].sort((a, b) => a.level - b.level)[0]
   return (
     <a className="card pet-mini" href="#/app/pet">
-      <span className="pet-mini-art"><Pet stage={hatched ? pet.stage.id : 'egg'} mood={pet.mood} name={readName(p.id)} size={64} ready={ready} cracks={hatched ? 0 : Math.min(2, pet.checkDays)} /></span>
+      <span className="pet-mini-art"><Pet stage={hatched ? pet.stage.id : 'egg'} mood={pet.mood} name={readName(p.id)} size={64} ready={ready} cracks={hatched ? 0 : Math.min(2, pet.checkDays)} wear={hatched ? outfit(wardrobe) : undefined} /></span>
       <span className="pet-mini-t">
         <small className="kicker"><PawPrint size={12} /> Crew pet</small>
         <b>{readName(p.id)}</b>

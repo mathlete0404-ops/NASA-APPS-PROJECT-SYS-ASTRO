@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Bell, Cloud, Database, Download, LogOut, Moon, Rocket, Salad, ScanFace, Server, Shield, User } from 'lucide-react'
 import { activeProfile, exportData, missionDay, resetEmpty, updateProfile, useStore } from '../data/store'
 import { cloudConfigured, signOut } from '../data/cloud'
@@ -17,12 +17,15 @@ function Section({ icon: I, title, children }: { icon: typeof User; title: strin
     </div>
   )
 }
-const Row = ({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) => (
-  <div className="set-row">
-    <div className="set-label"><b>{label}</b>{hint && <small>{hint}</small>}</div>
-    <div className="set-ctrl">{children}</div>
-  </div>
-)
+const Row = ({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) => {
+  const id = useId()
+  return (
+    <div className="set-row">
+      <div className="set-label"><b id={id}>{label}</b>{hint && <small>{hint}</small>}</div>
+      <div className="set-ctrl" role="group" aria-labelledby={id}>{children}</div>
+    </div>
+  )
+}
 
 const PERM_TEXT: Record<NotifyPermission, string> = {
   granted: 'Notifications allowed',
