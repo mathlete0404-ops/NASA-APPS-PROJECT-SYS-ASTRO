@@ -21,7 +21,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from . import db
-from .engine import METRICS, metric_status, per_day, triage
+from .engine import METRICS, freshen, metric_status, per_day, triage
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG = json.loads((ROOT / "data" / "nasa_catalog.json").read_text()) if (ROOT / "data" / "nasa_catalog.json").exists() else {"datasets": []}
@@ -108,13 +108,19 @@ def add_session(s: Session) -> dict:
     return {"ok": True, "status": status(s.crew_id)}
 
 
-def _status(con, crew_id: str) -> dict:
+def _status(con, crew_id: str, today: str | None = None) -> dict:
+    from datetime import date
+    today = today or date.today().isoformat()
+    # a daily check always records mood, so its day marks the latest check
+    row = con.execute("SELECT MAX(substr(ts, 1, 10)) AS d FROM measurement WHERE crew_id=? AND metric='mood'", (crew_id,)).fetchone()
+    last_check_day = row["d"] if row else None
     out = {}
     for metric in METRICS:
         hist = con.execute("SELECT ts, value, quality_ok FROM measurement WHERE crew_id=? AND metric=? ORDER BY ts",
                            (crew_id, metric)).fetchall()
         if hist:
-            out[metric] = metric_status(metric, per_day([(r["ts"], r["value"], bool(r["quality_ok"])) for r in hist]))
+            st = metric_status(metric, per_day([(r["ts"], r["value"], bool(r["quality_ok"])) for r in hist]))
+            out[metric] = freshen(metric, st, hist[-1]["ts"][:10], last_check_day, today)
     return out
 
 

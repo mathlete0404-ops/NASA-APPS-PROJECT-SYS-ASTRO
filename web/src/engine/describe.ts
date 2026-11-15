@@ -25,6 +25,8 @@ const PHRASE: Record<string, { up: string; down: string }> = {
 
 export function plain(id: string, r: StatusResult): string {
   const m = METRICS[id]
+  if (r.level === 'nodata' && r.why === 'skipped') return `${m.label}: not measured today (face scan skipped).`
+  if (r.level === 'nodata' && r.why === 'stale') return `${m.label}: no current reading (last measured ${r.ageDays ?? 'several'} days ago).`
   if (r.level === 'nodata') return `${m.label}: couldn’t be measured well this time (light, movement or not enough time).`
   if (r.level === 'baseline') return `${m.label}: still learning your normal (${r.n ?? 0} of 7 days).`
   if (r.level === 'usual') return `${m.label}: in your normal range.`

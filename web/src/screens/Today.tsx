@@ -91,12 +91,18 @@ export function Today({ go }: { go: (tab: string) => void }) {
           {hasData && attention.length === 0 && overall !== 'baseline' && <p>Everything is in your normal range.</p>}
           {attention.length > 0 && (
             <ul className="reasons">
-              {attention.slice(0, 5).map(([id, r]) => (
+              {attention.filter(([, r]) => r.why !== 'skipped' && r.why !== 'stale').slice(0, 5).map(([id, r]) => (
                 <li key={id}>
                   <StatusChip level={r.level} /> {plain(id, r)}
                   {r.level !== 'nodata' && <details className="why-details"><summary>How we know</summary><p>{technical(r)}</p></details>}
                 </li>
               ))}
+              {attention.some(([, r]) => r.why === 'skipped') && (
+                <li><StatusChip level="nodata" /> Face scan skipped in your latest check, so heart rate, breathing, blinks and face width have no reading today. <button className="btn small ghost" onClick={() => go('check')}>Do a face scan</button></li>
+              )}
+              {attention.some(([, r]) => r.why === 'stale') && (
+                <li><StatusChip level="nodata" /> No daily check for {Math.max(...attention.map(([, r]) => r.ageDays ?? 0))} days, so your numbers are out of date. <button className="btn small ghost" onClick={() => go('check')}>Start today’s check</button></li>
+              )}
             </ul>
           )}
           {attention.some(([, r]) => r.level === 'act') && <p style={{ marginTop: 8 }}><b>Next step:</b> tell the crew medical officer today, and check again tomorrow morning.</p>}
@@ -142,7 +148,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
               return (
                 <button key={id} className={`num-row lv-${r.level}`} title={plain(id, r)} onClick={() => go('trends')}>
                   <span className="num-l">{METRICS[id].label.replace(/ \(estimate\)$/, '')}</span>
-                  <span className="num-v">{latest?.ok ? fmtNum(latest.value) : '—'}<small> {METRICS[id].unit}</small></span>
+                  <span className="num-v">{latest?.ok && r.why !== 'skipped' && r.why !== 'stale' ? fmtNum(latest.value) : '—'}<small> {METRICS[id].unit}</small></span>
                   <StatusChip level={r.level} n={r.n} />
                 </button>
               )

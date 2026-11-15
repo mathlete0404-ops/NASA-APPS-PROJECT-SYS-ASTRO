@@ -63,7 +63,7 @@ export function Medical({ go }: { go: (t: string) => void }) {
                   <td data-label="Status">{started ? <StatusChip level={lvl} /> : <small className="muted">No checks yet</small>}</td>
                   <td data-label="Alerts">
                     {alerts.length ? alerts.map(([id, r]) => (
-                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> (failed quality check today)</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
+                      <div key={id}><StatusChip level={r.level} /> {METRICS[id].label}{r.level === 'nodata' ? <small className="muted"> ({r.why === 'skipped' ? 'face scan skipped' : r.why === 'stale' ? `no check for ${r.ageDays ?? 'several'} days` : 'failed quality check'})</small> : <>: {fmtNum(r.value)} {METRICS[id].unit} <small className="muted">(z {r.z! > 0 ? '+' : ''}{r.z})</small></>}</div>
                     )) : <small className="muted">none</small>}
                   </td>
                   <td data-label="Latest symptom">

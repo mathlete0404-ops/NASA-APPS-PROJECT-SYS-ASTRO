@@ -12,6 +12,10 @@ export interface StatusResult {
   scale?: number
   value?: number
   n?: number
+  /** Why it is No data: a poor measurement, a face scan skipped in the latest check, or too old. */
+  why?: 'quality' | 'skipped' | 'stale'
+  /** Days since the last reading (stale only). */
+  ageDays?: number
 }
 
 export const METRICS: Record<string, MetricDef> = Object.fromEntries(
