@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Sun, type LucideIcon } from 'lucide-react'
 import { LEVEL_LABEL, type Level } from '../engine/status'
 import { EVIDENCE } from '../content/evidence'
 
@@ -52,6 +52,22 @@ export function Spark({
         <circle key={p.i} className={p.ok ? 'spark-dot' : 'spark-bad'} cx={X(p.i)} cy={Y(p.v)} r={p.i === values.length - 1 ? 3.4 : 1.7} />
       ))}
     </svg>
+  )
+}
+
+/** What a page will show once there is data, and the one thing to do to get there. */
+export function EmptyState({ icon: I, title, children, action, onAction }: {
+  icon: LucideIcon; title: string; children: React.ReactNode; action?: string; onAction?: () => void
+}) {
+  return (
+    <div className="card empty-state">
+      <span className="ic"><I /></span>
+      <div className="empty-body">
+        <h3>{title}</h3>
+        <p className="muted">{children}</p>
+        {action && onAction && <button className="btn primary" onClick={onAction}>{action}</button>}
+      </div>
+    </div>
   )
 }
 

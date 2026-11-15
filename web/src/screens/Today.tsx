@@ -46,7 +46,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
     ...(p.phase === 'preflight' ? [{ done: s.sessions.some((x) => x.crewId === p.id && x.kind === 'balance'), label: 'Record a balance test before flight', tab: 'balance' }] : []),
     { done: checkDays.size >= 7, label: `Check in 7 days so the app learns your normal (${learning}/7)`, tab: 'check' },
   ]
-  const showStart = !hideStart && !s.sample && steps.some((x) => !x.done)
+  const showStart = !hideStart && steps.some((x) => !x.done)
 
   return (
     <div className="stack">
@@ -71,7 +71,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
           <div className="row between"><h2>How you’re doing</h2>{hasData && <StatusChip level={overall} />}</div>
           {(!hasData || overall === 'baseline') && (
             <>
-              <p>{hasData ? <>Learning your normal: <b>day {learning} of 7</b>. Check in each morning.</> : 'No measurements yet. After 7 daily checks, the app can tell when something changes.'}</p>
+              <p>{hasData ? <>Learning your normal: <b>day {learning} of 7</b>. Check in each morning.</> : <>No checks yet. Your first daily check takes 2 minutes. After 7 days of checks the app knows your normal and can tell when something changes.</>}</p>
               <div className="days7">
                 {Array.from({ length: 7 }, (_, i) => <span key={i} className={i < learning ? 'on' : ''}><i>{i + 1}</i></span>)}
               </div>

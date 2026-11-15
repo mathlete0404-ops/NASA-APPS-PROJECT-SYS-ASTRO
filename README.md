@@ -5,7 +5,7 @@ Challenge: *Create Health Monitoring Software for Astronauts on Space Missions*.
 
 > **Prototype, not a medical device.** Results are patterns, never diagnoses. Camera video never leaves the browser.
 
-**Live demo:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
+**Live app:** https://mathlete0404-ops.github.io/NASA-APPS-PROJECT-SYS-ASTRO/ (built by `.github/workflows/ci.yml`; in the repo go to Settings → Pages → Source: *GitHub Actions* once) · **Demo video / slides:** _TBD_
 
 A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
@@ -17,7 +17,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 
 | Area | Status | Where |
 | --- | --- | --- |
-| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. Sample crew only on request, clearly labelled | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
+| Opens straight into the app with a short logo fade, then a **first-open setup** (who you are, how statuses work, first check), a **Getting started** checklist and an in-app **How to use** guide. No pre-filled data: every page says what will appear and how to start | ✅ | `web/src/screens/Welcome.tsx`, `web/index.html`, `web/src/boot.ts` |
 | App shell: sidebar dashboard, light/dark theme, works on phones (no horizontal scroll at 375 px) | ✅ | `web/src/App.tsx`, `web/src/styles.css` |
 | Daily face scan (MediaPipe Face Landmarker in a Web Worker): rPPG heart-rate **estimate** (POS method), blink rate, PERCLOS, face-width ÷ IPD ratio, light/motion/presence quality gate → "No data" | ✅ | `web/src/vision/`, `web/src/engine/face.ts`, `rppg.ts` |
 | Mood & sleep check-in, optional body mass | ✅ | `web/src/screens/DailyCheck.tsx` |
@@ -96,7 +96,7 @@ Cloud accounts: the team project is **`crew-mirror`** (Supabase, Seoul `ap-north
 update public.profiles set is_cmo = true where call_sign = 'MS2' and mission_code = 'ARES-1';
 ```
 
-In the Supabase dashboard, set **Auth → URL Configuration → Site URL** to the app's address (e.g. `http://localhost:5173` or the live site). For a live demo, you can turn off **Confirm email** so new accounts can sign in immediately.
+In the Supabase dashboard, set **Auth → URL Configuration → Site URL** to the app's address (e.g. `http://localhost:5173` or the live site). You can turn off **Confirm email** so new accounts can sign in immediately.
 
 For a different project, set:
 
@@ -107,7 +107,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 
 Login and identity: see `docs/IDENTITY_PLAN.md` for the current design and proposed improvements.
 
-Static build: `cd web && npm run build` → `web/dist/` (no server needed; first open shows a short setup, or "Try it with a sample crew").
+Static build: `cd web && npm run build` → `web/dist/` (no server needed; first open shows a short setup that creates your own profile).
 
 ### iOS app (Xcode)
 Needs Xcode 16+ (tested with Xcode 26.6). The first build needs internet once so Swift Package Manager can fetch Capacitor.
@@ -135,15 +135,15 @@ The UI uses a "layered surfaces" style shared with the team's NullBase project: 
 
 - **3D body**: one adult body model, and sex-specific anatomy is removed on purpose. Region tags come from names plus body height, so a few edge structures may sit in a neighbouring region. The 2D map stays as a low-power fallback.
 - **Cloud accounts**: connected to the `crew-mirror` project. RLS was tested with throwaway users: own-rows only, medical officer reads only their mission, no self-promotion, no writing as another user. A real email sign-up was not tested end to end, because confirmation emails go to real inboxes.
-- **Balance tests** are disabled while floating (there is no "up"); they run pre-flight and after landing.
+- **Balance tests** are disabled while weightless (there is no "up"); they run pre-flight and after landing.
 - **Camera measures are not clinically validated.** The rPPG heart rate is labelled "estimate". Thresholds (light 50–230, motion, peak quality ≥ 0.3) are engineering choices tested on synthetic signals, not on astronauts.
 - **Range of motion** is measured for the shoulder in the coach (arm raise + "It hurts here"). Other joints still use the slider.
 - **Ghost coach** (replaying a recorded correct rep) and the finger-tap test are not built.
-- **Food values** are approximate demo numbers, and the targets are defaults for a crew nutritionist to set.
+- **Food values** are approximate reference values, and the targets are defaults for a crew nutritionist to set.
 - **RadLab** and the Environmental Data App are linked as evidence. Their data are not ingested; dose rates are published averages with citations.
 - **Solar storm card** reads Earth-orbit GOES data from NOAA (not NASA). Far from Earth the real flux differs, so it is context only and defers to vehicle dosimetry and mission storm rules. Without a network it shows the last saved reading, labelled "Last known".
 - The data.nasa.gov API sometimes timed out during ingest, so the offline catalog is a partial snapshot (76 datasets).
-- Demo crew history is **synthetic** and labelled as such in the app.
+- The app ships with **no data**. Each astronaut builds their own baseline over their first 7 daily checks; until then pages show what will appear and how to start. Saved data from older builds that contained a sample crew is dropped on load, and setup opens again.
 
 ## Use of AI tools
 

@@ -1,8 +1,8 @@
 // First-open setup: who you are (stored on this device — no account needed), how the
 // app works, and the first step. Also exports the Guide shown from "How to use Crew Mirror".
 import { useState } from 'react'
-import { ArrowLeft, ArrowRight, CalendarDays, CloudOff, Dumbbell, HeartPulse, ListChecks, PersonStanding, ScanFace, Shield, Stethoscope, Users } from 'lucide-react'
-import { createProfile, loadSample } from '../data/store'
+import { ArrowLeft, ArrowRight, CalendarDays, CloudOff, Dumbbell, HeartPulse, ListChecks, PersonStanding, ScanFace, Shield, Stethoscope } from 'lucide-react'
+import { createProfile } from '../data/store'
 import { PHASES, type Phase } from '../content/mission'
 import { Footer, Logo, StatusChip } from '../components/ui'
 
@@ -10,7 +10,7 @@ const today = () => new Date().toISOString().slice(0, 10)
 const ROLES = ['Commander', 'Pilot', 'Mission specialist', 'Flight engineer', 'Payload specialist', 'Crew medical officer']
 const PHASE_HELP: Record<Phase, string> = {
   preflight: 'The app learns your normal on Earth.',
-  transit: 'Weightless, on the way or in orbit.',
+  transit: 'In orbit or on the way.',
   landing: 'Balance and strength are checked again.',
   surface: 'Partial gravity.',
   return: 'Recovering after the mission.',
@@ -103,7 +103,6 @@ export function Welcome({ go }: { go: (t: string) => void }) {
             </div>
             <div className="row" style={{ marginTop: 8 }}>
               <button className="btn primary" onClick={() => setStep(1)}>Set up my profile <ArrowRight /></button>
-              <button className="btn ghost" onClick={() => { void loadSample().then(() => go('today')) }}><Users /> Try it with a sample crew</button>
             </div>
           </div>
         )}
@@ -129,7 +128,7 @@ export function Welcome({ go }: { go: (t: string) => void }) {
             <div className="grid g2">
               <div className="field"><label htmlFor="ld">{phase === 'preflight' ? 'Planned launch date' : 'Launch date'}</label><input id="ld" type="date" value={launch} onChange={(e) => setLaunch(e.target.value)} /></div>
               {(phase === 'landing' || phase === 'surface' || phase === 'return') && (
-                <div className="field"><label htmlFor="wd">Days you spent weightless</label><input id="wd" type="number" min={0} value={weightless} onChange={(e) => setWeightless(+e.target.value)} /></div>
+                <div className="field"><label htmlFor="wd">Time weightless (days)</label><input id="wd" type="number" min={0} value={weightless} onChange={(e) => setWeightless(+e.target.value)} /></div>
               )}
               <div className="field"><label htmlFor="ms">Body mass (optional)</label><input id="ms" type="number" step="0.1" placeholder="kg" value={mass} onChange={(e) => setMass(e.target.value)} /></div>
             </div>

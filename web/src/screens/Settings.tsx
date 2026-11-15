@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Cloud, Database, Download, LogOut, Moon, Rocket, Salad, ScanFace, Server, Shield, User } from 'lucide-react'
-import { activeProfile, exportData, missionDay, resetDemo, resetEmpty, updateProfile, useStore } from '../data/store'
+import { activeProfile, exportData, missionDay, resetEmpty, updateProfile, useStore } from '../data/store'
 import { cloudConfigured, signOut } from '../data/cloud'
 import { api } from '../data/api'
 import { PHASES, type Phase } from '../content/mission'
@@ -58,9 +58,9 @@ export function Settings({ go }: { go: (t: string) => void }) {
             {Object.values(PHASES).map((x) => <option key={x.id} value={x.id}>{x.label}</option>)}
           </select>
         </Row>
-        <Row label="Launch date" hint={missionDay(p) >= 0 ? `Flight day ${missionDay(p)}` : `${-missionDay(p)} days to launch`}><input type="date" value={p.launchDate} onChange={(e) => updateProfile({ ...p, launchDate: e.target.value })} /></Row>
+        <Row label="Launch date" hint="In flight, time weightless is counted from this date."><input type="date" value={p.launchDate} onChange={(e) => updateProfile({ ...p, launchDate: e.target.value })} /></Row>
         {!PHASES[p.phase].microgravity && p.phase !== 'preflight' && (
-          <Row label="Days spent weightless" hint="Bones weaken while weightless, so bony pain is treated more carefully."><input type="number" min={0} value={p.transitDays} onChange={(e) => updateProfile({ ...p, transitDays: +e.target.value })} style={{ width: 90 }} /></Row>
+          <Row label="Time weightless (days)" hint="Used for the bone-loss estimate: bony pain is treated more carefully after a long flight."><input type="number" min={0} value={p.transitDays} onChange={(e) => updateProfile({ ...p, transitDays: +e.target.value })} style={{ width: 90 }} /></Row>
         )}
         <small className="muted">Phase changes which tests are offered (no balance tests while weightless), how cautiously bony pain is treated, and the exercise plan.</small>
       </Section>
@@ -105,7 +105,6 @@ export function Settings({ go }: { go: (t: string) => void }) {
 
       <Section icon={Database} title="Data on this device">
         <Row label="Export everything" hint="JSON of your numbers, reports, workouts, food and calendar."><button className="btn small" onClick={download}><Download /> Export</button></Row>
-        <Row label="Sample crew" hint="Look around with made-up people and data. Your own data is replaced — export first."><button className="btn small" onClick={() => void resetDemo()}>Show sample crew</button></Row>
         <Row label="Start fresh" hint="Erase this device and build your own baseline.">
           {confirmWipe ? <><button className="btn small danger" onClick={() => { void resetEmpty(); setConfirmWipe(false); go('today') }}>Erase now</button><button className="btn small" onClick={() => setConfirmWipe(false)}>Cancel</button></>
             : <button className="btn small" onClick={() => setConfirmWipe(true)}>Erase…</button>}

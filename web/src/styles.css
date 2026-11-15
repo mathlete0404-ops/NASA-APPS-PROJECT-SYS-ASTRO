@@ -308,6 +308,7 @@ th { color: var(--muted-fg); font-weight: 600; font-size: .7rem; text-transform:
 .problem:hover { border-color: var(--violet); }
 .problem.on { border-color: var(--violet); background: var(--violet-soft); }
 .split-3d { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (min-width: 1001px) { .split-3d.cal-split { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } }
 @media (max-width: 1000px) { .split-3d { grid-template-columns: 1fr; } }
 .src { border: 1.5px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card); }
 .src.top { border-color: var(--violet); box-shadow: -4px 4px 0 0 var(--violet); }
@@ -351,20 +352,18 @@ th { color: var(--muted-fg); font-weight: 600; font-size: .7rem; text-transform:
 .notice.ok { border-color: var(--usual); background: var(--usual-bg); color: var(--usual); }
 @media (max-width: 860px) { .auth-wrap { grid-template-columns: 1fr; } .auth-wrap .side { display: none; } }
 
-/* ── Welcome, guide, sample banner ────────────────────────────────────────── */
+/* ── Welcome, guide ────────────────────────────────────────── */
 .welcome { min-height: 100vh; display: grid; place-items: center; align-content: center; gap: 16px; padding: 32px 16px; background: radial-gradient(900px 500px at 85% -10%, hsl(262 83% 58% / .12), transparent 60%), radial-gradient(700px 400px at 0% 110%, hsl(168 76% 55% / .12), transparent 60%), var(--background); }
 .welcome-card { width: 100%; max-width: 620px; padding: 28px; border: 2px solid var(--ink); box-shadow: -8px 8px 0 0 var(--layer); animation: app-in .6s cubic-bezier(.16, 1, .3, 1) both; }
 .welcome .steps span { min-width: 28px; text-align: center; }
 .modal { position: fixed; inset: 0; z-index: 60; background: hsl(228 47% 5% / .55); backdrop-filter: blur(3px); display: grid; place-items: center; padding: 16px; animation: page-in .2s ease both; }
 .modal-card { width: 100%; max-width: 760px; max-height: 88vh; overflow-y: auto; border: 2px solid var(--ink); box-shadow: -8px 8px 0 0 var(--layer); }
-.sample-bar { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 9px 28px; background: var(--watch-bg); color: var(--foreground); border-bottom: 1px solid var(--watch); font-size: .9rem; }
 .nav-item.btn-like, .side-foot button.nav-item { font: inherit; }
 details.why-details { margin-top: 4px; }
 details.why-details summary { cursor: pointer; color: var(--muted-fg); font-size: .8rem; list-style: none; }
 details.why-details summary::before { content: '› '; }
 details.why-details[open] summary::before { content: '⌄ '; }
 details.why-details p { font-size: .8rem; color: var(--muted-fg); margin: 4px 0 0; }
-@media (max-width: 900px) { .sample-bar { padding: 9px 16px; } }
 .feature-icon { display: inline-flex; align-items: center; justify-content: center; width: 38px; height: 38px; border-radius: 8px; border: 2px solid var(--ink); background: var(--teal); color: #04130f; flex: none; }
 .feature-icon svg { width: 18px; height: 18px; }
 .feature { display: flex; gap: 14px; align-items: flex-start; }
@@ -599,3 +598,11 @@ button.pet-task:hover, button.pet-task:focus-visible { border-color: var(--viole
   .pet-bob, .pet-egg-wobble, .pet-svg .pet-sparkle, .pet-svg .pet-z { animation: none; }
   .pet-svg .pet-sparkle { opacity: 1; }
 }
+
+/* ── Empty states: what will appear here, and how to start ─────────────── */
+.empty-state { display: flex; gap: 14px; align-items: flex-start; }
+.empty-state .ic { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: var(--muted); color: var(--teal-text); flex: none; }
+.empty-state .ic svg { width: 20px; height: 20px; }
+.empty-state h3 { margin: 2px 0 4px; font-size: 1.05rem; }
+.empty-state p { margin: 0 0 12px; font-size: .92rem; max-width: 60ch; }
+.empty-state .btn { margin-top: 2px; }

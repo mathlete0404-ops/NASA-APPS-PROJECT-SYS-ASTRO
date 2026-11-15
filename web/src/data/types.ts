@@ -6,7 +6,7 @@ export interface CrewProfile {
   role: string
   launchDate: string // YYYY-MM-DD
   phase: Phase
-  transitDays: number // days spent floating, used after transit ends
+  transitDays: number // days spent weightless; used by the bone-loss estimate after the flight
   isCmo?: boolean
   /** Used when no scale/SLAMMD reading exists yet. */
   massKg?: number
@@ -33,7 +33,6 @@ export interface Session {
   missionDay: number
   kind: 'daily' | 'balance' | 'mass'
   measurements: Measurement[]
-  synthetic?: boolean
 }
 
 export interface SymptomReport {
@@ -57,7 +56,6 @@ export interface SymptomReport {
   pointedBy?: '3d' | 'camera' | 'map'
   /** Likely source from the pain-source finder (pattern, not diagnosis). */
   source?: { id: string; label: string; kind: string; score: number; reasons: string[] }
-  synthetic?: boolean
 }
 
 export interface CalendarEvent {

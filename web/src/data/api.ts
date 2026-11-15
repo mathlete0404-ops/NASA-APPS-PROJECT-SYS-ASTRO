@@ -2,7 +2,6 @@
 // unreachable, writes go to an outbox and are retried — the app never depends on it.
 import { get, set } from 'idb-keyval'
 import type { CrewProfile, DownlinkMsg, Session, SymptomReport } from './types'
-import type { State } from './store'
 
 const BASE = (import.meta.env.VITE_HABITAT_URL as string | undefined) ?? '/api'
 
@@ -93,13 +92,6 @@ export const api = {
   pushSession: (s: Session) => send({ method: 'POST', path: '/sessions', body: sessionBody(s) }),
   pushSymptom: (r: SymptomReport) => send({ method: 'POST', path: '/symptoms', body: symptomBody(r) }),
   pushDownlink: (m: DownlinkMsg) => send({ method: 'POST', path: '/downlink', body: { crew_id: m.crewId, body: m.body, delay_s: m.delayS } }),
-  async pushAll(s: State, microgravityDays: (p: CrewProfile) => number) {
-    if (!(await this.health())) return
-    await Promise.all(s.crew.map((p) => call('PUT', `/crew/${p.id}`, profileBody(p, microgravityDays(p))).catch(() => null)))
-    for (const x of s.sessions) await call('POST', '/sessions', sessionBody(x)).catch(() => null)
-    for (const x of s.symptoms) await call('POST', '/symptoms', symptomBody(x)).catch(() => null)
-  },
   crewOverview: () => call('GET', '/crew'),
-  resetDemo: () => call('POST', '/demo/reset').catch(() => null),
   search: (q: string) => call('GET', `/nasa/search?q=${encodeURIComponent(q)}`, undefined, 6000),
 }

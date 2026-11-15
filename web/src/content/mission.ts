@@ -16,7 +16,7 @@ export const PHASES: Record<Phase, PhaseInfo> = {
     focus: 'Record your baseline: face scan, check-in, balance, body mass.',
   },
   transit: {
-    id: 'transit', label: 'In flight (weightless)', gravity: '0 g', microgravity: true,
+    id: 'transit', label: 'In flight', gravity: '0 g', microgravity: true,
     body: 'Weight-bearing bone loses ~1%/month without countermeasures; the spine lengthens and back muscles shrink; fluid shifts to the head; crews often eat less than they need.',
     focus: 'Daily face scan, pain check, exercise coach, mass trend.',
   },

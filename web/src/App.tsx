@@ -3,7 +3,7 @@ import {
   CalendarDays, ChevronDown, CircleHelp, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PersonStanding,
   ScanFace, Settings as SettingsIcon, Stethoscope, TrendingUp,
 } from 'lucide-react'
-import { activeProfile, load, refreshOnline, resetEmpty, setActiveCrew, useStore } from './data/store'
+import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
 import { Footer, Logo, ThemeToggle } from './components/ui'
 import { Auth } from './site/Auth'
@@ -138,12 +138,6 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           {TABS.filter((t) => t.group !== 'footer').map((t) => item(t, true))}
           {item(TABS.find((t) => t.id === 'settings')!, true)}
         </nav>
-        {s.sample && (
-          <div className="sample-bar">
-            <span><b>Sample crew.</b> These people and numbers are made up so you can look around.</span>
-            <button className="btn small primary" onClick={() => void resetEmpty()}>Set up my own profile</button>
-          </div>
-        )}
         <main className="content page-enter" key={tab}>
           {!s.loaded ? <p>Loading…</p> : (
             <>
@@ -155,7 +149,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
               {tab === 'report' && <Report key={p?.id} go={go} />}
               {tab === 'coach' && <Coach key={p?.id} go={go} />}
               {tab === 'balance' && <Balance key={p?.id} />}
-              {tab === 'trends' && <Trends />}
+              {tab === 'trends' && <Trends go={go} />}
               {tab === 'evidence' && <Evidence />}
               {tab === 'medical' && <Medical go={go} />}
               {tab === 'settings' && <Settings go={go} />}
