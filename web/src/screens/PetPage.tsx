@@ -96,7 +96,7 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
           {hatched && <span className={`pet-mood m-${pet.mood}`}>{MOOD_LABEL[pet.mood]}</span>}
           {trying && <span className="pill shop-trying">Trying on: {trying.name}</span>}
         </div>
-        {hatched && (
+        {(
           <div className="seg pet-views" role="group" aria-label="Pet page view">
             <button className={view === 'care' ? 'on' : ''} aria-pressed={view === 'care'} onClick={() => show('care')}><PawPrint /> Care</button>
             <button className={view === 'trips' ? 'on' : ''} aria-pressed={view === 'trips'} onClick={() => show('trips')}><Rocket /> Trips</button>
@@ -122,7 +122,14 @@ function PetPageFor({ crewId, go }: { crewId: string; go: (t: string) => void })
       </div>
 
       <div className="stack">
-        {hatched && view === 'shop' ? (
+        {!hatched && view !== 'care' ? (
+          <div className="card pet-locked">
+            <div className="card-h"><span className="ic"><Lock /></span><h3>{view === 'trips' ? 'Trips' : view === 'shop' ? 'Pet shop' : 'Space Exchange'}</h3></div>
+            <p><b>{name} has to hatch first.</b> {daysLeft > 0 ? `${daysLeft} more daily check${daysLeft === 1 ? '' : 's'} and it hatches.` : 'Tap the egg three times to hatch it.'}</p>
+            <p className="muted">{view === 'trips' ? `Then you can send ${name} on trips that bring home care points and miles.` : view === 'shop' ? `Then you can spend care points on hats, colours and space scenes for ${name}.` : `Then, once ${name} is a Cadet (7 daily checks), the Space Exchange opens: a pretend stock market for care points.`}</p>
+            {!pet.tasks.find((t) => t.id === 'check')?.done && <button className="btn primary" onClick={() => go('check')}>Start today’s check</button>}
+          </div>
+        ) : hatched && view === 'shop' ? (
           <PetShop name={name} stage={stageId} xp={earned} wardrobe={wardrobe} update={updateWardrobe} selected={tryOn} onSelect={setTryOn} />
         ) : hatched && view === 'trips' ? (
           <PetTrips name={name} stage={stageId} game={game} update={updateGame} now={now} />

@@ -1119,3 +1119,5 @@ html[lang="ko"] { --font-body: 'Inter', 'Apple SD Gothic Neo', 'Noto Sans KR', '
 @media (max-width: 480px) { .mk-row { grid-template-columns: 2.9rem 1fr auto; } .mk-ch { display: none; } }
 
 .pet-trips .card-h, .pet-market .card-h { flex-wrap: wrap; row-gap: 4px; }
+
+.pet-locked p { margin: 0 0 10px; line-height: 1.4; }
