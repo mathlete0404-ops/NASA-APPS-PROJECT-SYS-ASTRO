@@ -5,7 +5,7 @@ import {
   Activity, ArrowRight, BellRing, Check, CloudOff, Code2, Dumbbell, EyeOff, Footprints, HeartPulse, PawPrint, Play,
   Radiation, ScanFace, ShieldAlert, Siren, Stethoscope, UtensilsCrossed,
 } from 'lucide-react'
-import { Logo, ThemeToggle } from '../components/ui'
+import { LangToggle, Logo, ThemeToggle } from '../components/ui'
 
 const BASE = import.meta.env.BASE_URL
 const APP = '#/app/today'
@@ -46,6 +46,7 @@ export function Home() {
           <a href="#proof" onClick={(e) => { e.preventDefault(); document.getElementById('proof')?.scrollIntoView({ behavior: 'smooth' }) }}>Proof</a>
         </nav>
         <div className="hp-nav-r">
+          <LangToggle onDark />
           <ThemeToggle onDark />
           <a className="btn primary small" href={APP}>Open the app <ArrowRight /></a>
         </div>

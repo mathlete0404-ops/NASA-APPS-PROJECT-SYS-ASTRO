@@ -1063,3 +1063,9 @@ html.dark { --pet-gold-ink: hsl(44 96% 62%); }
   .sos-top span { display: none; }
   .sos-q { font-size: 1.25rem; }
 }
+
+/* Korean (한국어): keep words whole when wrapping; Hangul falls back to the system's Korean font */
+html[lang="ko"] body { word-break: keep-all; overflow-wrap: anywhere; }
+html[lang="ko"] { --font-body: 'Inter', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif; }
+.lang-toggle { font-weight: 700; min-width: 54px; }
+.lang-toggle.on-dark { color: #e8edf6; }
