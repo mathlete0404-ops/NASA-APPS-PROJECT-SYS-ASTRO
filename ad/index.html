@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Crew Mirror Ad</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 /* Crew Mirror, 30-second film (v2).
    One 30 s timeline: CSS/Web Animations for the phone, captions and cursor; three.js for the
@@ -44,8 +44,25 @@ body { font-family: Inter, system-ui, sans-serif; color: var(--ink); }
 .cap { width: 640px; opacity: 0; }
 .cap.right { left: 1180px; } .cap.left { left: 130px; }
 .cap.m .head { font-size: 64px; letter-spacing: -1.8px; }
-#h1 { left: 0; right: 0; top: 812px; text-align: center; opacity: 0; }
-#h1 .head { font-size: 72px; }
+#h1 { left: 0; right: 0; top: 760px; text-align: center; opacity: 0; }
+#h1 .kick { font-size: 15px; letter-spacing: .5em; margin-bottom: 20px; text-shadow: 0 1px 14px #000c; }
+#h1 .h1l { font: 300 58px/1.1 'Space Grotesk'; letter-spacing: -1px; color: #eef3fb; text-shadow: 0 2px 34px #000d; }
+#h1 .h1l b { font-weight: 500; color: #fff; }
+#h1 .rule { width: 72px; height: 1px; background: #ffffff55; margin: 26px auto 0; }
+#presents { inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; }
+#presents .pk { font: 500 22px 'JetBrains Mono'; letter-spacing: .62em; text-transform: uppercase; color: #e7edf7; padding-left: .62em; }
+#presents .pp { font: 400 14px 'JetBrains Mono'; letter-spacing: .5em; text-transform: uppercase; color: #7f8ba0; margin-top: 18px; padding-left: .5em; }
+#hud .hrow { display: flex; gap: 22px; font-size: 15px; letter-spacing: .16em; margin-bottom: 11px; font-variant-numeric: tabular-nums; }
+#hud .hk { width: 270px; color: #7f8ba0; }
+#hud .hv { color: #e7edf7; }
+#title { inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
+#title::before { content: ''; position: absolute; inset: 0; background: radial-gradient(900px 520px at 50% 50%, #000000d9, #00000080 55%, transparent 80%); z-index: -1; }
+#title { z-index: 1; }
+#h1 .kick { text-shadow: 0 0 18px #000, 0 1px 3px #000; }
+#title img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 0 80px hsl(168 76% 55% / .35), 0 20px 50px #000a; }
+#title .tt { font: 600 128px/1 'Space Grotesk'; letter-spacing: -4px; color: #fff; margin-top: 34px; text-shadow: 0 4px 60px #000c; }
+#title .ts { font: 400 27px/1.4 Inter; color: #b7c1d3; margin-top: 22px; }
+#title .tb { font: 500 15px 'JetBrains Mono'; letter-spacing: .42em; text-transform: uppercase; color: var(--teal); margin-top: 30px; padding-left: .42em; }
 
 /* The phone */
 #persp { inset: 0; perspective: 2400px; }
@@ -110,9 +127,13 @@ body.rec #replay, body.rec #sound { display: none; }
 
   <!-- Opening HUD -->
   <div class="abs corner" id="cn1"></div><div class="abs corner" id="cn2"></div><div class="abs corner" id="cn3"></div><div class="abs corner" id="cn4"></div>
-  <div class="abs hud" id="hud"><span class="type" id="hudtype">Mars signal delay · up to 22 min</span><span class="caret" id="caret"></span>
-    <i class="line" id="hudline"></i></div>
-  <div class="abs" id="h1"><div class="head">On the way to Mars, help is <em>far away.</em></div></div>
+  <div class="abs hud" id="hud">
+    <div class="hrow"><span class="hk">Mission elapsed</span><span class="hv" id="t-met">143:06:12:09</span></div>
+    <div class="hrow"><span class="hk">Range to Earth</span><span class="hv" id="t-rng">380 214 000 km</span></div>
+    <div class="hrow"><span class="hk">Signal delay, one way</span><span class="hv" id="t-dly">21 min 08 s</span></div>
+    <i class="line" id="hudline"></i><small>Crew health · on board · no live ground link</small></div>
+  <div class="abs" id="h1"><div class="kick">En route to Mars</div><div class="h1l">Help is <b>22 light-minutes</b> away.</div><div class="rule"></div></div>
+  <div class="abs" id="title"><img src="img/app-icon.png" alt="" /><div class="tt">Crew Mirror</div><div class="ts">A two-minute daily health check for astronauts.</div><div class="tb">Team SYS-ASTRO</div></div>
 
   <!-- Captions -->
   <div id="mcaps"></div>
@@ -151,6 +172,7 @@ body.rec #replay, body.rec #sound { display: none; }
   <div class="abs" id="vig"></div>
   <div class="abs" id="grain"></div>
   <div class="abs" id="black"></div>
+  <div class="abs" id="presents"><div class="pk">Team SYS-ASTRO</div><div class="pp">presents</div></div>
   <div class="abs" id="aimark">Made with AI assistance (Claude Code)</div>
   <div class="abs" id="clock" style="width: 1px; height: 1px; opacity: 0"></div>
 </div></div>
@@ -185,8 +207,11 @@ const P = (x, y, rx, ry, s, rz = 0) => ({ transform: `translate(${x}px, ${y}px) 
 const master = $('clock').animate([{ opacity: 0 }, { opacity: 1 }], { duration: T, fill: 'both' })
 
 // ------------------------------------------------------------------ timeline
-// 3.5 s opening, then 13 features of exactly 1.9 s each (transitions included), then a 1.8 s end card.
-const OPEN = 3.5, D = 1.9, END = OPEN + 13 * D // 28.2
+// 5.8 s opening (team card, orbit with mission telemetry, title card), then 13 features of equal
+// length (~1.74 s each, transitions included), then a 1.6 s end card.
+const OPEN = 5.8, END = 28.4, D = (END - OPEN) / 13
+const SH = OPEN - 3.5 // the phone choreography below was written for a 3.5 s opening
+const GLSH = 1.4      // the space shot starts after the team card
 // [id, phone side (+1 right, -1 left), headline, subline]
 const F = [
   ['today', 1, 'No doctor<br><em>on board.</em>', 'So check in every day.'],
@@ -208,18 +233,15 @@ const M = F.filter((f) => f.id.startsWith('m_'))
 const OFF = .08 // seconds into each clip when its slot starts
 
 // ------------------------------------------------------------------ opening overlay
-tl('black', [[0, { opacity: 1 }], [.5, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
-const NCH = $('hudtype').textContent.length
-{ const h = $('hudtype'); h.style.width = 'auto'; var HUDW = Math.ceil(h.getBoundingClientRect().width) + 2; h.style.width = '' } // letter-spacing makes glyphs wider than 1ch
-tl('hudtype', [[.35, { width: '0px' }], [1.15, { width: HUDW + 'px' }]], `steps(${NCH}, end)`)
-tl('hud', [[.25, { opacity: 0 }], [.35, { opacity: 1 }], [3.1, { opacity: 1 }], [3.4, { opacity: 0 }]], 'linear')
-tl('caret', [[0, { opacity: 1 }], [30, { opacity: 1 }]], 'linear')
-$('caret').animate([{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0, offset: .5 }, { opacity: 0 }], { duration: 900, iterations: Infinity })
-tl('hudline', [[1.15, { transform: 'scaleX(0)' }], [1.6, { transform: 'scaleX(1)' }]])
-for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[.2, { opacity: 0 }], [.6, { opacity: 1 }], [3.1, { opacity: 1 }], [3.4, { opacity: 0 }]], 'linear')
-show('h1', 1.4, 3.4, 'translateY(18px)', .45)
-tl('wash', [[3.3, { opacity: 0 }], [4.3, { opacity: 1 }]])
-tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [3.35, { opacity: 1, filter: 'blur(0px)' }], [4.3, { opacity: .5, filter: 'blur(1.5px)' }], [END - .2, { opacity: .5, filter: 'blur(1.5px)' }], [END + 1, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
+tl('black', [[0, { opacity: 1 }], [1.45, { opacity: 1 }], [2.05, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
+tl('presents', [[.25, { opacity: 0 }], [.75, { opacity: 1 }], [1.15, { opacity: 1 }], [1.45, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
+tl('hud', [[1.9, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
+tl('hudline', [[2.1, { transform: 'scaleX(0)' }], [2.6, { transform: 'scaleX(1)' }]])
+for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[1.8, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
+show('h1', 2.35, 4.4, 'translateY(14px)', .5)
+tl('title', [[4.5, { opacity: 0, transform: 'scale(1.06)' }], [4.75, { opacity: 1, transform: 'scale(1.0)' }], [5.45, { opacity: 1, transform: 'scale(.985)' }], [5.75, { opacity: 0, transform: 'scale(.97)' }]], 'cubic-bezier(.2,.8,.2,1)')
+tl('wash', [[3.3 + SH, { opacity: 0 }], [4.3 + SH, { opacity: 1 }]])
+tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [3.35 + SH, { opacity: 1, filter: 'blur(0px)' }], [4.3 + SH, { opacity: .5, filter: 'blur(1.5px)' }], [END - .2, { opacity: .5, filter: 'blur(1.5px)' }], [END + 1, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
 
 // ------------------------------------------------------------------ captions: one per feature, opposite the phone
 F.forEach(({ id, side, head, sub, a, b }) => {
@@ -234,7 +256,7 @@ F.forEach(({ id, side, head, sub, a, b }) => {
 tl('c8', [[END + .15, { opacity: 0, transform: 'translateX(-40px)' }], [END + .65, { opacity: 1, transform: 'none' }]])
 
 // ------------------------------------------------------------------ screens
-layer('s-today', 3.2, SL.today.b + .02, .02)
+layer('s-today', 3.2 + SH, SL.today.b + .02, .02)
 layer('s-check', SL.check.a + .02, SL.check.b + .02, .02)
 layer('s-banner', SL.banner.a + .02, SL.banner.b + .02, .02)
 layer('s-notif', SL.notif.a + .02, SL.notif.b + .02, .02)
@@ -262,7 +284,7 @@ const POSE = {
   pet: [[345, 150, 0, -12, 1.34], [332, 162, 0, -6, 1.4]],
 }
 for (const { id, side } of M) POSE[id] = [[side * 360, 0, 0, -side * 19, 1.1], [side * 348, -4, 0, -side * 14, 1.15]]
-const RK = [[0, P(330, 1250, 36, -22, .92, 5)], [3.2, P(330, 1250, 36, -22, .92, 5)], [4.15, P(...POSE.today[0])], [4.75, P(318, 0, 3, -12, 1.04, 0)]]
+const RK = [[0, P(330, 1250, 36, -22, .92, 5)], [3.2 + SH, P(330, 1250, 36, -22, .92, 5)], [4.15 + SH, P(...POSE.today[0])], [4.75 + SH, P(318, 0, 3, -12, 1.04, 0)]]
 F.forEach(({ id, side, a, b }, i) => {
   const [A, B] = POSE[id]
   if (i > 0) {
@@ -291,8 +313,8 @@ function tap(t, x, y, from = [70, 110], lead = .5) {
 }
 // Today: Start today's check
 const st = CAP.today_top.start
-ckey(4.3, st.x + 150, st.y + 54 + 300); tap(4.85, st.x, st.y + 54, [140, 230], .5); ckey(5.2, st.x + 30, st.y + 54 + 50)
-VIS.push([4.35, 5.22])
+ckey(4.3 + SH, st.x + 150, st.y + 54 + 300); tap(4.85 + SH, st.x, st.y + 54, [140, 230], .5); ckey(5.2 + SH, st.x + 30, st.y + 54 + 50)
+VIS.push([4.35 + SH, 5.22 + SH])
 // Result: How we know
 const hw = CAP.today_banner.how, HOW = SL.banner.a + .72
 tap(HOW, hw.x - 30, hw.y + 54, [110, 260], .4); ckey(HOW + .5, hw.x + 10, hw.y + 54 + 120); VIS.push([SL.banner.a + .3, HOW + .55])
@@ -343,7 +365,9 @@ $('burst').style.left = $('ring2').style.left = pcx + 'px'; $('burst').style.top
 const PH = PT + .66 // hatch moment
 // Sound cues for the soundtrack (read by the renderer; also used to play audio live).
 window.__SFX = [
-  { t: 3.25, k: 'rise' },
+  { t: 0, k: 'timing', open: OPEN, bar: D, end: END },
+  { t: 4.52, k: 'boom' },
+  { t: 3.25 + SH, k: 'rise' },
   ...F.slice(1).map(({ a }) => ({ t: a - .04, k: 'whip' })),
   ...RIP.map(([t]) => ({ t, k: 'tap' })),
   { t: NT + .02, k: 'ping' },
@@ -574,6 +598,7 @@ for (const [, k] of CAMK) { const d = [k[3] - k[0], k[4] - k[1], k[5] - k[2]], l
 const tmpV = new THREE.Vector3(), tmpW = new THREE.Vector3()
 function renderGL(t) {
   if (!GL.R) return
+  t = Math.max(0, t - GLSH)
   const { R, rt, scene, cam, sun, earth, earthMat, moon, mars, stars, post } = GL
   const k = track(CAMK, t)
   cam.position.set(k[0], k[1], k[2])
@@ -622,6 +647,14 @@ function frameUpdate(t) {
   $('rig').style.filter = b > .4 ? 'url(#mblur)' : 'none'
   drawFace(t)
   renderGL(t)
+  if (t < 4.6) {
+    const met = 143 * 86400 + 6 * 3600 + 12 * 60 + 9 + Math.floor(t)
+    const two = (n) => String(n).padStart(2, '0')
+    $('t-met').textContent = `${Math.floor(met / 86400)}:${two(Math.floor(met / 3600) % 24)}:${two(Math.floor(met / 60) % 60)}:${two(met % 60)}`
+    const u = smooth(2.0, 4.3, t), km = 380214000 + u * 20890000, dly = Math.round(km / 299792.458)
+    $('t-rng').textContent = Math.round(km / 1000).toLocaleString('en-US').replace(/,/g, ' ') + ' 000 km'
+    $('t-dly').textContent = `${Math.floor(dly / 60)} min ${two(dly % 60)} s`
+  }
 }
 
 // ------------------------------------------------------------------ videos
@@ -647,7 +680,6 @@ window.__seek = async (ms) => {
 }
 if (REC) {
   document.body.classList.add('rec')
-  $('caret').getAnimations().forEach((a) => a.cancel())
   window.__ready.then(() => window.__seek(0))
 } else {
   window.__ready.then(() => {
