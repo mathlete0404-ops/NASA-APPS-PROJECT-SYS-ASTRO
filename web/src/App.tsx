@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   CalendarDays, ChevronDown, CircleHelp, Ellipsis, PanelLeftClose, PanelLeftOpen, Wifi, WifiOff, ChevronRight, Database, Dumbbell, Footprints, HeartPulse, House, ListChecks, LogIn, PawPrint, PersonStanding,
-  ScanFace, Settings as SettingsIcon, Stethoscope, TrendingUp,
+  ScanFace, Settings as SettingsIcon, Siren, Stethoscope, TrendingUp,
 } from 'lucide-react'
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
@@ -23,6 +23,7 @@ import { CalendarPage } from './screens/Calendar'
 import { Settings } from './screens/Settings'
 import { GuideBody, Welcome } from './screens/Welcome'
 import { Home } from './site/Home'
+import { CrewAlertBanner, Emergency } from './screens/Emergency'
 import { X } from 'lucide-react'
 
 // Six places cover the daily job (check in, see the plan, look after the pet, say where it hurts). Everything else
@@ -41,6 +42,7 @@ const TABS = [
   { id: 'evidence', label: 'NASA evidence', short: 'Evidence', icon: Database, title: 'NASA evidence', group: 'More' },
   { id: 'medical', label: 'Medical officer', short: 'Medical', icon: Stethoscope, title: 'Crew medical officer', group: 'More' },
   { id: 'settings', label: 'Settings', short: 'Settings', icon: SettingsIcon, title: 'Settings', group: 'footer' },
+  { id: 'sos', label: 'Emergency', short: 'SOS', icon: Siren, title: 'Emergency', group: 'sos' },
 ] as const
 /** Phone tab bar: four main places plus More (Pet and Report pain live in More and on Today/Body). */
 const PHONE_TABS = ['today', 'check', 'plan', 'body'] as const
@@ -146,6 +148,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           <span className={`pill net${s.online ? ' on' : ''}`} title={s.online ? 'Connected to the habitat computer. Numbers sync.' : 'Not connected. Everything still works and is saved on this device.'}>
             {s.online ? <Wifi size={13} /> : <WifiOff size={13} />}<span className="hide-xs">{s.online ? 'Synced' : 'On device'}</span>
           </span>
+          <a className="btn danger small sos-top" href="#/app/sos" title="Emergency guides" aria-label="Emergency guides"><Siren /><span>SOS</span></a>
           <span className="hide-phone"><ThemeToggle /></span>
         </header>
         <nav className="tabbar" aria-label="Main">
@@ -154,6 +157,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           ) })}
           <button type="button" className={PHONE_TABS.some((id) => id === tab) ? '' : 'on'} aria-expanded={sheet} onClick={() => setSheet(true)}><Ellipsis /><span>More</span></button>
         </nav>
+        <CrewAlertBanner go={go} />
         <main className="content page-enter" key={tab}>
           {!s.loaded ? <p>Loading…</p> : (
             <>
@@ -170,6 +174,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
               {tab === 'evidence' && <Evidence />}
               {tab === 'medical' && <Medical go={go} />}
               {tab === 'settings' && <Settings go={go} />}
+              {tab === 'sos' && <Emergency go={go} />}
             </>
           )}
         </main>
@@ -181,7 +186,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
             <div className="sheet-grip" />
             <div className="sheet-grid">
               {TABS.filter((t) => !PHONE_TABS.some((id) => id === t.id)).map((t) => (
-                <a key={t.id} href={`#/app/${t.id}`} className={`sheet-item${t.id === 'report' ? ' warn' : ''}`} aria-current={t.id === tab ? 'page' : undefined}><t.icon /><span>{t.label}</span></a>
+                <a key={t.id} href={`#/app/${t.id}`} className={`sheet-item${t.id === 'report' || t.id === 'sos' ? ' warn' : ''}`} aria-current={t.id === tab ? 'page' : undefined}><t.icon /><span>{t.label}</span></a>
               ))}
               <button type="button" className="sheet-item" onClick={() => { setSheet(false); setGuide(true) }}><CircleHelp /><span>How to use</span></button>
               {cloudConfigured && !s.account && <a className="sheet-item" href="#/login"><LogIn /><span>Sign in to sync</span></a>}

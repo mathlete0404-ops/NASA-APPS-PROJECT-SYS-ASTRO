@@ -275,6 +275,7 @@ function ResultView({ r, region, side, top, floating, go, restart, structure }: 
         <ul className="reasons">{r.reasons.map((x) => <li key={x}>{x}</li>)}</ul>
         {r.level !== 'self_care' && (
           <div className="row" style={{ marginTop: 10 }}>
+            {r.level === 'act_now' && <button className="btn danger" onClick={() => go(`sos/${/chest pain/i.test(r.reasons.join(' ')) ? 'chest' : /weakness|slurred|headache|vision/i.test(r.reasons.join(' ')) ? 'stroke' : /fall or impact/i.test(r.reasons.join(' ')) ? 'head' : ''}`.replace(/\/$/, ''))}>Open the emergency guide</button>}
             <button className="btn danger" onClick={() => go('medical')}>Open crew medical officer view</button>
             <small>Stay where you are; do not exercise the area.</small>
           </div>
