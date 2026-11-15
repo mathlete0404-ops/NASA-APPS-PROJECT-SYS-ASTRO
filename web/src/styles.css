@@ -1064,6 +1064,11 @@ html.dark { --pet-gold-ink: hsl(44 96% 62%); }
   .sos-q { font-size: 1.25rem; }
 }
 
+/* Korean (한국어): keep words whole when wrapping; Hangul falls back to the system's Korean font */
+html[lang="ko"] body { word-break: keep-all; overflow-wrap: anywhere; }
+html[lang="ko"] { --font-body: 'Inter', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif; }
+.lang-toggle { font-weight: 700; min-width: 54px; }
+.lang-toggle.on-dark { color: #e8edf6; }
 /* Pet shop, round two: more accessories */
 .pet-svg .pet-ac-petal { fill: hsl(330 90% 86%); stroke: hsl(330 60% 58%); stroke-width: .7; }
 .pet-svg .pet-ac-ctr { fill: hsl(44 96% 56%); stroke: hsl(36 80% 38%); stroke-width: .6; }

@@ -6,7 +6,7 @@ import {
 import { activeProfile, load, refreshOnline, setActiveCrew, useStore } from './data/store'
 import { cloudConfigured } from './data/cloud'
 import { useReminderSync } from './data/notify'
-import { Footer, Logo, ThemeToggle, useEscape } from './components/ui'
+import { Footer, LangToggle, Logo, ThemeToggle, useEscape } from './components/ui'
 import { Auth } from './site/Auth'
 import { Today } from './screens/Today'
 import { DailyCheck } from './screens/DailyCheck'
@@ -148,6 +148,7 @@ function Shell({ tab, go }: { tab: Tab; go: (t: string) => void }) {
           <span className={`pill net${s.online ? ' on' : ''}`} title={s.online ? 'Connected to the habitat computer. Numbers sync.' : 'Not connected. Everything still works and is saved on this device.'}>
             {s.online ? <Wifi size={13} /> : <WifiOff size={13} />}<span className="hide-xs">{s.online ? 'Synced' : 'On device'}</span>
           </span>
+          <LangToggle />
           <a className="btn danger small sos-top" href="#/app/sos" title="Emergency guides" aria-label="Emergency guides"><Siren /><span>SOS</span></a>
           <span className="hide-phone"><ThemeToggle /></span>
         </header>

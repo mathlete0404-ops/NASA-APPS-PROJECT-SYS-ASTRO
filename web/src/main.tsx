@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './styles.css'
 import App from './App.tsx'
+import { initI18n } from './i18n'
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
@@ -33,3 +34,5 @@ addEventListener('vite:preloadError', (e) => {
   location.reload()
 })
 
+// Optional Korean: translate visible text when 한국어 is on (English stays the default).
+requestAnimationFrame(() => initI18n())

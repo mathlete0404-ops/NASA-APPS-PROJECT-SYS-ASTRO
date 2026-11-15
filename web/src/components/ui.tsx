@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Moon, Sun, type LucideIcon } from 'lucide-react'
+import { getLang, setLang } from '../i18n'
 import { LEVEL_LABEL, type Level } from '../engine/status'
 import { EVIDENCE } from '../content/evidence'
 
@@ -156,4 +157,14 @@ export function useEscape(onClose: () => void, active = true) {
     addEventListener('keydown', h)
     return () => removeEventListener('keydown', h)
   }, [onClose, active])
+}
+
+/** EN / 한국어 switch. Its own label is never translated. */
+export function LangToggle({ onDark = false }: { onDark?: boolean }) {
+  const [l, setL] = useState(getLang())
+  useEffect(() => { const on = () => setL(getLang()); addEventListener('crew-mirror:lang', on); return () => removeEventListener('crew-mirror:lang', on) }, [])
+  return (
+    <button type="button" data-no-i18n className={`btn ghost small lang-toggle${onDark ? ' on-dark' : ''}`} onClick={() => setLang(l === 'ko' ? 'en' : 'ko')}
+      aria-label={l === 'ko' ? 'Switch to English' : '한국어로 보기'} title={l === 'ko' ? 'English' : '한국어'}>{l === 'ko' ? 'EN' : '한국어'}</button>
+  )
 }
