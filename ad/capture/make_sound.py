@@ -11,7 +11,8 @@ import numpy as np
 
 SR = 48000
 DUR = 30.0
-OPEN, BAR, END = 3.5, 1.9, 3.5 + 13 * 1.9
+_T = next((e for e in json.load(open(sys.argv[1])) if e['k'] == 'timing'), None)
+OPEN, BAR, END = (_T['open'], _T['bar'], _T['end']) if _T else (3.5, 1.9, 3.5 + 13 * 1.9)
 BEAT = BAR / 4
 rng = np.random.default_rng(7)
 n = int(SR * DUR)
@@ -60,15 +61,68 @@ def tone(freq, length, shape='sine', detune=0.0):
 
 note = lambda m: 440.0 * 2 ** ((m - 69) / 12)
 
-# ---------------------------------------------------------------- opening (0 - 3.5 s): space
-drone = (tone(note(33), OPEN + 0.6) * 0.5 + tone(note(45), OPEN + 0.6) * 0.25 + tone(note(52), OPEN + 0.6) * 0.12)
-drone *= np.minimum(1, np.arange(len(drone)) / (SR * 1.2)) * np.linspace(1, 0.6, len(drone))
-add(drone, 0, 0.32)
-air = band_noise(OPEN + 0.4, 300, 2400, seed=1) * np.linspace(0.05, 0.6, int((OPEN + 0.4) * SR)) ** 2
-add(air, 0, 0.18, -0.3); add(band_noise(OPEN + 0.4, 300, 2400, seed=2) * np.linspace(0.05, 0.6, int((OPEN + 0.4) * SR)) ** 2, 0, 0.18, 0.3)
-# shimmer: slow high bell notes over the planets
+# ---------------------------------------------------------------- opening: the journey
+def lowpass(x, fc):
+    X = np.fft.rfft(x); f = np.fft.rfftfreq(len(x), 1 / SR)
+    X *= 1 / np.sqrt(1 + (f / fc) ** 4)          # gentle 2nd-order-like roll-off
+    return np.fft.irfft(X, len(x))
+
+def reverb(x, secs=2.8, wet=0.35, seed=5):
+    """Convolve with a decaying noise tail: a big, dark space."""
+    m = int(secs * SR)
+    ir = np.random.default_rng(seed).standard_normal(m) * np.exp(-np.arange(m) / (SR * secs / 6.5))
+    ir = lowpass(ir, 2500); ir /= np.abs(ir).sum() / 40
+    n2 = 1 << int(np.ceil(np.log2(len(x) + m)))
+    y = np.fft.irfft(np.fft.rfft(x, n2) * np.fft.rfft(ir, n2), n2)[: len(x)]
+    return x * (1 - wet) + y * wet
+
+OL = OPEN + 0.6
+to = np.arange(int(OL * SR)) / SR
+# 1) radio: Quindar tones (the beeps that opened and closed Apollo-era air-to-ground calls) with band-limited static
+for t0, f0 in ((0.12, 2525.0), (1.32, 2475.0)):
+    q = tone(f0, 0.25) * env(0.25, 0.004, 1.0, 1.0, 0.02)
+    add(q, t0, 0.07, -0.2)
+static = band_noise(1.5, 300, 3000, seed=9) * env(1.5, 0.05, 0.6, 0.7, 0.2)
+add(static, 0.1, 0.035, 0.1)
+# 2) engine and hull: deep rumble (brown noise, low-passed) with a slow surge, plus a sub tone
+brown = np.cumsum(np.random.default_rng(3).standard_normal(len(to)))
+_w = 4801; _c = np.concatenate([[0], np.cumsum(brown)])
+_ma = (_c[_w:] - _c[:-_w]) / _w  # moving average (length N - w + 1)
+_ma = np.concatenate([np.full(_w // 2, _ma[0]), _ma, np.full(len(brown) - len(_ma) - _w // 2, _ma[-1])])
+brown = brown - _ma  # remove the slow drift
+rumble = lowpass(brown, 110); rumble /= np.abs(rumble).max() + 1e-9
+swell = np.clip((to - 0.2) / 3.6, 0, 1) ** 1.6 * (1 + 0.18 * np.sin(2 * np.pi * 0.35 * to))
+fade = np.clip((OL - to) / 0.9, 0, 1)
+add(rumble * swell * fade, 0, 0.85, -0.15); add(np.roll(rumble, 2400) * swell * fade, 0, 0.85, 0.15)
+sub = (np.sin(2 * np.pi * 36 * to) + 0.5 * np.sin(2 * np.pi * 54 * to)) * np.clip((to - 1.4) / 2.5, 0, 1) * fade
+add(sub, 0, 0.22)
+# 3) cabin: life-support fan and electrical hum, once we are "on board" (after the team card)
+fan = band_noise(OL, 400, 6000, seed=4) * np.clip((to - 1.6) / 0.8, 0, 1) * fade
+add(fan, 0, 0.025, 0.3)
+hum = sum(np.sin(2 * np.pi * 60 * k * to) / k for k in (1, 2, 3)) * np.clip((to - 1.6) / 0.8, 0, 1) * fade
+add(hum, 0, 0.018)
+# 4) the Moon passing close to the lens: a heavy, slow doppler whoosh
+GLSH = 1.4
+ln = 1.6; x = band_noise(ln, 150, 5000, seed=12); tt = np.arange(len(x)) / SR
+add(x * np.exp(-((tt - 0.85) / 0.33) ** 2), GLSH + 1.95 - 0.85, 0.28, -0.5)
+# 5) riser into the title: rising noise and a gliding tone
+rl = 4.52 - 3.0; tt = np.arange(int(rl * SR)) / SR
+rise = band_noise(rl, 1500, 12000, seed=13) * (tt / rl) ** 3
+glide = np.sin(2 * np.pi * np.cumsum(110 * 2 ** (2.2 * tt / rl)) / SR) * (tt / rl) ** 2
+add(rise, 3.0, 0.12); add(glide, 3.0, 0.05)
+# 6) the title hit: a sub drop, a dark impact and a long tail
+bl = 3.2; tt = np.arange(int(bl * SR)) / SR
+drop = np.sin(2 * np.pi * np.cumsum(30 + 60 * np.exp(-tt / 0.25)) / SR) * np.exp(-tt / 1.1)
+crack = lowpass(np.random.default_rng(14).standard_normal(len(tt)), 900) * np.exp(-tt / 0.18)
+crack /= np.abs(crack).max() + 1e-9
+boom = reverb(np.concatenate([drop * 0.9 + crack * 0.6, np.zeros(SR)]), 3.0, 0.45)
+# 7) under the title: a wide, open chord that leads into the groove
+for j, m in enumerate([45, 52, 57, 64, 69]):
+    pad = tone(note(m), OPEN - 4.5 + 0.5, 'saw', 0.003 * (j - 2)) * env(OPEN - 4.5 + 0.5, 0.25, 3.0, 0.8, 0.3)
+    add(pad, 4.5, 0.03, (-0.6, -0.3, 0, 0.3, 0.6)[j])
+# a few high, slow bells over the planets
 for k, m in enumerate([76, 83, 81, 88]):
-    add(tone(note(m), 2.2) * env(2.2, 0.02, 0.9), 0.4 + k * 0.75, 0.05, -0.5 + k * 0.33)
+    add(tone(note(m), 2.2) * env(2.2, 0.02, 0.9), 2.0 + k * 0.6, 0.035, -0.5 + k * 0.33)
 
 # ---------------------------------------------------------------- groove (3.5 s - end card)
 # A minor - F - C - G, one chord per bar (= one feature)
@@ -164,11 +218,16 @@ for e in SFX:
     elif k == 'tap': add(tap(), t0, 0.5, 0.15)
     elif k == 'ping': add(ping(), t0, 0.22, -0.1)
     elif k == 'hatch': add(hatch(), t0, 0.3, 0.2)
-    elif k == 'rise': add(rise(), t0 - 0.65, 0.3, 0)
+    elif k == 'rise': add(rise(), t0 - 0.65, 0.18, 0)
     elif k == 'logo': add(logo(), t0, 0.22, 0)
 
 # ---------------------------------------------------------------- master: fades, soft limit, normalise
 fade_in = np.minimum(1, t_all / 0.4)
+# a breath of near-silence right before the title hit, so the impact lands
+duck = np.ones(n); i0, i1, i2 = int(4.30 * SR), int(4.49 * SR), int(4.52 * SR)
+duck[i0:i1] = np.linspace(1, 0.12, i1 - i0); duck[i1:i2] = 0.12
+L *= duck; R *= duck
+add(boom, 4.52, 0.62)  # the hit itself is not ducked
 fade_out = np.clip((DUR - t_all) / 1.2, 0, 1)
 mix = np.stack([L, R], 1) * (fade_in * fade_out)[:, None]
 mix = np.tanh(mix * 1.6) / np.tanh(1.6)

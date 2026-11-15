@@ -2,7 +2,7 @@
 
 **The ad is built and rendered.** Open `ad/index.html` in Chrome to play it live (it works straight from disk), or use the finished video `ad/crew-mirror-ad.mp4` (1920×1080, 30 fps, 30 s, with an original soundtrack).
 
-**Concept:** it opens like real footage from orbit, then cuts to one phone that shows the real app. The camera moves the phone left and right between features, and a Mac-style cursor taps through it. There are **no people** anywhere: the face scan is MediaPipe's generic canonical face mesh, drawn exactly like the app draws it (478 teal 2 px dots on `#050816`).
+**Concept:** it opens with the team name and real-looking footage from orbit with mission telemetry, then the app title, then cuts to one phone that shows the real app. The camera moves the phone left and right between features, and a Mac-style cursor taps through it. There are **no people** anywhere: the face scan is MediaPipe's generic canonical face mesh, drawn exactly like the app draws it (478 teal 2 px dots on `#050816`).
 
 **Goal:** in 30 seconds, a judge should know who it's for (an astronaut far from Earth), what it does (a two-minute check that compares you with your own normal), and why astronauts will keep using it (a pet that grows when they show up).
 
@@ -10,25 +10,15 @@
 
 ## Timeline (matches `ad/index.html`)
 
-Retimed so every feature gets the same unrushed share: a 3.5 s opening, then **13 features of 1.9 s each** (whip transition included), then a 1.8 s end card. The phone alternates right and left; each feature has one caption on the other side. Every app clip is at least 2.2 s of real interaction at real speed (no slow motion, freeze frames or loops). A small "Made with AI assistance (Claude Code)" label sits in the bottom-right corner for all 30 s (Space Apps rule for AI-generated video).
+A 5.8 s opening (team card, orbit with mission telemetry, title card), then **13 features of equal length (about 1.74 s each)**, then a 1.6 s end card. The phone alternates right and left; each feature has one caption on the other side. A small "Made with AI assistance (Claude Code)" label sits in the bottom-right corner for all 30 s (Space Apps rule for AI-generated video).
 
-| Time | Feature | Picture | Caption |
-|---|---|---|---|
-| 0:00.0–0:03.5 | Opening | three.js: sunlit Earth limb, the Moon slides past the lens, quick push in to Mars. Mono HUD types **MARS SIGNAL DELAY · UP TO 22 MIN**. | **On the way to Mars, help is far away.** |
-| 0:03.5–0:05.4 | 1. Today | The space shot dims; the phone rises on the right with the real Today screen. The cursor taps **Start today's check · 2 min**. | **No doctor on board.** So check in every day. |
-| 0:05.4–0:07.3 | 2. Face scan | Whip left. Daily check while scanning: live 478-point face mesh (head turn, a blink, breathing), countdown from 60s. Slow push in. | **Two minutes. Just the camera.** Video never leaves the device. |
-| 0:07.3–0:09.2 | 3. Result | Whip right. "How you're doing": **WATCH · You slept less than usual**. The cursor taps **How we know** and the reason opens. | **Compared with you.** Not an average. |
-| 0:09.2–0:11.1 | 4. Today scroll | Whip left. Today scrolls slowly from the top to the face scan trends. | **Your day, at a glance.** |
-| 0:11.1–0:13.0 | 5. Plan | Whip right. Plan › Exercise: "Resistive session on ARED" gets its tick. | **Exercise, ticked off.** |
-| 0:13.0–0:14.9 | 6. Scan a package | Whip left. A photo of a beef brisket pouch is read on the phone: "Found on the menu: Beef brisket · thermostabilized". The cursor taps **Add to today** and protein goes from 0 to 22 g. | **Snap the pouch. Count the protein.** Read on the device. |
-| 0:14.9–0:16.8 | 7. 3D body | Whip right. 3D body, Muscles layer; the cursor drags it round slowly. | **Your body, in 3D.** |
-| 0:16.8–0:18.7 | 8. Space weather | Whip left. Tap the **Space weather: Quiet** pill; Today scrolls to the solar radiation storm card. | **Radiation storms, watched.** |
-| 0:18.7–0:20.6 | 9. Calendar | Whip right. Calendar: tap the 18th; the EVA shows below. | **Every day of the mission.** |
-| 0:20.6–0:22.5 | 10. Report pain | Whip left. **Yes** to chest pain → **Continue → Act now** → **Act now: contact the crew medical officer** (no exercises). | **Danger signs come first.** Act now: crew medical officer. |
-| 0:22.5–0:24.4 | 11. Reminders | Whip right. Settings › Reminders: the daily reminder switch turns on. | **Reminders at your time.** |
-| 0:24.4–0:26.3 | 12. Notification | Whip left. Today dims; an iOS-style banner slides in: **You haven't done today's check** / "Two minutes now keeps your normal accurate." | **A nudge each morning.** No signal needed. |
-| 0:26.3–0:28.2 | 13. Pet | Whip right, pushed in on the pet card. The cursor taps the egg three times; it wobbles and hatches (flash, ring, sparkles) into the Hatchling. | **It grows with you.** Show up daily. |
-| 0:28.2–0:30.0 | End card | The phone flips to the app icon and settles right. | **Crew Mirror** · Your health, measured against you. · Team SYS-ASTRO · NASA Space Apps Seoul 2026 · *Prototype, not a medical device.* |
+| Time | Feature | Picture | Caption | Sound |
+|---|---|---|---|---|
+| 0:00.0–0:01.5 | Team card | Black. **TEAM SYS-ASTRO · presents** in wide mono type. | — | Radio "beep" (Quindar tone, as on Apollo-era air-to-ground calls), soft static, the engine rumble starts |
+| 0:01.5–0:04.5 | Orbit | Sunlit Earth limb, the Moon slides past the lens, push towards Mars. Mission telemetry ticks top left: mission elapsed time, range to Earth, one-way signal delay. | **EN ROUTE TO MARS** · Help is **22 light-minutes** away. | Deep engine rumble and sub, cabin fan and hum, a slow doppler whoosh as the Moon passes, a riser |
+| 0:04.5–0:05.8 | Title | App icon and **Crew Mirror**, "A two-minute daily health check for astronauts.", **TEAM SYS-ASTRO**. | — | A breath of silence, then a deep cinematic hit with a long tail; a wide chord leads into the beat |
+| 0:05.8–0:28.4 | 13 features | Today → face scan → result → Today scroll → exercise tick → **package scan** → 3D body → space weather → calendar → danger signs → reminders → notification → pet hatch. | One caption each (see `F` in `ad/index.html`) | 126 bpm synth groove, one bar per feature; whooshes on transitions, clicks on taps, ping on the notification, chime on the hatch |
+| 0:28.4–0:30.0 | End card | The phone flips to the app icon. | **Crew Mirror** · Your health, measured against you. · Team SYS-ASTRO · NASA Space Apps Seoul 2026 · *Prototype, not a medical device.* | Bell and a resolving chord |
 
 Optional voice-over (about 60 words): "On the way to Mars, help is far away. There's no doctor on board. Crew Mirror is a two-minute check with just the camera. It compares you with your own normal, then tells you what to do today, and why. Danger signs come first. Show up every day, and your crew pet grows with you. Crew Mirror. Your health, measured against you."
 
