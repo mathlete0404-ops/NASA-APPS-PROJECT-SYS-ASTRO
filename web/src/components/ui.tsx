@@ -75,7 +75,7 @@ export function Footer() {
   return (
     <footer className="footer">
       <span><strong>Prototype, not a medical device.</strong> Results are patterns, never diagnoses. Camera video never leaves this device.</span>
-      <span className="mono">Crew Mirror · Team SYS-ASTRO · NASA Space Apps Seoul 2026 · MIT</span>
+      <span className="mono">Crew Mirror · Team SYS-ASTRO · NASA Space Apps Seoul 2026</span>
     </footer>
   )
 }

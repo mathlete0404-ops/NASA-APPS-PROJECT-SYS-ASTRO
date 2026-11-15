@@ -1,9 +1,11 @@
 // Today's plan: what to do (rules + reasons), the exercise plan for this phase, and food.
 import { useMemo, useState } from 'react'
-import { ArrowRight, Check, Droplets, Dumbbell, Pill, Plus, Salad, Sparkles, Trash2 } from 'lucide-react'
+import { ArrowRight, Camera, Check, Droplets, Dumbbell, Pill, Plus, Salad, Sparkles, Trash2 } from 'lucide-react'
 import { activeProfile, addFood, addWorkout, dayKey, removeFood, removeWorkout, uid, useStore } from '../data/store'
 import { exercisePlan, latestMass, recommendations, type Area } from '../engine/plan'
-import { add, DEFAULT_TARGETS, goals, PANTRY, suggest, zero } from '../content/nutrition'
+import { add, DEFAULT_TARGETS, FOOD_KINDS, goals, PANTRY, PORTIONS, portionLabel, suggest, zero, type Nutrients } from '../content/nutrition'
+import type { FoodEntry } from '../data/types'
+import { ScanFood, type ScannedFood } from '../components/ScanFood'
 import { EvidenceChips } from '../components/ui'
 
 const AREA: Record<Area, { label: string; color: string }> = {
@@ -11,6 +13,13 @@ const AREA: Record<Area, { label: string; color: string }> = {
   sleep: { label: 'Sleep', color: 'var(--baseline)' }, fluid: { label: 'Fluids', color: 'var(--chart-line)' },
   exercise: { label: 'Exercise', color: 'var(--usual)' }, nutrition: { label: 'Food', color: 'var(--watch)' },
   balance: { label: 'Balance', color: 'var(--teal-text)' }, recovery: { label: 'Recovery', color: 'var(--watch)' },
+}
+
+/** What a log entry was: a menu item, or a food read from a package photo. */
+const foodOf = (f: FoodEntry): { name: string; n: Nutrients } => {
+  if (f.custom) return { name: f.custom.name, n: f.custom }
+  const item = PANTRY.find((x) => x.id === f.itemId)
+  return { name: item?.name ?? 'Unknown food', n: item?.n ?? zero() }
 }
 
 function Nutrient({ label, value, goal, unit, max = false }: { label: string; value: number; goal: number; unit: string; max?: boolean }) {
@@ -33,6 +42,8 @@ export function Plan({ go }: { go: (t: string) => void }) {
   const s = useStore()
   const p = activeProfile(s)
   const [pick, setPick] = useState(PANTRY[0].id)
+  const [portion, setPortion] = useState(1)
+  const [scan, setScan] = useState<File | null>(null)
   const [showLog, setShowLog] = useState(false)
   const today = dayKey(new Date())
   const log = useMemo(() => (p ? s.food.filter((f) => f.crewId === p.id && dayKey(f.ts) === today) : []), [s.food, p, today])
@@ -46,9 +57,10 @@ export function Plan({ go }: { go: (t: string) => void }) {
   }
   const mass = latestMass(s, p.id) ?? p.massKg ?? 75
   const g = goals(mass, { ...DEFAULT_TARGETS, ...p.targets })
-  const eaten = log.reduce((acc, f) => add(acc, PANTRY.find((x) => x.id === f.itemId)?.n ?? zero(), f.servings), zero())
+  const eaten = log.reduce((acc, f) => add(acc, foodOf(f).n, f.servings), zero())
   const ideas = suggest(eaten, g)
-  const eat = (itemId: string) => addFood({ id: uid(), crewId: p.id, ts: new Date().toISOString(), itemId, servings: 1 })
+  const eat = (itemId: string, servings = 1, custom?: FoodEntry['custom']) => addFood({ id: uid(), crewId: p.id, ts: new Date().toISOString(), itemId, servings, ...(custom ? { custom } : {}) })
+  const onScanned = (x: ScannedFood) => { eat(x.itemId, x.servings, x.custom); setScan(null) }
   const done = ex.items.filter((i) => i.done).length
 
   return (
@@ -96,11 +108,21 @@ export function Plan({ go }: { go: (t: string) => void }) {
           <div className="card-h"><span className="ic"><Salad /></span><h3>Food today</h3><span className="sub">targets for {Math.round(mass)} kg</span></div>
           <div className="food-add">
             <select value={pick} onChange={(e) => setPick(e.target.value)} aria-label="Food">
-              {PANTRY.map((f) => <option key={f.id} value={f.id}>{f.name} — {f.serving}</option>)}
+              {FOOD_KINDS.filter((k) => k !== 'Supplement').map((k) => (
+                <optgroup key={k} label={k}>
+                  {PANTRY.filter((f) => f.kind === k && f.id !== 'water').map((f) => <option key={f.id} value={f.id}>{f.name} — {f.serving}</option>)}
+                </optgroup>
+              ))}
             </select>
-            <button className="btn primary" onClick={() => eat(pick)}><Plus /> Add</button>
+            <select className="portion" value={portion} onChange={(e) => setPortion(+e.target.value)} aria-label="How much">
+              {PORTIONS.map((k) => <option key={k} value={k}>{portionLabel(k)}</option>)}
+            </select>
+            <button className="btn primary" onClick={() => eat(pick, portion)}><Plus /> Add</button>
           </div>
           <div className="row" style={{ gap: 8, marginTop: 8 }}>
+            <label className="btn small scan-btn"><Camera /> Scan a package
+              <input type="file" accept="image/*" capture="environment" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) setScan(f); e.target.value = '' }} />
+            </label>
             <button className="btn small" onClick={() => eat('water')}><Droplets /> Water 250 mL</button>
             <button className="btn small" onClick={() => eat('vitd')} disabled={eaten.vitD >= g.vitD}><Pill /> {eaten.vitD >= g.vitD ? 'Vitamin D taken' : 'Vitamin D tablet'}</button>
           </div>
@@ -133,15 +155,19 @@ export function Plan({ go }: { go: (t: string) => void }) {
               {showLog && (
                 <table style={{ marginTop: 6 }}>
                   <tbody>{log.map((f) => {
-                    const item = PANTRY.find((x) => x.id === f.itemId)
-                    return <tr key={f.id}><td className="mono" style={{ width: 60 }}>{new Date(f.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td><td>{item?.name}</td><td className="num">{item?.n.kcal} kcal</td><td style={{ width: 40 }}><button className="btn ghost icon" title="Remove" onClick={() => removeFood(f.id)}><Trash2 /></button></td></tr>
+                    const item = foodOf(f)
+                    return <tr key={f.id}><td className="mono" style={{ width: 60 }}>{new Date(f.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td><td>{item.name}{f.servings !== 1 ? ` · ${portionLabel(f.servings)}` : ''}{f.custom ? <small className="muted"> · from photo</small> : null}</td><td className="num">{Math.round(item.n.kcal * f.servings)} kcal</td><td style={{ width: 40 }}><button className="btn ghost icon" title="Remove" onClick={() => removeFood(f.id)}><Trash2 /></button></td></tr>
                   })}</tbody>
                 </table>
               )}
             </div>
           )}
-          <p className="muted" style={{ fontSize: '.8rem', marginTop: 12 }}>Targets follow NASA's exploration nutrition requirements (JSC-67378) for your body mass. No sunlight on board, so vitamin D comes from a daily tablet. Food values are typical per serving, not from the flight food database.</p>
+          <div className="space-food-note">
+            <b>Space food is different.</b> Everything is shelf-stable: heated pouches, food you add water to, and fresh fruit only when a cargo ship arrives. Protein is harder to reach and salt runs high: ISS crews ate about 96–109 g of protein and 3,800–4,700 mg of sodium a day. Pick a protein entrée at every meal, and check sodium before adding salty pouches.
+          </div>
+          <p className="muted" style={{ fontSize: '.8rem', marginTop: 8 }}>Targets follow NASA's exploration nutrition requirements (JSC-67378) for your body mass. No sunlight on board, so vitamin D comes from a daily tablet. Menu values are estimates per serving from comparable foods; a mission loads its own food database.</p>
           <EvidenceChips ids={['nutrition', 'mass']} />
+          {scan && <ScanFood file={scan} onAdd={onScanned} onClose={() => setScan(null)} />}
         </div>
       </div>
     </div>

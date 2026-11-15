@@ -123,7 +123,7 @@ function LayerMesh({ layer, visible, xray, highlights, selected, onPick, onHover
         const p = info(e)
         if (p) onPick(p, e.object, stack.length ? stack : [p])
       }}
-      onPointerMove={(e: ThreeEvent<PointerEvent>) => { if (onHover) { e.stopPropagation(); onHover(info(e)) } }}
+      onPointerMove={(e: ThreeEvent<PointerEvent>) => { if (onHover && e.pointerType === 'mouse') { e.stopPropagation(); onHover(info(e)) } }}
       onPointerOut={() => onHover?.(null)}
     />
   )
@@ -132,6 +132,8 @@ function LayerMesh({ layer, visible, xray, highlights, selected, onPick, onHover
 export interface BodyViewerProps {
   highlights?: Highlight[]
   selected?: string
+  /** Layer of the selected structure (from search), so it can be loaded and shown first. */
+  selectedLayer?: Layer
   onPick?: (p: Picked, stack: Picked[]) => void
   initialLayers?: Layer[]
   height?: number | string
@@ -147,12 +149,15 @@ export interface BodyViewerProps {
 const POSTERIOR = new Set<Region>(['upper_back', 'lower_back'])
 
 export function BodyViewer({
-  highlights = [], selected, onPick, initialLayers, height = 560, focus, showControls = true, pickLayers, initialXray, initialView = 'body',
+  highlights = [], selected, selectedLayer, onPick, initialLayers, height = 560, focus, showControls = true, pickLayers, initialXray, initialView = 'body',
 }: BodyViewerProps) {
   const [view, setView] = useState<View>(initialLayers ? 'custom' : initialView)
   const [layers, setLayers] = useState<Set<Layer>>(new Set(initialLayers ?? VIEWS[initialView].layers))
   const [xray, setXray] = useState(initialXray ?? (initialLayers ? 0 : VIEWS[initialView].xray))
   const [showLayers, setShowLayers] = useState(false)
+  // Only download a layer's model once it is first shown (the five models are ~6 MB together).
+  const [loaded, setLoaded] = useState<Set<Layer>>(() => new Set(layers))
+  useEffect(() => { setLoaded((cur) => ([...layers].every((l) => cur.has(l)) ? cur : new Set([...cur, ...layers]))) }, [layers])
   const pickView = (v: Exclude<View, 'custom'>) => { setView(v); setLayers(new Set(VIEWS[v].layers)); setXray(VIEWS[v].xray) }
   const [hover, setHover] = useState<Picked | null>(null)
   const controls = useRef<CameraControls>(null)
@@ -177,23 +182,29 @@ export function BodyViewer({
     void controls.current?.setLookAt(p[0], p[1], p[2], 0, 0.9, 0, true)
   }
 
-  // When a structure is chosen from search (not a click), fly to it.
+  // When a structure is chosen from search (not a click): show its layer, wait for it to load, fly to it.
   useEffect(() => {
-    if (!selected || !group.current) return
-    const t = setTimeout(() => {
-      let hit: THREE.Object3D | null = null
-      group.current!.traverse((o) => { if (!hit && (o.userData as Record<string, string>).zname === selected) hit = o })
-      if (!hit) return
-      // make sure the chosen structure can be seen: show its layer, and x-ray the muscles for deep ones
-      const lyr = ((hit as THREE.Object3D).userData as Record<string, string>).layer as Layer
+    if (!selected) return
+    const show = (lyr: Layer) => {
       if (view === 'body' && lyr !== 'skin') {
         pickView(lyr === 'muscles' ? 'muscles' : lyr === 'nerves' ? 'nerves' : 'bones')
       } else {
         setLayers((cur) => (cur.has(lyr) ? cur : new Set([...cur, lyr])))
         if ((lyr === 'skeleton' || lyr === 'joints' || lyr === 'nerves') && layers.has('muscles')) setXray((x) => Math.max(x, 0.7))
       }
-      flyTo(hit)
-    }, 120)
+    }
+    if (selectedLayer) show(selectedLayer)
+    let tries = 0
+    let t = 0
+    const tick = () => {
+      let hit: THREE.Object3D | null = null
+      group.current?.traverse((o) => { if (!hit && (o.userData as Record<string, string>).zname === selected) hit = o })
+      if (hit) {
+        if (!selectedLayer) show(((hit as THREE.Object3D).userData as Record<string, string>).layer as Layer)
+        flyTo(hit)
+      } else if (++tries < 50) t = window.setTimeout(tick, 200) // the layer may still be downloading
+    }
+    t = window.setTimeout(tick, 120)
     return () => clearTimeout(t)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected])
@@ -238,8 +249,7 @@ export function BodyViewer({
           <meshBasicMaterial color="#000000" transparent opacity={0.28} />
         </mesh>
         <CameraControls ref={controlsRef} minDistance={0.25} maxDistance={5} makeDefault />
-        <Suspense fallback={null}>
-          <group ref={group}>
+        <group ref={group}>
             {view === 'body' && layers.has('skin') && (
               // neutral mannequin surface where sex-specific anatomy was removed from the model
               <mesh position={[0, 0.8, -0.03]} scale={[0.07, 0.06, 0.062]}>
@@ -247,16 +257,18 @@ export function BodyViewer({
                 <meshStandardMaterial {...SOLID_SKIN} />
               </mesh>
             )}
-            {(['skeleton', 'joints', 'nerves', 'muscles', 'skin'] as Layer[]).map((l) => (
-              <LayerMesh
-                key={l} layer={l} visible={layers.has(l)} xray={xray} highlights={highlights} selected={selected}
-                onPick={onPick && (!pickLayers || pickLayers.includes(l)) ? (p, obj, stack) => { onPick(p, stack); flyTo(obj) } : undefined}
-                onHover={setHover}
-                solidSkin={view === 'body'}
-              />
+            {(['skeleton', 'joints', 'nerves', 'muscles', 'skin'] as Layer[]).filter((l) => loaded.has(l)).map((l) => (
+              // each layer has its own Suspense: loading one never blanks the others
+              <Suspense key={l} fallback={null}>
+                <LayerMesh
+                  layer={l} visible={layers.has(l)} xray={xray} highlights={highlights} selected={selected}
+                  onPick={onPick && (!pickLayers || pickLayers.includes(l)) ? (p, obj, stack) => { onPick(p, stack); flyTo(obj) } : undefined}
+                  onHover={setHover}
+                  solidSkin={view === 'body'}
+                />
+              </Suspense>
             ))}
-          </group>
-        </Suspense>
+        </group>
       </Canvas>
       {active && <div className="body3d-hover mono" style={{ left: '50%', top: '45%', transform: 'translateX(-50%)' }}>Loading 3D anatomy… {Math.round(progress)}%</div>}
       {hover && <div className="body3d-hover mono">{hover.label}{hover.side !== 'middle' ? ` · ${hover.side}` : ''}</div>}

@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { angle3, initCoach, stepCoach, formScore, type Joints } from './coach'
 import { estimateBreathing } from './resp'
+
+// Seeded noise so the signal tests give the same result on every run (Math.random made CI flaky).
+const seeded = (seed: number) => () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296 }
+beforeEach(() => { vi.spyOn(Math, 'random').mockImplementation(seeded(20261115)) })
+afterEach(() => { vi.restoreAllMocks() })
 
 const J = (knee: number, extra: Partial<Joints> = {}): Joints => ({
   kneeL: knee, kneeR: knee, hipL: 170, hipR: 170, shoulderL: 20, shoulderR: 20, trunkLean: 10,

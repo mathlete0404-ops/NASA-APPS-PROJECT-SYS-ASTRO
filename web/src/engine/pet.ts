@@ -26,8 +26,8 @@ export interface Stage { id: StageId; name: string; min: number; note: string }
 
 /** Stages by number of days with a daily check. Cadet = the day your baseline is learned. */
 export const STAGES: readonly Stage[] = [
-  { id: 'egg', name: 'Egg', min: 0, note: 'Do your first daily check to hatch it.' },
-  { id: 'hatchling', name: 'Hatchling', min: 1, note: 'Hatched on your first check. Small, curious, new to space.' },
+  { id: 'egg', name: 'Egg', min: 0, note: 'Do your first daily check, then tap the egg to hatch it.' },
+  { id: 'hatchling', name: 'Hatchling', min: 1, note: 'Hatched after your first check. Small, curious, new to space.' },
   { id: 'cadet', name: 'Cadet', min: 7, note: 'Seven checks: the app now knows your normal.' },
   { id: 'explorer', name: 'Explorer', min: 21, note: 'Three weeks of check-ins. Ready for longer trips.' },
   { id: 'veteran', name: 'Veteran', min: 60, note: 'Sixty check days. A long-haul crew member.' },

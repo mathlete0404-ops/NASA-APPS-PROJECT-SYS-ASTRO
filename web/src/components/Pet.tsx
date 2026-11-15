@@ -1,7 +1,7 @@
 // Crew pet: an original little space critter in a glass helmet. It grows from showing
 // up (see engine/pet.ts) and never reacts to health results.
 import { useState } from 'react'
-import { ArrowRight, Check, CheckCircle2, Circle, PawPrint, Pencil, X } from 'lucide-react'
+import { ArrowRight, Check, PawPrint, Pencil, X } from 'lucide-react'
 import { activeProfile, useStore } from '../data/store'
 import { MOOD_LABEL, petState, STAGES, type Mood, type StageId } from '../engine/pet'
 
@@ -60,7 +60,13 @@ function Face({ mood }: { mood: Mood }) {
 }
 
 /** The creature itself. Purely visual; all state comes from props. */
-export function Pet({ stage, mood, name = 'Your pet', size = 140 }: { stage: StageId; mood: Mood; name?: string; size?: number }) {
+export function Pet({ stage, mood, name = 'Your pet', size = 140, cracks = 0, ready = false, burst = false, pop = false }: {
+  stage: StageId; mood: Mood; name?: string; size?: number
+  /** Egg only: 0..3 taps so far (adds cracks and a shake). */ cracks?: number
+  /** Egg only: ready to hatch (wobbles more). */ ready?: boolean
+  /** Hatch moment: flash, ring and sparkles. */ burst?: boolean
+  /** Just hatched: the creature pops in. */ pop?: boolean
+}) {
   const stageName = STAGES.find((s) => s.id === stage)?.name ?? stage
   const label = `${name}, your pet. ${stageName} stage, ${MOOD_LABEL[mood].toLowerCase()}`
   const sc = BODY_SCALE[stage]
@@ -80,7 +86,7 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140 }: { stage: Sta
       <circle className="pet-glass" cx={70} cy={62} r={46} />
 
       {stage === 'egg' ? (
-        <g className="pet-egg-wobble">
+        <g className={`pet-egg-wobble${ready ? ' ready' : ''}`}><g key={cracks} className={cracks ? 'pet-egg-shake' : undefined}>
           <path className="pet-egg" d="M70 52 C86 52 92 76 92 87 C92 99 82 106 70 106 C58 106 48 99 48 87 C48 76 54 52 70 52 Z" />
           <circle className="pet-speck-a" cx={62} cy={70} r={2.6} />
           <circle className="pet-speck-b" cx={77} cy={64} r={2} />
@@ -88,9 +94,12 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140 }: { stage: Sta
           <circle className="pet-speck-b" cx={59} cy={92} r={2.2} />
           <circle className="pet-speck-b" cx={70} cy={80} r={1.6} />
           <circle className="pet-speck-a" cx={69} cy={98} r={1.8} />
-        </g>
+          {cracks >= 1 && <path className="pet-crack" d="M63 60 L66 66 L61 71 L66 76" />}
+          {cracks >= 2 && <path className="pet-crack" d="M84 74 L79 79 L84 84 L80 90" />}
+          {cracks >= 3 && <path className="pet-crack" d="M49 84 L55 80 L61 86 L67 79 L73 86 L79 80 L85 85 L91 82" />}
+        </g></g>
       ) : (
-        <g className="pet-bob">
+        <g className={pop ? 'pet-pop' : undefined}><g className="pet-bob">
           <g transform={`translate(70 106) scale(${sc}) translate(-70 -106)`}>
             {atLeast(stage, 'explorer') && (
               <g>
@@ -113,6 +122,13 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140 }: { stage: Sta
             <Face mood={mood} />
             {atLeast(stage, 'cadet') && <Star cx={70} cy={97} r={5.2} className="pet-gold pet-badge" />}
           </g>
+        </g></g>
+      )}
+      {burst && (
+        <g className="pet-burst">
+          <circle className="pet-flash" cx={70} cy={80} r={30} />
+          <circle className="pet-ring" cx={70} cy={80} r={30} />
+          <Sparkle x={34} y={52} s={6} delay="0s" /><Sparkle x={108} y={48} s={5} delay=".1s" /><Sparkle x={96} y={22} s={4} delay=".2s" /><Sparkle x={44} y={24} s={4} delay=".15s" />
         </g>
       )}
 
@@ -137,10 +153,14 @@ export function Pet({ stage, mood, name = 'Your pet', size = 140 }: { stage: Sta
 
 const DEFAULT_NAME = 'Orbit'
 const nameKey = (crewId: string) => `crew-mirror:pet-name:${crewId}`
-const readName = (crewId: string) => { try { return localStorage.getItem(nameKey(crewId)) || DEFAULT_NAME } catch { return DEFAULT_NAME } }
-const writeName = (crewId: string, name: string) => { try { localStorage.setItem(nameKey(crewId), name) } catch { /* private mode: keep it in memory */ } }
+const hatchKey = (crewId: string) => `crew-mirror:pet-hatched:${crewId}`
+export const readName = (crewId: string) => { try { return localStorage.getItem(nameKey(crewId)) || DEFAULT_NAME } catch { return DEFAULT_NAME } }
+export const writeName = (crewId: string, name: string) => { try { localStorage.setItem(nameKey(crewId), name) } catch { /* private mode: keep it in memory */ } }
+/** The pet stays an egg until the crew member hatches it by hand (after their first check). */
+export const readHatched = (crewId: string) => { try { return localStorage.getItem(hatchKey(crewId)) === '1' } catch { return false } }
+export const writeHatched = (crewId: string) => { try { localStorage.setItem(hatchKey(crewId), '1') } catch { /* keep it in memory */ } }
 
-const MOOD_NOTE: Record<Mood, string> = {
+export const MOOD_NOTE: Record<Mood, string> = {
   thriving: 'All three care tasks done today.',
   happy: 'Two of three care tasks done today.',
   content: 'One care task done today.',
@@ -148,7 +168,7 @@ const MOOD_NOTE: Record<Mood, string> = {
   sleepy: 'Napping until your next check. Nothing is lost.',
 }
 
-function PetName({ name, onSave }: { name: string; onSave: (n: string) => void }) {
+export function PetName({ name, onSave }: { name: string; onSave: (n: string) => void }) {
   const [draft, setDraft] = useState<string | null>(null)
   const save = () => {
     if (draft === null) return
@@ -173,62 +193,24 @@ function PetName({ name, onSave }: { name: string; onSave: (n: string) => void }
   )
 }
 
-/** Today screen card: the pet, its stage, streak and today's three care tasks. */
-export function PetCard({ go }: { go: (tab: string) => void }) {
-  const p = activeProfile(useStore())
-  if (!p) return null
-  return <PetCardFor key={p.id} crewId={p.id} go={go} />
-}
-
-function PetCardFor({ crewId, go }: { crewId: string; go: (tab: string) => void }) {
+/** Today screen: one small row that opens the pet page. */
+export function PetMini() {
   const s = useStore()
-  const [name, setName] = useState(() => readName(crewId))
-  const pet = petState(s, crewId)
-  const left = pet.next ? pet.next.min - pet.checkDays : 0
+  const p = activeProfile(s)
+  if (!p) return null
+  const pet = petState(s, p.id)
+  const hatched = readHatched(p.id)
+  const ready = !hatched && pet.checkDays >= 1
+  const done = pet.tasks.filter((t) => t.done).length
   return (
-    <div className="card pet-card">
-      <div className="card-h"><span className="ic"><PawPrint /></span><h3>Crew pet</h3><span className="sub">{pet.xp} care points</span></div>
-      <div className="pet-top">
-        <div className="pet-stage-wrap"><Pet stage={pet.stage.id} mood={pet.mood} name={name} /></div>
-        <div className="pet-info">
-          <PetName name={name} onSave={(n) => { setName(n); writeName(crewId, n) }} />
-          <div className="pet-tags">
-            <span className="pill">{pet.stage.name}</span>
-            <span className={`pet-mood m-${pet.mood}`}>{MOOD_LABEL[pet.mood]}</span>
-          </div>
-          <p className="pet-note">{pet.stage.note}</p>
-          <div className="progress" role="progressbar" aria-label={pet.next ? `Progress to ${pet.next.name}` : 'Top stage reached'}
-            aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pet.progress * 100)}>
-            <span style={{ width: `${Math.round(pet.progress * 100)}%` }} />
-          </div>
-          <small className="muted">{pet.next ? `${left} more daily check${left === 1 ? '' : 's'} to ${pet.next.name}` : 'Top stage reached.'}</small>
-          <small className="pet-streak">
-            {pet.streak > 0 ? `${pet.streak}-day streak · best ${pet.bestStreak}`
-              : pet.bestStreak > 0 ? `Best streak ${pet.bestStreak} day${pet.bestStreak === 1 ? '' : 's'}. A new one starts with your next check.`
-                : 'Your streak starts with your first check.'}
-          </small>
-        </div>
-      </div>
-
-      <p className="pet-mood-note"><b>Today’s care</b> · {MOOD_NOTE[pet.mood]}</p>
-      <div className="pet-tasks" aria-label="Today’s care">
-        {pet.tasks.map((t) => {
-          const inner = (
-            <>
-              {t.done ? <CheckCircle2 size={18} className="pet-task-ic done" /> : <Circle size={18} className="pet-task-ic" />}
-              <span className="pet-task-l">
-                {t.label}
-                {t.byPainReport && <small> · pain report counts as care</small>}
-              </span>
-              {!t.done && <ArrowRight size={15} />}
-            </>
-          )
-          return t.done
-            ? <div key={t.id} className="pet-task done">{inner}<span className="sr-only">done</span></div>
-            : <button key={t.id} className="pet-task" onClick={() => go(t.tab)}>{inner}</button>
-        })}
-      </div>
-      <p className="pet-foot-note"><small>Grows when you show up. Your results never change it.</small></p>
-    </div>
+    <a className="card pet-mini" href="#/app/pet">
+      <span className="pet-mini-art"><Pet stage={hatched ? pet.stage.id : 'egg'} mood={pet.mood} name={readName(p.id)} size={64} ready={ready} /></span>
+      <span className="pet-mini-t">
+        <small className="kicker"><PawPrint size={12} /> Crew pet</small>
+        <b>{readName(p.id)}</b>
+        <small>{ready ? 'Ready to hatch. Tap to open.' : !hatched ? 'An egg. Do your first check to hatch it.' : `${pet.stage.name} · ${MOOD_LABEL[pet.mood]} · ${done}/3 care today`}</small>
+      </span>
+      <ArrowRight size={16} />
+    </a>
   )
 }
