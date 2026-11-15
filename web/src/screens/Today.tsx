@@ -9,6 +9,7 @@ import { PATTERN_LABEL } from '../engine/triage'
 import { REGION_LABEL } from '../content/cards'
 import { fmtNum, Spark, StatusChip } from '../components/ui'
 import { SpaceWeatherCard } from '../components/SpaceWeatherCard'
+import { PetCard } from '../components/Pet'
 
 const GROUPS: { id: string; label: string }[] = [
   { id: 'face', label: 'Face scan' },
@@ -94,6 +95,7 @@ export function Today({ go }: { go: (tab: string) => void }) {
       </div>
 
       <div className="grid g2">
+        <PetCard go={go} />
         {showStart && (
           <div className="card">
             <div className="card-h"><span className="ic"><ListChecks /></span><h3>Getting started</h3><span className="sub">{steps.filter((x) => x.done).length}/{steps.length}</span><button className="btn ghost icon" title="Hide" onClick={() => { setHideStart(true); try { localStorage.setItem('crew-mirror:gs-hidden', '1') } catch { /* ignore */ } }}><X /></button></div>
