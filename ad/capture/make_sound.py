@@ -124,50 +124,78 @@ for j, m in enumerate([45, 52, 57, 64, 69]):
 for k, m in enumerate([76, 83, 81, 88]):
     add(tone(note(m), 2.2) * env(2.2, 0.02, 0.9), 2.0 + k * 0.6, 0.035, -0.5 + k * 0.33)
 
-# ---------------------------------------------------------------- groove (3.5 s - end card)
-# A minor - F - C - G, one chord per bar (= one feature)
-CHORDS = [[57, 60, 64], [53, 57, 60], [48, 55, 64], [55, 59, 62]]
-BASS = [45, 41, 36, 43]
-nbars = 13
-for b in range(nbars):
-    t0 = OPEN + b * BAR
-    ch, bs = CHORDS[b % 4], BASS[b % 4]
-    lift = 0.6 if b == 0 else 1.0
-    # pad: soft saw chord, slow attack, stereo spread
-    for j, m in enumerate(ch):
-        pad = tone(note(m + 12), BAR + 0.15, 'saw', 0.002 * (j - 1)) * env(BAR + 0.15, 0.12, 2.0, 0.6, 0.12)
-        add(pad, t0, 0.05 * lift, (-0.5, 0, 0.5)[j])
-    # bass on beats 1 and 3, plus a pickup
-    for bt, ln in ((0, 0.42), (2, 0.42), (3.5, 0.2)):
-        bas = (tone(note(bs), ln) + 0.3 * tone(note(bs + 12), ln)) * env(ln, 0.004, 0.18, 0.35, 0.03)
-        add(bas, t0 + bt * BEAT, 0.22 * lift)
-    # kick on every beat (four on the floor), quieter on 2 and 4
-    for bt in range(4):
-        kl = 0.28
-        tt = np.arange(int(kl * SR)) / SR
-        f = 48 + 90 * np.exp(-tt / 0.035)
-        kick = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt / 0.12)
-        add(kick, t0 + bt * BEAT, (0.55 if bt % 2 == 0 else 0.4) * lift)
-    # hats on the off-beats, a clap on 2 and 4
-    for bt in range(4):
-        hat = band_noise(0.06, 7000, 15000) * env(0.06, 0.001, 0.018)
-        add(hat, t0 + (bt + 0.5) * BEAT, 0.07 * lift, 0.35)
-        if bt in (1, 3):
-            clap = band_noise(0.16, 900, 5000) * env(0.16, 0.002, 0.05)
-            add(clap, t0 + bt * BEAT, 0.12 * lift, -0.1)
-    # arpeggio (16ths) over the chord, gentle
-    arp = [ch[0] + 24, ch[1] + 24, ch[2] + 24, ch[1] + 24]
-    for s16 in range(16):
-        if b == 0 and s16 < 8: continue
-        m = arp[s16 % 4]
-        bl = tone(note(m), 0.16) * env(0.16, 0.002, 0.06)
-        add(bl, t0 + s16 * BEAT / 4, 0.035, 0.45 if s16 % 2 else -0.45)
+# ---------------------------------------------------------------- music (v2): after the opening
+# Uplifting cinematic electronic in D major, one chord per feature (I-V-vi-IV), half-time drums,
+# a breathing (side-chained) pad, a plucked arpeggio with ping-pong echo and a bell motif.
+BEAT = BAR / 4
+CHORDS = [[62, 66, 69], [57, 61, 64], [59, 62, 66], [55, 59, 62]]   # D, A, Bm, G
+ROOTS = [38, 33, 35, 31]
+MOTIF = [(0, 78, 1.0), (1, 76, 1.0), (2, 74, 1.5), (3.5, 69, 0.5)]  # (beat, note, beats), every 2 bars
+nb = 13
+QUIET = {9}            # the danger-signs feature: drums drop out for a breath
+pump_t = np.arange(int(BEAT * SR)) / SR
+pump = 1 - 0.55 * np.exp(-pump_t / 0.09)          # side-chain shape per beat
 
-# ---------------------------------------------------------------- end card: resolve and ring out
+def saw_pad(m, ln, voices=5, spread=0.006):
+    t = np.arange(int(ln * SR)) / SR; y = np.zeros_like(t)
+    for v in range(voices):
+        d = spread * (v - (voices - 1) / 2)
+        for k in range(1, 9): y += np.sin(2 * np.pi * note(m) * k * (1 + d) * t + v) / k * 0.82 ** k
+    return y / voices / 1.4
+
+def pluck(m, ln=0.32):
+    t = np.arange(int(ln * SR)) / SR
+    y = sum(np.sin(2 * np.pi * note(m) * k * t) * np.exp(-t * (9 + 6 * k)) / k for k in range(1, 6))
+    return y
+
+for b in range(nb):
+    t0 = OPEN + b * BAR
+    ch, rt = CHORDS[b % 4], ROOTS[b % 4]
+    build = min(1.0, 0.55 + 0.15 * b)               # opens up over the first bars
+    quiet = b in QUIET
+    # pad, breathing with the beat
+    pad = sum(saw_pad(m + 12, BAR + 0.2) for m in ch)
+    pad = lowpass(pad, 900 + 2600 * build) * env(BAR + 0.2, 0.08, 3.0, 0.9, 0.18)
+    pumpline = np.tile(pump, 5)[: len(pad)]
+    add(pad * (1 if quiet else pumpline), t0, 0.022, -0.35); add(np.roll(pad, 600) * (1 if quiet else pumpline), t0, 0.022, 0.35)
+    # sub bass: root on 1, octave pickups
+    for bt, ln, oc in ((0, 1.6 * BEAT, 0), (2, 0.9 * BEAT, 0), (3.5, 0.4 * BEAT, 12)):
+        bs = (np.sin(2 * np.pi * note(rt + oc) * np.arange(int(ln * SR)) / SR) + 0.25 * tone(note(rt + 12 + oc), ln)) * env(ln, 0.006, 0.5, 0.6, 0.04)
+        add(bs, t0 + bt * BEAT, 0.0 if quiet else 0.24)
+    # plucked arpeggio (16ths) with a ping-pong echo
+    arp = [ch[0] + 12, ch[1] + 12, ch[2] + 12, ch[0] + 24, ch[2] + 12, ch[1] + 12, ch[0] + 24, ch[1] + 24]
+    for s16 in range(16):
+        if b == 0 and s16 < 4: continue
+        p = pluck(arp[s16 % 8]); tt = t0 + s16 * BEAT / 4
+        g = 0.05 * build * (0.7 if s16 % 4 else 1.0)
+        add(p, tt, g, -0.25); add(p, tt + 0.75 * BEAT, g * 0.45, 0.6); add(p, tt + 1.5 * BEAT, g * 0.2, -0.6)
+    # drums: half-time. kick on 1 and the "and" of 2, clap on 3, soft shaker 16ths
+    if not quiet:
+        for bt in (0, 1.5):
+            kl = 0.4; tt = np.arange(int(kl * SR)) / SR
+            kick = np.sin(2 * np.pi * np.cumsum(45 + 110 * np.exp(-tt / 0.03)) / SR) * np.exp(-tt / 0.16)
+            add(kick, t0 + bt * BEAT, 0.5)
+        clap = sum(band_noise(0.22, 900, 6000, seed=40 + b * 3 + j) * env(0.22, 0.001, 0.06) for j in range(3))
+        clap = reverb(np.concatenate([clap, np.zeros(int(0.8 * SR))]), 1.2, 0.4, seed=7)
+        add(clap, t0 + 2 * BEAT, 0.13, 0.05)
+        for s16 in range(16):
+            sh = band_noise(0.05, 6000, 14000, seed=200 + s16) * env(0.05, 0.002, 0.012)
+            add(sh, t0 + s16 * BEAT / 4 + (0.012 if s16 % 2 else 0), 0.03 * (1.3 if s16 % 4 == 2 else 1) * build, 0.4)
+    # bell motif every second bar
+    if b % 2 == 1:
+        for bt, m, ln in MOTIF:
+            bell = (tone(note(m), ln * BEAT + 1.2) + 0.35 * tone(note(m + 12), ln * BEAT + 1.2)) * env(ln * BEAT + 1.2, 0.004, 0.55)
+            add(bell, t0 + bt * BEAT, 0.035, 0.2)
+# into the end card: a short riser
+rl = BAR * 0.9; tt = np.arange(int(rl * SR)) / SR
+add(band_noise(rl, 2000, 12000, seed=77) * (tt / rl) ** 3, END - rl, 0.09)
+
+# ---------------------------------------------------------------- end card: resolve on a wide D chord
 ring = 30 - END
-for j, m in enumerate([57, 60, 64, 69]):
-    add(tone(note(m + 12), ring, 'saw') * env(ring, 0.05, 1.4, 0.0), END, 0.06, (-0.6, -0.2, 0.2, 0.6)[j])
-add((tone(note(33), ring) * 0.6) * env(ring, 0.01, 1.2), END, 0.3)
+for j, m in enumerate([50, 57, 62, 66, 69, 74]):
+    add(saw_pad(m + 12, ring) * env(ring, 0.03, 1.6, 0.0), END, 0.035, (-0.7, -0.4, -0.1, 0.1, 0.4, 0.7)[j])
+add((np.sin(2 * np.pi * note(38) * np.arange(int(ring * SR)) / SR)) * env(ring, 0.01, 1.2), END, 0.25)
+add(reverb(np.concatenate([(tone(note(86), 1.2) + 0.4 * tone(note(93), 1.2)) * env(1.2, 0.003, 0.5), np.zeros(SR)]), 2.0, 0.5), END + 0.1, 0.06)
 
 # ---------------------------------------------------------------- sound effects from the timeline
 def whip():
@@ -176,6 +204,12 @@ def whip():
     tt = np.arange(len(x)) / SR
     shape = np.exp(-((tt - 0.14) / 0.07) ** 2)
     return x * shape
+
+def key(rng_k):
+    ln = 0.06; t = np.arange(int(ln * SR)) / SR
+    click = band_noise(ln, 2200, 7500, seed=int(rng_k.integers(1e6))) * np.exp(-t / 0.0045)
+    thock = np.sin(2 * np.pi * rng_k.uniform(170, 260) * t) * np.exp(-t / 0.014)
+    return click * 0.8 + thock * 0.55
 
 def tap():
     ln = 0.05
@@ -211,6 +245,12 @@ def logo():
     return out
 
 SFX = json.load(open(sys.argv[1]))
+# keystrokes: never more than ~18 per second (a fast typist), slightly humanised
+krng = np.random.default_rng(21); last = -1.0
+for e in sorted((e for e in SFX if e['k'] == 'key'), key=lambda e: e['t']):
+    if e['t'] - last < 0.055: continue
+    last = e['t']
+    add(key(krng), e['t'] + krng.uniform(-0.004, 0.006), 0.21 * e.get('vol', 1) * krng.uniform(0.75, 1.1), krng.uniform(-0.25, 0.25))
 for e in SFX:
     k, t0 = e['k'], e['t']
     if k == 'whip': add(whip(), t0 - 0.14, 0.5, rng.uniform(-0.4, 0.4))

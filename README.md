@@ -39,7 +39,7 @@ A few minutes a day in front of a laptop or tablet, Crew Mirror:
 | **Accounts & cloud sync** (Supabase auth + RLS; works offline without an account) | ✅ code · needs a project | `web/src/data/cloud.ts`, `supabase/migrations/` |
 | **Settings** (profile, mission, nutrition targets, scan length, theme, account, data export) | ✅ | `web/src/screens/Settings.tsx` |
 | NASA evidence: Inspiration4 CBC + CMP analysis (OSD-569, OSD-575), offline data.nasa.gov catalog with live search through the server | ✅ | `ingest/`, `web/src/screens/Evidence.tsx` |
-| Radiation context + cumulative dose estimate | ✅ (published rates) | `web/src/content/mission.ts` |
+| Radiation context: typical dose rates on Earth, the ISS, Earth–Mars cruise, the Moon and Mars, with sources (no personal cumulative dose tracking yet) | ✅ (published rates) | `web/src/content/mission.ts` |
 | **Solar radiation storm card**: live NOAA SWPC ≥10 MeV proton flux → NOAA S-scale (S1–S5), phase-aware rule-based actions (shelter / suspend EVA / tell the CMO), 24 h chart, last reading kept for offline use ("Last known", never "Quiet" when there is no data) | ✅ | `web/src/engine/spaceweather.ts`, `web/src/components/SpaceWeatherCard.tsx` |
 | CI + static deploy: tests (web and server), typecheck, production build, GitHub Pages | ✅ workflow · needs Pages enabled | `.github/workflows/ci.yml` |
 | CMO view: all crew, worst first, reasons; delayed downlink to Earth (light-time) | ✅ | `web/src/screens/Medical.tsx` |

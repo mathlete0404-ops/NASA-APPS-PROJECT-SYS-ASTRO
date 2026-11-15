@@ -44,8 +44,11 @@ body { font-family: Inter, system-ui, sans-serif; color: var(--ink); }
 .cap { width: 640px; opacity: 0; }
 .cap.right { left: 1180px; } .cap.left { left: 130px; }
 .cap.m .head { font-size: 64px; letter-spacing: -1.8px; }
-#h1 { left: 0; right: 0; top: 760px; text-align: center; opacity: 0; }
-#h1 .kick { font-size: 15px; letter-spacing: .5em; margin-bottom: 20px; text-shadow: 0 1px 14px #000c; }
+#h1 { left: 112px; top: 812px; width: 900px; opacity: 0; padding: 22px 30px 24px 26px; border-left: 2px solid var(--teal); background: linear-gradient(90deg, #050913d9, #05091399 70%, transparent); }
+#h1 .logl { font: 400 36px/1.2 'JetBrains Mono'; letter-spacing: .01em; color: #eef3fb; text-shadow: 0 2px 18px #000; white-space: nowrap; }
+.tcaret { display: inline-block; width: 16px; height: 34px; background: var(--teal); vertical-align: -6px; margin-left: 6px; opacity: 0; }
+.ch { opacity: 0; }
+#h1 .kick { font-size: 15px; letter-spacing: .32em; margin-bottom: 14px; }
 #h1 .h1l { font: 300 58px/1.1 'Space Grotesk'; letter-spacing: -1px; color: #eef3fb; text-shadow: 0 2px 34px #000d; }
 #h1 .h1l b { font-weight: 500; color: #fff; }
 #h1 .rule { width: 72px; height: 1px; background: #ffffff55; margin: 26px auto 0; }
@@ -58,7 +61,6 @@ body { font-family: Inter, system-ui, sans-serif; color: var(--ink); }
 #title { inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
 #title::before { content: ''; position: absolute; inset: 0; background: radial-gradient(900px 520px at 50% 50%, #000000d9, #00000080 55%, transparent 80%); z-index: -1; }
 #title { z-index: 1; }
-#h1 .kick { text-shadow: 0 0 18px #000, 0 1px 3px #000; }
 #title img { width: 112px; height: 112px; border-radius: 26px; box-shadow: 0 0 80px hsl(168 76% 55% / .35), 0 20px 50px #000a; }
 #title .tt { font: 600 128px/1 'Space Grotesk'; letter-spacing: -4px; color: #fff; margin-top: 34px; text-shadow: 0 4px 60px #000c; }
 #title .ts { font: 400 27px/1.4 Inter; color: #b7c1d3; margin-top: 22px; }
@@ -132,8 +134,8 @@ body.rec #replay, body.rec #sound { display: none; }
     <div class="hrow"><span class="hk">Range to Earth</span><span class="hv" id="t-rng">380 214 000 km</span></div>
     <div class="hrow"><span class="hk">Signal delay, one way</span><span class="hv" id="t-dly">21 min 08 s</span></div>
     <i class="line" id="hudline"></i><small>Crew health · on board · no live ground link</small></div>
-  <div class="abs" id="h1"><div class="kick">En route to Mars</div><div class="h1l">Help is <b>22 light-minutes</b> away.</div><div class="rule"></div></div>
-  <div class="abs" id="title"><img src="img/app-icon.png" alt="" /><div class="tt">Crew Mirror</div><div class="ts">A two-minute daily health check for astronauts.</div><div class="tb">Team SYS-ASTRO</div></div>
+  <div class="abs" id="h1"><div class="kick" id="log-k">Crew log · Day 143</div><div class="logl"><span id="log-l">A message home takes 22 minutes.</span><span class="tcaret" id="log-c"></span></div></div>
+  <div class="abs" id="title"><img src="img/app-icon.png" alt="" /><div class="tt">Crew Mirror</div><div class="ts">A two-minute daily health check for astronauts.</div><div class="tb" id="title-tb">Team SYS-ASTRO</div></div>
 
   <!-- Captions -->
   <div id="mcaps"></div>
@@ -232,13 +234,56 @@ const SL = Object.fromEntries(F.map((f) => [f.id, f]))
 const M = F.filter((f) => f.id.startsWith('m_'))
 const OFF = .08 // seconds into each clip when its slot starts
 
+// ------------------------------------------------------------------ typing
+// typeIn(el, t0, cps, every): reveal each character at its own time on the master timeline and
+// log a keystroke for the soundtrack (every Nth non-space character), so typing is frame-exact.
+const KEYS = []
+function typeIn(el, t0, cps = 26, every = 1, vol = 1) {
+  if (typeof el === 'string') el = $(el)
+  const chars = []
+  const walk = (n) => {
+    for (const c of [...n.childNodes]) {
+      if (c.nodeType === 3) {
+        const frag = document.createDocumentFragment()
+        for (const ch of c.textContent) { const sp = document.createElement('span'); sp.className = 'ch'; sp.textContent = ch; frag.appendChild(sp); chars.push(sp) }
+        c.replaceWith(frag)
+      } else if (!c.classList?.contains('tcaret')) walk(c)
+    }
+  }
+  walk(el)
+  let k = 0
+  chars.forEach((sp, i) => {
+    const t = t0 + i / cps
+    tl(sp, [[t - .001, { opacity: 0 }], [t, { opacity: 1 }]], 'linear')
+    if (sp.textContent.trim() && k++ % every === 0) KEYS.push({ t, vol })
+  })
+  return t0 + chars.length / cps
+}
+// a block caret that blinks (deterministically) between a and b
+function caret(el, a, b, typedUntil) {
+  const keys = [[a - .001, { opacity: 0 }], [a, { opacity: 1 }]]
+  for (let t = typedUntil + .25; t < b; t += .5) keys.push([t, { opacity: 0 }], [t + .25, { opacity: 1 }])
+  keys.push([b, { opacity: 0 }])
+  tl(el, keys, 'steps(1, end)')
+}
+
 // ------------------------------------------------------------------ opening overlay
 tl('black', [[0, { opacity: 1 }], [1.45, { opacity: 1 }], [2.05, { opacity: 0 }], [30, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
-tl('presents', [[.25, { opacity: 0 }], [.75, { opacity: 1 }], [1.15, { opacity: 1 }], [1.45, { opacity: 0 }]], 'cubic-bezier(.4,0,.2,1)')
+tl('presents', [[.18, { opacity: 0 }], [.2, { opacity: 1 }], [1.32, { opacity: 1 }], [1.5, { opacity: 0 }]], 'linear')
+{ const e = typeIn(document.querySelector('#presents .pk'), .22, 17, 1, 1); typeIn(document.querySelector('#presents .pp'), e + .06, 30, 2, .6) }
 tl('hud', [[1.9, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
 tl('hudline', [[2.1, { transform: 'scaleX(0)' }], [2.6, { transform: 'scaleX(1)' }]])
 for (const id of ['cn1', 'cn2', 'cn3', 'cn4']) tl(id, [[1.8, { opacity: 0 }], [2.2, { opacity: 1 }], [4.25, { opacity: 1 }], [4.5, { opacity: 0 }]], 'linear')
-show('h1', 2.35, 4.4, 'translateY(14px)', .5)
+tl('h1', [[2.2, { opacity: 0, transform: 'translateX(-14px)' }], [2.4, { opacity: 1, transform: 'none' }], [4.3, { opacity: 1, transform: 'none' }], [4.48, { opacity: 0, transform: 'none' }]])
+// crew log: drawn per frame (see frameUpdate) so the caret follows the last typed letter
+const LOG = [{ id: 'log-k', t0: 2.42, cps: 26, vol: .8 }]
+LOG.forEach((L) => { L.text = $(L.id).textContent; $(L.id).textContent = '' })
+LOG.push({ id: 'log-l', t0: LOG[0].t0 + LOG[0].text.length / LOG[0].cps + .18, cps: 27, vol: 1, text: $('log-l').textContent })
+$('log-l').textContent = ''
+for (const L of LOG) [...L.text].forEach((ch, i) => { if (ch.trim()) KEYS.push({ t: L.t0 + i / L.cps, vol: L.vol }) })
+caret('log-c', 2.42, 4.48, LOG[1].t0 + LOG[1].text.length / LOG[1].cps)
+document.querySelectorAll('#hud .hk').forEach((h, i) => typeIn(h, 1.95 + i * .2, 48, 3, .45))
+typeIn('title-tb', 4.95, 24, 1, .8)
 tl('title', [[4.5, { opacity: 0, transform: 'scale(1.06)' }], [4.75, { opacity: 1, transform: 'scale(1.0)' }], [5.45, { opacity: 1, transform: 'scale(.985)' }], [5.75, { opacity: 0, transform: 'scale(.97)' }]], 'cubic-bezier(.2,.8,.2,1)')
 tl('wash', [[3.3 + SH, { opacity: 0 }], [4.3 + SH, { opacity: 1 }]])
 tl('gl', [[0, { opacity: 1, filter: 'blur(0px)' }], [3.35 + SH, { opacity: 1, filter: 'blur(0px)' }], [4.3 + SH, { opacity: .5, filter: 'blur(1.5px)' }], [END - .2, { opacity: .5, filter: 'blur(1.5px)' }], [END + 1, { opacity: .8, filter: 'blur(0px)' }]], 'cubic-bezier(.4,0,.2,1)')
@@ -250,10 +295,14 @@ F.forEach(({ id, side, head, sub, a, b }) => {
   d.style.top = (sub ? 392 : 420) + 'px'
   d.innerHTML = `<div class="head">${head}</div>${sub ? `<div class="sub">${sub}</div>` : ''}`
   $('mcaps').appendChild(d)
-  const dx = side < 0 ? 26 : -26
-  tl(d, [[a + .12, { opacity: 0, transform: `translateX(${dx}px)` }], [a + .42, { opacity: 1, transform: 'none' }], [b - .2, { opacity: 1, transform: 'none' }], [b - .04, { opacity: 0, transform: 'none' }]])
+  tl(d, [[a + .14, { opacity: 0 }], [a + .16, { opacity: 1 }], [b - .16, { opacity: 1 }], [b - .03, { opacity: 0 }]])
+  const hd = d.querySelector('.head'), sb = d.querySelector('.sub')
+  const n = hd.textContent.length
+  const e = typeIn(hd, a + .18, Math.max(26, n / .62), 1, 1)
+  if (sb) typeIn(sb, e + .06, Math.max(40, sb.textContent.length / .42), 2, .55)
 })
-tl('c8', [[END + .15, { opacity: 0, transform: 'translateX(-40px)' }], [END + .65, { opacity: 1, transform: 'none' }]])
+tl('c8', [[END + .15, { opacity: 0 }], [END + .17, { opacity: 1 }]])
+{ const c = $('c8'); const e = typeIn(c.querySelector('.head'), END + .2, 22, 1, 1); typeIn(c.querySelector('.sub'), e + .08, 46, 2, .6); tl(c.querySelector('.endline'), [[e + .5, { opacity: 0 }], [e + .8, { opacity: 1 }]]) }
 
 // ------------------------------------------------------------------ screens
 layer('s-today', 3.2 + SH, SL.today.b + .02, .02)
@@ -366,6 +415,7 @@ const PH = PT + .66 // hatch moment
 // Sound cues for the soundtrack (read by the renderer; also used to play audio live).
 window.__SFX = [
   { t: 0, k: 'timing', open: OPEN, bar: D, end: END },
+  ...KEYS.map(({ t, vol }) => ({ t, k: 'key', vol })),
   { t: 4.52, k: 'boom' },
   { t: 3.25 + SH, k: 'rise' },
   ...F.slice(1).map(({ a }) => ({ t: a - .04, k: 'whip' })),
@@ -647,6 +697,7 @@ function frameUpdate(t) {
   $('rig').style.filter = b > .4 ? 'url(#mblur)' : 'none'
   drawFace(t)
   renderGL(t)
+  for (const L of (typeof LOG !== 'undefined' ? LOG : [])) $(L.id).textContent = L.text.slice(0, clamp(Math.floor((t - L.t0) * L.cps) + 1, 0, L.text.length))
   if (t < 4.6) {
     const met = 143 * 86400 + 6 * 3600 + 12 * 60 + 9 + Math.floor(t)
     const two = (n) => String(n).padStart(2, '0')
